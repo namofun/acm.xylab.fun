@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>SatelliteSite</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Plag.Backend.Roles.Storage" Version="$(PlagVersion)" />
+    <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
+
+    <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
+    <PackageReference Include="SatelliteSite.PolygonModule" Version="$(PolygonVersion)" />
+    <PackageReference Include="Polygon.FakeJudgehost.DataExtensions" Version="$(PolygonVersion)" />
+
+    <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
+    <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
+    <PackageReference Include="SatelliteSite.OjUpdateModule" Version="$(TenantVersion)" />
+
+    <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
+    <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
+    <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
+    <PackageReference Include="SatelliteSite.ContestModule" Version="$(CcsVersion)" />
+
+    <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
+    <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
+    <PackageReference Include="SatelliteSite.IdentityModule" Version="$(SubstrateVersion)" />
+    <PackageReference Include="SatelliteSite.TelemetryModule" Version="$(SubstrateVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Bulk.SqlServer" Version="$(EFCoreBulkVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(AspNetCoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCoreVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
