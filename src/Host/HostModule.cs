@@ -1,14 +1,11 @@
 ﻿using Ccs.Registration;
 using Markdig;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Polygon.FakeJudgehost;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace SatelliteSite
 {
@@ -18,15 +15,6 @@ namespace SatelliteSite
 
         public override void Initialize()
         {
-        }
-
-        public override void RegisterEndpoints(IEndpointBuilder endpoints)
-        {
-            endpoints.MapFallback("/", context =>
-            {
-                context.Response.Redirect("/dashboard/contests");
-                return Task.CompletedTask;
-            });
         }
 
         public override void RegisterServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
@@ -42,11 +30,6 @@ namespace SatelliteSite
             });
 
             services.AddContestRegistrationTenant();
-
-            services.AddFakeJudgehost()
-                .AddFakeSeeds<DefaultContext>()
-                .AddJudgehost<FakeJudgeActivity>("fake-judgehost-0")
-                .AddHttpClientFactory(_ => new System.Net.Http.HttpClient { BaseAddress = new System.Uri("http://localhost:9121/api/") });
         }
     }
 }

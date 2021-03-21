@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Plag.Backend.Roles.Rest" Version="$(PlagVersion)" />
     <PackageReference Include="Plag.Backend.Roles.Storage" Version="$(PlagVersion)" />
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
 
@@ -17,6 +18,7 @@
     <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.OjUpdateModule" Version="$(TenantVersion)" />
+    <PackageReference Include="SatelliteSite.NewsModule" Version="$(TenantVersion)" />
 
     <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
     <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
@@ -27,7 +29,7 @@
     <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.IdentityModule" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.TelemetryModule" Version="$(SubstrateVersion)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Bulk.SqlServer" Version="$(EFCoreBulkVersion)" />
+    <PackageReference Include="XiaoYang.EntityFrameworkCore.Bulk.SqlServer" Version="$(EFCoreBulkVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(AspNetCoreVersion)" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCoreVersion)">
