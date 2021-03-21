@@ -1,0 +1,20 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: |
+    mkdir sync
+    cd sync
+    git clone https://yang-er:$(GITHUB_TOKEN)@github.com/namofun/acm.xylab.fun.git
+    cd acm.xylab.fun
+    git remote add azure https://tlylz:$(VSTS_TOKEN)@dev.azure.com/tlylz/namomo/_git/acm.xylab.fun
+    git push -u azure main --force
+  displayName: 'Sync to Azure DevOps'
