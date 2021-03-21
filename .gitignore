@@ -433,6 +433,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 # Project Files
-/src/Host/Migrations
 /src/Host/Runs
 /src/Host/Problems

@@ -1,9 +1,13 @@
+using Ccs.Registration;
+using Markdig;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SatelliteSite.IdentityModule.Entities;
+using System.IO;
 
 namespace SatelliteSite
 {
@@ -30,10 +34,22 @@ namespace SatelliteSite
                 .AddModule<NewsModule.NewsModule<DefaultContext>>()
                 .AddModule<PolygonModule.PolygonModule<Polygon.DefaultRole<DefaultContext, QueryCache>>>()
                 .AddModule<ContestModule.ContestModule<Ccs.RelationalRole<XylabUser, Role, DefaultContext>>>()
-                .AddModule<PlagModule.PlagModule<Plag.Backend.StorageBackendRole<PdsContext>>>()
-                .AddModule<HostModule>()
+                .AddModule<PlagModule.PlagModule<Plag.Backend.RestfulBackendRole>>()
                 .AddDatabase<DefaultContext>((c, b) => b.UseSqlServer(c.GetConnectionString("UserDbConnection"), b => b.UseBulk()))
-                .AddDatabase<PdsContext>((c, b) => b.UseSqlServer(c.GetConnectionString("PlagDbConnection"), b => b.UseBulk()))
-                .ConfigureSubstrateDefaults<DefaultContext>();
+                .ConfigureSubstrateDefaults<DefaultContext>()
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddMarkdown();
+
+                    services.AddDbModelSupplier<DefaultContext, Polygon.Storages.PolygonIdentityEntityConfiguration<XylabUser, DefaultContext>>();
+
+                    services.ConfigurePolygonStorage(options =>
+                    {
+                        options.JudgingDirectory = Path.Combine(context.HostingEnvironment.ContentRootPath, "Runs");
+                        options.ProblemDirectory = Path.Combine(context.HostingEnvironment.ContentRootPath, "Problems");
+                    });
+
+                    services.AddContestRegistrationTenant();
+                });
     }
 }
