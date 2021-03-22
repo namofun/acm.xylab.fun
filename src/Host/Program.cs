@@ -25,9 +25,9 @@ namespace SatelliteSite
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .MarkDomain<Program>()
-                .AddModule<XylabModule.XylabModule>()
                 .AddModule<TelemetryModule.TelemetryModule>()
                 .AddModule<IdentityModule.IdentityModule<XylabUser, Role, DefaultContext>>()
+                .AddModule<XylabModule.XylabModule>()
                 .AddModule<GroupModule.GroupModule<DefaultContext>>()
                 .AddModule<StudentModule.StudentModule<XylabUser, Role, DefaultContext>>()
                 .AddModule<OjUpdateModule.OjUpdateModule<DefaultContext>>()

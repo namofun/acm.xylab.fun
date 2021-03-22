@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SatelliteSite.Services;
+using SatelliteSite.XylabModule.Services;
 
 namespace SatelliteSite.XylabModule
 {
@@ -14,13 +17,23 @@ namespace SatelliteSite.XylabModule
         {
         }
 
-        public override void RegisterServices(IServiceCollection services)
+        public override void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureApplicationBuilder(options =>
             {
                 options.SiteName = "Online Judge";
                 options.PointBeforeUrlRewriting.Add(app => app.UseMiddleware<AliyunCdnRealIpMiddleware>());
             });
+
+            services.ConfigureIdentityAdvanced(options =>
+            {
+                options.ShortenedClaimName = true;
+            });
+
+            services.EnsureSingleton<IEmailSender>();
+            services.ReplaceSingleton<IEmailSender, HybridEmailSender>();
+            services.AddOptions<HybridEmailOptions>()
+                .Bind(configuration.GetSection("SendGrid"));
         }
 
         public override void RegisterEndpoints(IEndpointBuilder endpoints)
