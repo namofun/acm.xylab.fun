@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SatelliteSite.IdentityModule.Entities;
+using SatelliteSite.Services;
 using System.IO;
 
 namespace SatelliteSite
@@ -50,6 +51,12 @@ namespace SatelliteSite
                     });
 
                     services.AddContestRegistrationTenant();
+
+                    services.Configure<ApplicationInsightsDisplayOptions>(options =>
+                    {
+                        options.ApiKey = context.Configuration["ApplicationInsights:ForDisplayAppKey"];
+                        options.ApplicationId = context.Configuration["ApplicationInsights:ForDisplayAppId"];
+                    });
                 });
     }
 }
