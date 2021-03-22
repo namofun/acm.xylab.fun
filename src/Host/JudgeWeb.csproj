@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Plag.Backend.Roles.Rest" Version="$(PlagVersion)" />
-    <PackageReference Include="Plag.Backend.Roles.Storage" Version="$(PlagVersion)" />
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
 
     <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
