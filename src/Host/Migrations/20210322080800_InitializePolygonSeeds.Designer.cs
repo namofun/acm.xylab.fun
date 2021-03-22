@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SatelliteSite;
 
 namespace SatelliteSite.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    partial class DefaultContextModelSnapshot : ModelSnapshot
+    [Migration("20210322080800_InitializePolygonSeeds")]
+    partial class InitializePolygonSeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1688,54 +1690,6 @@ namespace SatelliteSite.Migrations
                     b.ToTable("TenantClassStudents");
                 });
 
-            modelBuilder.Entity("Tenant.Entities.GroupTeam", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AffiliationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeamName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<DateTimeOffset>("Time")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AffiliationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TenantTrainingTeams");
-                });
-
-            modelBuilder.Entity("Tenant.Entities.GroupUser", b =>
-                {
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("Accepted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("TeamId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TenantTrainingUsers");
-                });
-
             modelBuilder.Entity("Tenant.Entities.Student", b =>
                 {
                     b.Property<string>("Id")
@@ -2124,36 +2078,6 @@ namespace SatelliteSite.Migrations
                     b.HasOne("Tenant.Entities.Student", null)
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Tenant.Entities.GroupTeam", b =>
-                {
-                    b.HasOne("Tenant.Entities.Affiliation", "Affiliation")
-                        .WithMany()
-                        .HasForeignKey("AffiliationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SatelliteSite.XylabUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Tenant.Entities.GroupUser", b =>
-                {
-                    b.HasOne("Tenant.Entities.GroupTeam", null)
-                        .WithMany("Users")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SatelliteSite.XylabUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

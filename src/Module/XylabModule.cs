@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SatelliteSite.XylabModule
 {
-    public class XylabModule : AbstractModule
+    public class XylabModule : AbstractModule, IAuthorizationPolicyRegistry
     {
         public override string Area => "Xylab";
 
@@ -26,6 +27,13 @@ namespace SatelliteSite.XylabModule
 
             endpoints.WithErrorHandler("Xylab", "Home")
                 .MapStatusCode("/{**slug}");
+        }
+
+        public void RegisterPolicies(IAuthorizationPolicyContainer container)
+        {
+            container.AddPolicy2("ExternalRanklistReader",
+                b => b.AcceptClaim("tenant", "10183")
+                      .AcceptRole("Student"));
         }
     }
 }

@@ -11,11 +11,8 @@
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
 
     <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
+    <PackageReference Include="Polygon.Seeds" Version="$(PolygonVersion)" />
     <PackageReference Include="SatelliteSite.PolygonModule" Version="$(PolygonVersion)" />
-    <PackageReference Include="Polygon.FakeJudgehost.DataExtensions" Version="$(PolygonVersion)" />
-
-    <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
-    <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
 
     <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
     <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
@@ -24,7 +21,6 @@
 
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
-    <PackageReference Include="SatelliteSite.IdentityModule" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.TelemetryModule" Version="$(SubstrateVersion)" />
     <PackageReference Include="XiaoYang.EntityFrameworkCore.Bulk.SqlServer" Version="$(EFCoreBulkVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(AspNetCoreVersion)" />

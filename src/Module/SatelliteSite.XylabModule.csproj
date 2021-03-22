@@ -10,6 +10,9 @@
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.NewsModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.OjUpdateModule" Version="$(TenantVersion)" />
+    <PackageReference Include="SatelliteSite.IdentityModule" Version="$(SubstrateVersion)" />
+    <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
+    <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
   </ItemGroup>
 
 </Project>
