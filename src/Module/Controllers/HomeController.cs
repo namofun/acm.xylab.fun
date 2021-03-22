@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SatelliteSite.NewsModule.Services;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SatelliteSite.XylabModule.Controllers
 {
@@ -18,13 +20,15 @@ namespace SatelliteSite.XylabModule.Controllers
         public static IReadOnlyList<string> PhotoList { get; }
             = new[] { "2018qingdao", "2018xian", "2018final" };
 
+
         [HttpGet]
         [HttpGet("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index([FromServices] INewsStore store)
         {
             ViewData["Photo"] = PhotoList[DateTimeOffset.Now.Millisecond % PhotoList.Count];
-            return View();
+            return View(await store.ListActiveAsync(10));
         }
+
 
         [HttpGet]
         public IActionResult About()

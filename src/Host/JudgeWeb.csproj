@@ -17,8 +17,6 @@
 
     <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
-    <PackageReference Include="SatelliteSite.OjUpdateModule" Version="$(TenantVersion)" />
-    <PackageReference Include="SatelliteSite.NewsModule" Version="$(TenantVersion)" />
 
     <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
     <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
