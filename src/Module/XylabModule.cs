@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ namespace SatelliteSite.XylabModule
             services.ConfigureApplicationBuilder(options =>
             {
                 options.SiteName = "Online Judge";
+                options.PointBeforeUrlRewriting.Add(app => app.UseMiddleware<AliyunCdnRealIpMiddleware>());
             });
         }
 

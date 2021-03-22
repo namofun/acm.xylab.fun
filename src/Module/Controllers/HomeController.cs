@@ -13,7 +13,7 @@ namespace SatelliteSite.XylabModule.Controllers
     public class HomeController : ViewControllerBase
     {
         public static string ProgramVersion { get; }
-            = typeof(GitVersionAttribute).Assembly
+            = typeof(HomeController).Assembly
                 .GetCustomAttribute<GitVersionAttribute>()?
                 .Version?.Substring(0, 7) ?? "unknown";
 
