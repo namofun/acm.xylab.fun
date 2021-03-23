@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ccs.Services;
+using Microsoft.AspNetCore.Mvc;
 using SatelliteSite.NewsModule.Services;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace SatelliteSite.XylabModule.Controllers
         [HttpGet("/")]
         public async Task<IActionResult> Index([FromServices] INewsStore store)
         {
+            ViewData["ActiveAction"] = "HomePage";
             ViewData["Photo"] = PhotoList[DateTimeOffset.Now.Millisecond % PhotoList.Count];
             return View(await store.ListActiveAsync(10));
         }
@@ -34,6 +36,37 @@ namespace SatelliteSite.XylabModule.Controllers
         public IActionResult About()
         {
             return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult Problems()
+        {
+            ViewData["ActiveAction"] = "Problemset";
+
+            return Message(
+                "Feature Unavailable",
+                "This feature is being fixed, and will be reopened soon.");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Contests([FromServices] IContestRepository2 store, int page = 1)
+        {
+            ViewData["ActiveAction"] = "ListContest";
+
+            return View(
+                await store.ListAsync(User, Ccs.CcsDefaults.KindDom, page));
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Gyms([FromServices] IContestRepository2 store, int page = 1)
+        {
+            ViewData["ActiveAction"] = "ListGym";
+
+            return View(
+                await store.ListAsync(User, Ccs.CcsDefaults.KindGym, page));
         }
     }
 }

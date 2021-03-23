@@ -36,6 +36,32 @@ namespace SatelliteSite.XylabModule
                 .Bind(configuration.GetSection("SendGrid"));
         }
 
+        public override void RegisterMenu(IMenuContributor menus)
+        {
+            menus.Menu(MenuNameDefaults.MainNavbar, menu =>
+            {
+                menu.HasEntry(100)
+                    .HasTitle("fas fa-home", "Home")
+                    .HasLink("Xylab", "Home", "Index")
+                    .ActiveWhenViewData("HomePage");
+
+                menu.HasEntry(200)
+                    .HasTitle("fas fa-book-open", "Problems")
+                    .HasLink("Xylab", "Home", "Problems")
+                    .ActiveWhenViewData("Problemset");
+
+                menu.HasEntry(300)
+                    .HasTitle("fas fa-trophy", "Contests")
+                    .HasLink("Xylab", "Home", "Contests")
+                    .ActiveWhenViewData("ListContest");
+
+                menu.HasEntry(310)
+                    .HasTitle("fas fa-rocket", "Gyms")
+                    .HasLink("Xylab", "Home", "Gyms")
+                    .ActiveWhenViewData("ListGym");
+            });
+        }
+
         public override void RegisterEndpoints(IEndpointBuilder endpoints)
         {
             endpoints.MapControllers();

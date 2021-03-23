@@ -14,6 +14,10 @@
     <PackageReference Include="SatelliteSite.IdentityModule" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
+    <PackageReference Include="SatelliteSite.PolygonModule" Version="$(PolygonVersion)" />
+    <PackageReference Include="SatelliteSite.ContestModule" Version="$(CcsVersion)" />
+    <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
+    <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
   </ItemGroup>
 
 </Project>
