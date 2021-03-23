@@ -48,8 +48,6 @@ namespace SatelliteSite.XylabModule.Services
 
         private Task SendGridAsync(string email, string subject, string message)
         {
-            var client = new SendGridClient(_apiKey.SendGridKey);
-
             var msg = new SendGridMessage
             {
                 From = new EmailAddress("acm@xylab.fun", "小羊实验室"),
@@ -63,7 +61,7 @@ namespace SatelliteSite.XylabModule.Services
 
             _emailSending(_logger, email, null);
             var telemetry = _telemetry;
-            var user = _apiKey.SendGridUser;
+            var apiKey = _apiKey;
 
             Task.Run(async () =>
             {
@@ -72,6 +70,8 @@ namespace SatelliteSite.XylabModule.Services
 
                 try
                 {
+                    var client = new SendGridClient(apiKey.SendGridKey);
+
                     var response = await client.SendEmailAsync(msg);
                     if (!response.IsSuccessStatusCode)
                     {
@@ -86,7 +86,7 @@ namespace SatelliteSite.XylabModule.Services
                 telemetry.TrackDependency(
                     dependencyTypeName: "SendGrid",
                     dependencyName: "SendGrid",
-                    target: user,
+                    target: apiKey.SendGridUser,
                     data: email,
                     startTime: startTime,
                     duration: DateTimeOffset.Now - startTime,
