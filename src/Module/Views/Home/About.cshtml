@@ -10,33 +10,32 @@
         <h4 class="mb-3">Architecture of Service</h4>
         <ul class="pl-4 pr-4">
             <li>
-                <h5>JudgeW32</h5>
+                <h5>Project Substrate <a href="//github.com/namofun/uikit"><i class="fab fa-git-alt"></i></a></h5>
                 <p>
-                    Encapsulation of Windows APIs for Process Info, Job Object and Error Reporting.
-                    <br />
-                    <a href="//github.com/yang-er/joj-old/tree/master/JudgeW32" rel="nofollow">Archived version</a> and <a href="//github.com/yang-er/joj-win32">new version</a> are both on GitHub.
+                    This is a project for ASP.NET Core module design standard,
+                    designed as Satellite Site first. With this module, you can
+                    build your module application faster.
                 </p>
             </li>
             <li>
-                <h5>JudgeL64</h5>
+                <h5>Problem &amp; Judging <a href="//github.com/namofun/polygon"><i class="fab fa-git-alt"></i></a></h5>
                 <p>
-                    Applying setuid, rlimit, ptrace, chroot before fork &amp; exec.
-                    <br />
-                    Inspired by <a href="//github.com/zhblue/hustoj" rel="nofollow">HUSTOJ</a>.
-                    <br />
-                    Archived versions is on <a href="//github.com/yang-er/joj-old/tree/master/JudgeL64" rel="nofollow">GitHub</a>.
+                    Problems, judgings, submissions, executables, internal-errors,
+                    judgehosts from <a href="//www.domjudge.org">DOMjudge</a> design. Using a modified
+                    <a href="//github.com/namofun/judgehost">judgehost</a> to enhance performance.
                 </p>
             </li>
             <li>
-                <h5>JudgeWeb</h5>
+                <h5>Contest Control System <a href="//github.com/namofun/ccs"><i class="fab fa-git-alt"></i></a></h5>
                 <p>
-                    Websites for OJ by ASP.NET Core MVC.
-                    <br />
-                    Front-end by BootStrap and jQuery, markdown rendering by Markdig and KaTeX.
-                    <br />
-                    Database by Microsoft SQL Server.
-                    <br />
-                    Current versions is on <a href="//github.com/yang-er/OnlineJudge" rel="nofollow">GitHub</a>.
+                    Extensible contest system for online contests and onsite contests.
+                    Support different kinds of contests and ranking rules like XCPC, IOI and CF.
+                </p>
+            </li>
+            <li>
+                <h5>Plagiarism Detection <a href="//github.com/namofun/plagiarism"><i class="fab fa-git-alt"></i></a></h5>
+                <p>
+                    Online plagiarism detection system inspired from <a href="//github.com/jplag/jplag">JPlag</a> project. Rewritten in C# and ANTLR4. Firstly developed as a course design.
                 </p>
             </li>
         </ul>
@@ -47,8 +46,9 @@
         <ul class="pl-4 pr-4">
             <li>
                 <h5>Team</h5>
-                <ul class="pl-4">
+                <ul class="pl-4 mb-2">
                     <li>GitHub @@yang-er</li>
+                    <li>GitHub @@WUST-mengqinyu</li>
                 </ul>
                 <p>Welcome to join!</p>
             </li>
@@ -56,15 +56,16 @@
                 <h5>History</h5>
                 <ul class="pl-4 mb-3">
                     <li>2018/05/11 Project started</li>
-                    <li>2018/06/01 First use in class</li>
-                    <li>2018/06/10 Finish Windows module</li>
-                    <li>2018/06/22 Finish Linux module</li>
-                    <li>2018/06/27 Paused developing</li>
-                    <li>2019/03/04 Restarted developing</li>
-                    <li>2019/06/06 Use DOMjudge as JudgeCore</li>
-                    <li>2019/07/04 Started developing contest feature</li>
+                    <li>2018/06/01 Toy version first use in class</li>
+                    <li>2019/06/06 Use DOMjudge v7.0.0 as JudgeCore</li>
+                    <li>2019/07/04 Start developing contest feature</li>
                     <li>2019/07/24 Cleanup and fully open source</li>
                     <li>2019/12/15 Added polygon and dashboard</li>
+                    <li>2020/03/20 Split database operations off from MVC</li>
+                    <li>2020/04/10 Project Satellite Site</li>
+                    <li>2020/05/12 Fork for Namomo OJ</li>
+                    <li>2020/06/15 Project Substrate for modularization</li>
+                    <li>2021/03/23 Production test for newer version</li>
                 </ul>
             </li>
         </ul>
@@ -74,7 +75,7 @@
         <h4 class="mb-3">Repositories</h4>
         <ul class="pl-4 mb-3">
             <li>
-                <h5><a href="//github.com/yang-er/joj-old">Archived Version</a></h5>
+                <h5>Toy Version <a href="//github.com/yang-er/joj-old"><i class="fab fa-github"></i></a></h5>
                 <p>
                     First version that used in our data-structure class.
                     JudgeW32 was hosted on a tiny Windows Nano Server and provider judging functions.
@@ -82,17 +83,25 @@
                 </p>
             </li>
             <li>
-                <h5><a href="//github.com/yang-er/OnlineJudge">Current Version</a></h5>
+                <h5>Archived Version <a href="//github.com/yang-er/OnlineJudge"><i class="fab fa-github"></i></a></h5>
                 <p>
-                    The currently running version of this online judge.
+                    The previous running version of this online judge.
                     Most functions are adopted from DOMjudge to adapt to training.
                     Provide contest management, polygon and so on.
                 </p>
             </li>
             <li>
-                <h5><a href="//github.com/cn-xcpc-tools">CN XCPC Tools</a></h5>
+                <h5>CN XCPC Tools <a href="//github.com/cn-xcpc-tools"><i class="fab fa-github"></i></a></h5>
                 <p>
-                    Toolset for holding contests, such as localized ICPC Live, printing persistent, documents about DOMjudge.
+                    Toolset for holding contests, such as localized ICPC Live,
+                    printing persistent, documents about DOMjudge.
+                </p>
+            </li>
+            <li>
+                <h5>Namomo Open Source <a href="//github.com/namofun"><i class="fab fa-github"></i></a></h5>
+                <p>
+                    The GitHub organization holding the current versions.
+                    Also the repository for Namomo OJ.
                 </p>
             </li>
         </ul>
