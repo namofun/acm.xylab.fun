@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SatelliteSite.IdentityModule.Entities;
@@ -56,6 +57,16 @@ namespace SatelliteSite
                     {
                         options.ApiKey = context.Configuration["ApplicationInsights:ForDisplayAppKey"];
                         options.ApplicationId = context.Configuration["ApplicationInsights:ForDisplayAppId"];
+                    });
+
+                    services.Configure<ContestModule.Routing.MinimalSiteOptions>(options =>
+                    {
+                        options.Keyword = context.Configuration.GetConnectionString("ContestKeyword");
+                    });
+
+                    services.Configure<ContestModule.Components.ContestStatistics.ContestStatisticsOptions>(options =>
+                    {
+                        options.DefaultContest = context.Configuration.GetValue<int?>("DefaultProblemset");
                     });
                 });
     }
