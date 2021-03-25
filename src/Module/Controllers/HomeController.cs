@@ -40,13 +40,12 @@ namespace SatelliteSite.XylabModule.Controllers
 
 
         [HttpGet]
-        public IActionResult Problems()
+        public async Task<IActionResult> Problemsets([FromServices] IContestRepository2 store, int page = 1)
         {
             ViewData["ActiveAction"] = "Problemset";
 
-            return Message(
-                "Feature Unavailable",
-                "This feature is being fixed, and will be reopened soon.");
+            return View(
+                await store.ListAsync(User, Ccs.CcsDefaults.KindProblemset, page));
         }
 
 

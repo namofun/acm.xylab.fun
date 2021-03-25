@@ -45,9 +45,9 @@ namespace SatelliteSite.XylabModule
                     .HasLink("Xylab", "Home", "Index")
                     .ActiveWhenViewData("HomePage");
 
-                menu.HasEntry(200)
-                    .HasTitle("fas fa-book-open", "Problems")
-                    .HasLink("Xylab", "Home", "Problems")
+                menu.HasEntry(290)
+                    .HasTitle("fas fa-book-open", "Problemsets")
+                    .HasLink("Xylab", "Home", "Problemsets")
                     .ActiveWhenViewData("Problemset");
 
                 menu.HasEntry(300)
