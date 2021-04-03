@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SatelliteSite.Migrations
 {
+    [DbContext(typeof(DefaultContext))]
+    [Migration("20210323104216_NewRoleDefinitions")]
     public partial class NewRoleDefinitions : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

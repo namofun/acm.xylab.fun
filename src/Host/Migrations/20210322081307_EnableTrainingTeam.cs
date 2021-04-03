@@ -1,8 +1,11 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SatelliteSite.Migrations
 {
+    [DbContext(typeof(DefaultContext))]
+    [Migration("20210322081307_EnableTrainingTeam")]
     public partial class EnableTrainingTeam : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
