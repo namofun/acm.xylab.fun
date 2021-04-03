@@ -68,14 +68,14 @@ namespace SatelliteSite
 
     public class QueryCache : QueryCacheBase<DefaultContext>
     {
-        public override async Task<IEnumerable<(int UserId, string UserName)>> FetchPermittedUserAsync(DefaultContext context, int probid)
+        public override async Task<IEnumerable<(int UserId, string UserName, AuthorLevel Level)>> FetchPermittedUserAsync(DefaultContext context, int probid)
         {
             var query =
                 from s in context.ProblemAuthors
                 where s.ProblemId == probid
                 join u in context.Users on s.UserId equals u.Id
-                select new { u.Id, u.UserName };
-            return (await query.ToListAsync()).Select(a => (a.Id, a.UserName));
+                select new { u.Id, u.UserName, s.Level };
+            return (await query.ToListAsync()).Select(a => (a.Id, a.UserName, a.Level));
         }
 
         public override Task<List<SolutionAuthor>> FetchSolutionAuthorAsync(DefaultContext context, Expression<Func<Submission, bool>> predicate)
