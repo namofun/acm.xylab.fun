@@ -22,5 +22,13 @@ namespace SatelliteSite.OnPremiseModule.Controllers
             ViewData["ActiveAction"] = "HomePage";
             return View();
         }
+
+
+        [HttpGet]
+        public IActionResult Teach()
+        {
+            ViewData["ActiveAction"] = "Teacher";
+            return View();
+        }
     }
 }

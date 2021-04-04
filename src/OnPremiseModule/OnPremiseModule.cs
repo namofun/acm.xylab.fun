@@ -32,23 +32,13 @@ namespace SatelliteSite.OnPremiseModule
             {
                 menu.HasEntry(100)
                     .HasTitle("fas fa-home", "Home")
-                    .HasLink("Xylab", "Home", "Index")
+                    .HasLink("/")
                     .ActiveWhenViewData("HomePage");
 
-                menu.HasEntry(290)
-                    .HasTitle("fas fa-book-open", "Problemsets")
-                    .HasLink("Xylab", "Home", "Problemsets")
-                    .ActiveWhenViewData("Problemset");
-
-                menu.HasEntry(300)
-                    .HasTitle("fas fa-trophy", "Contests")
-                    .HasLink("Xylab", "Home", "Contests")
-                    .ActiveWhenViewData("ListContest");
-
-                menu.HasEntry(310)
-                    .HasTitle("fas fa-rocket", "Gyms")
-                    .HasLink("Xylab", "Home", "Gyms")
-                    .ActiveWhenViewData("ListGym");
+                menu.HasEntry(200)
+                    .HasTitle("fas fa-graduation-cap", "Teach")
+                    .HasLink("Xylab", "Home", "Teach")
+                    .ActiveWhenViewData("Teacher");
             });
         }
 

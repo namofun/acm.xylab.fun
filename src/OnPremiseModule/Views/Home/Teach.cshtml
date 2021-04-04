@@ -4,30 +4,101 @@
     ViewData["CompactMode"] = true;
 }
 
-<style type="text/css">
+@section Banner {
+    <style>
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
 
-    #problemsets {
-        min-height: calc(-10.25em + 100vh);
-    }
+body {
+  padding-top: 56px;
+}
 
-    @@media screen and (min-width:768px) {
-        #problemsets {
-            min-height: calc(-14.25em + 100vh);
-        }
-    }
+@@media (max-width: 991.98px) {
+  .offcanvas-collapse {
+    position: fixed;
+    top: 56px; /* Height of navbar */
+    bottom: 0;
+    left: 100%;
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    overflow-y: auto;
+    visibility: hidden;
+    background-color: #343a40;
+    transition: visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+    transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+  }
+  .offcanvas-collapse.open {
+    visibility: visible;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
 
-    .bd-footer { font-size: 85%; text-align: center; background-color: #f7f7f7; }
-    .bd-footer a { font-weight: 500; color: #495057; }
-    .bd-footer a:hover, .bd-footer a:focus { color: #007bff; }
-    .bd-footer p { margin-bottom: 0; }
-    .bd-footer-links { padding-left: 0; margin-bottom: 1rem; }
-    .bd-footer-links li { display: inline-block; }
-    .bd-footer-links li+li { margin-left: 1rem; }
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+}
 
-    @@media all and (min-width:768px) {
-	    .bd-footer { text-align: left; }
-    }
-</style>
+.nav-scroller .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, .75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-underline .nav-link {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: .875rem;
+  color: #6c757d;
+}
+
+.nav-underline .nav-link:hover {
+  color: #007bff;
+}
+
+.nav-underline .active {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.bg-purple { background-color: #6f42c1; }
+
+.lh-100 { line-height: 1; }
+.lh-125 { line-height: 1.25; }
+.lh-150 { line-height: 1.5; }
+    </style>
+    <div class="nav-scroller bg-white shadow-sm">
+        <nav class="nav nav-underline">
+            <a class="nav-link active" href="#">Dashboard</a>
+            <a class="nav-link" href="#">
+                Friends
+                <span class="badge badge-pill bg-light align-text-bottom">27</span>
+            </a>
+            <a class="nav-link" href="#">Explore</a>
+            <a class="nav-link" href="#">Suggestions</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+        </nav>
+    </div>
+} 
 
 <div class="container" id="problemsets">
     <div class="row">
@@ -97,19 +168,3 @@
         </div>
     </div>
 </div>
-
-@section BannerFooter {
-    <!-- #footer start -->
-    <footer class="bd-footer text-muted">
-        <div class="container-fluid p-3 p-md-5">
-            <ul class="bd-footer-links">
-                <li><a href="https://acm.xylab.fun" rel="me">Platform</a></li>
-                <li><a href="https://github.com/namofun" rel="nofollow">Open Source</a></li>
-                <li><a href="https://www.xylab.fun" rel="nofollow">Laboratory</a></li>
-            </ul>
-            <p>On-Premise Version @(Controllers.HomeController.ProgramVersion) on <a href="//dotnet.microsoft.com/" rel="nofollow">.NET Core 3.1</a>.</p>
-            <p>Hosted on <a href="//www.aliyun.com/" rel="nofollow">Aliyun Elastic Compute Service</a>.</p>
-        </div>
-    </footer>
-    <!-- #footer end -->
-}

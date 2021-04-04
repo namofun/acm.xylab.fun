@@ -42,7 +42,7 @@ namespace SatelliteSite.XylabModule
             {
                 menu.HasEntry(100)
                     .HasTitle("fas fa-home", "Home")
-                    .HasLink("Xylab", "Home", "Index")
+                    .HasLink("/")
                     .ActiveWhenViewData("HomePage");
 
                 menu.HasEntry(290)
