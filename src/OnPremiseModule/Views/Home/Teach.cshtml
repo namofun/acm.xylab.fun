@@ -1,139 +1,75 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Teaching Center";
 }
 
-@section Banner {
-    <style>
-        body {
-            background-color: #f7f8f9;
-        }
-
-        .window-card {
-            margin-top: 3rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-            border-radius: 0.25rem !important;
-        }
-
-            .window-card > .card-body {
-                padding: 2rem 1.5rem 1.5rem;
-            }
-
-
-        .window-card {
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-            .window-card > .card-body .panel-bottom {
-                text-align: right;
-                margin-top: 1.5em;
-            }
-html,
+<style>
 body {
-  overflow-x: hidden; /* Prevent scroll on narrow devices */
+  background-color: #f7f8f9;
 }
 
-body {
-  padding-top: 56px;
+.window-card {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  padding-right: 0;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border-radius: 0.25rem !important;
 }
 
-@@media (max-width: 991.98px) {
-  .offcanvas-collapse {
-    position: fixed;
-    top: 56px; /* Height of navbar */
-    bottom: 0;
-    left: 100%;
-    width: 100%;
-    padding-right: 1rem;
-    padding-left: 1rem;
-    overflow-y: auto;
-    visibility: hidden;
-    background-color: #343a40;
-    transition: visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
-    transition: transform .3s ease-in-out, visibility .3s ease-in-out;
-    transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
-  }
-  .offcanvas-collapse.open {
-    visibility: visible;
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
-  }
+.window-card > .card-body {
+  padding: 2rem 1.5rem 1.5rem;
 }
 
-.nav-scroller {
-  position: relative;
-  z-index: 2;
-  height: 2.75rem;
-  overflow-y: hidden;
+.window-card > .card-body .panel-bottom {
+  text-align: right;
+  margin-top: 1.5em;
 }
+</style>
 
-.nav-scroller .nav {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  padding-bottom: 1rem;
-  overflow-x: auto;
-  color: rgba(255, 255, 255, .75);
-  text-align: center;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-}
-
-.nav-underline .nav-link {
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-  font-size: .875rem;
-  color: #6c757d;
-}
-
-.nav-underline .nav-link:hover {
-  color: #007bff;
-}
-
-.nav-underline .active {
-  font-weight: 500;
-  color: #343a40;
-}
-
-.text-white-50 { color: rgba(255, 255, 255, .5); }
-
-.bg-purple { background-color: #6f42c1; }
-
-.lh-100 { line-height: 1; }
-.lh-125 { line-height: 1.25; }
-.lh-150 { line-height: 1.5; }
-    </style>
-    <div class="nav-scroller bg-white shadow-sm">
-        <nav class="nav nav-underline">
-            <a class="nav-link active" href="#">Dashboard</a>
-            <a class="nav-link" href="#">
-                Friends
-                <span class="badge badge-pill bg-light align-text-bottom">27</span>
-            </a>
-            <a class="nav-link" href="#">Explore</a>
-            <a class="nav-link" href="#">Suggestions</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-            <a class="nav-link" href="#">Link</a>
-        </nav>
-    </div>
-}
-
-<div class="container">
+<div class="container card-container">
     <div class="card window-card container-fluid">
         <div class="card-body">
-            <h2>Window 1</h2>
-
-            <hr>
-            <small class="text-muted">Trace ID: 00-f047fb99873d7b47b852c38ba8765b3f-fc4a2c0a072d8d40-00</small>
+            <h2 class="mb-3">Overview</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <a class="breadcrumb mb-md-0 text-reset text-decoration-none" href="#">
+                        <div style="width:100%;color:#6c757d">
+                            <span>Contests</span>
+                            <span class="float-right"><i class="fas fa-trophy"></i></span>
+                        </div>
+                        <h3 class="mb-0">
+                            0
+                        </h3>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="breadcrumb mb-md-0 text-reset text-decoration-none" href="#">
+                        <div style="width:100%;color:#6c757d">
+                            <span>Problems</span>
+                            <span class="float-right"><i class="fas fa-book-open"></i></span>
+                        </div>
+                        <h3 class="mb-0">
+                            0
+                        </h3>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="breadcrumb mb-0 text-reset text-decoration-none" href="#">
+                        <div style="width:100%;color:#6c757d">
+                            <span>Student Groups</span>
+                            <span class="float-right"><i class="fas fa-users"></i></span>
+                        </div>
+                        <h3 class="mb-0">
+                            0
+                        </h3>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card window-card container-fluid">
         <div class="card-body">
-            <h2>Window 2</h2>
+            <h2>Contests</h2>
             <p class="text-danger">You do not have access to this resource.</p>
         </div>
     </div>
