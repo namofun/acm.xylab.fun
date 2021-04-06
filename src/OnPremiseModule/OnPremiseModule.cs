@@ -38,6 +38,7 @@ namespace SatelliteSite.OnPremiseModule
                 menu.HasEntry(200)
                     .HasTitle("fas fa-graduation-cap", "Teach")
                     .HasLink("Xylab", "Home", "Teach")
+                    .RequireThat(c => c.HttpContext.User.IsTenantAdmin())
                     .ActiveWhenViewData("Teacher");
             });
         }

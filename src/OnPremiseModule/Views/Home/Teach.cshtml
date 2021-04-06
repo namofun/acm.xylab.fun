@@ -1,5 +1,28 @@
 ﻿@{
     ViewData["Title"] = "Teaching Center";
+    IPagedList<Ccs.Models.ContestListModel> contests = ViewBag.Contests;
+    IPagedList<Polygon.Entities.Problem> problems = ViewBag.Problems;
+}
+
+@functions {
+    static string ContestState(Ccs.Models.ContestListModel c)
+    {
+        if (!c.StartTime.HasValue) return "table-primary";
+        if (DateTimeOffset.Now < c.StartTime) return "table-warning";
+        if (DateTimeOffset.Now < c.StartTime + c.Duration) return "table-success";
+        return "";
+    }
+
+    static string ContestKind(Ccs.Models.ContestListModel c)
+    {
+        return c.Kind switch
+        {
+            0 => "Contest",
+            1 => "Practice",
+            2 => "Problemset",
+            _ => "Unknown",
+        };
+    }
 }
 
 <style>
@@ -38,7 +61,7 @@ body {
                             <span class="float-right"><i class="fas fa-trophy"></i></span>
                         </div>
                         <h3 class="mb-0">
-                            0
+                            @contests.TotalCount
                         </h3>
                     </a>
                 </div>
@@ -49,7 +72,7 @@ body {
                             <span class="float-right"><i class="fas fa-book-open"></i></span>
                         </div>
                         <h3 class="mb-0">
-                            0
+                            @problems.TotalCount
                         </h3>
                     </a>
                 </div>
@@ -70,7 +93,70 @@ body {
     <div class="card window-card container-fluid">
         <div class="card-body">
             <h2>Contests</h2>
-            <p class="text-danger">You do not have access to this resource.</p>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr role="row">
+                        <th scope="col" class="sortable searchable">ID</th>
+                        <th scope="col" class="sortable searchable">shortname</th>
+                        <th scope="col" class="sortable searchable">name</th>
+                        <th scope="col" class="sortable">public?</th>
+                        <th scope="col" class="sortable searchable">start</th>
+                        <th scope="col" class="sortable searchable">length</th>
+                        <th scope="col" class="sortable searchable"># teams</th>
+                        <th scope="col" class="sortable searchable"># problems</th>
+                        <th scope="col" class="sortable searchable">kind</th>
+                        <th scope="col" class="sortable searchable">rule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cts in contests)
+                    {
+                        <tr asp-area="Contest" asp-controller="Jury" asp-action="Home" asp-route-cid="@cts.ContestId" role="row" data-target="gotoUrl" class="@ContestState(cts)">
+                            <td use-a>@cts.ContestId</td>
+                            <td use-a>@cts.ShortName</td>
+                            <td use-a><span class="forceWidth" style="max-width:20em">@(string.IsNullOrEmpty(cts.Name) ? "(unnamed)" : cts.Name)</span></td>
+                            <td use-a>@(cts.IsPublic ? "yes" : "no")</td>
+                            <td use-a>@(cts.StartTime.HasValue ? Html.CstTime(cts.StartTime) : "-")</td>
+                            <td use-a>@(cts.Duration?.ToString() ?? "-")</td>
+                            <td use-a>@cts.TeamCount</td>
+                            <td use-a>@cts.ProblemCount</td>
+                            <td use-a>@ContestKind(cts)</td>
+                            <td use-a class="rks"><misc-status type="ContestRule" value="cts.RankingStrategy" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card window-card container-fluid">
+        <div class="card-body">
+            <h2>Problems</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr role="row">
+                        <th scope="col" class="sortable">ID</th>
+                        <th scope="col" class="sortable searchable">name</th>
+                        <th scope="col" class="sortable">time limit</th>
+                        <th scope="col" class="sortable">memory limit</th>
+                        <th scope="col" class="sortable">output limit</th>
+                        <th scope="col" class="sortable searchable">source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prob in problems)
+                    {
+                        <tr asp-area="Polygon" asp-action="Overview" asp-route-pid="@prob.Id" asp-controller="Editor" role="row" data-toggle="gotoUrl">
+                            <td use-a>@prob.Id</td>
+                            <td class="@(prob.AllowJudge ? "" : "disabled") @(prob.AllowSubmit ? "" : "text-decoration-del")" use-a>@prob.Title</td>
+                            <td use-a>@(prob.TimeLimit / 1000.0)s</td>
+                            <td class="@(prob.MemoryLimit == 524288 ? "disabled" : "")" use-a>@(prob.MemoryLimit == 524288 ? "default" : $"{prob.MemoryLimit / 1024} MB")</td>
+                            <td class="@(prob.OutputLimit == 4096 ? "disabled" : "")" use-a>@(prob.OutputLimit == 4096 ? "default" : $"{prob.OutputLimit} KB")</td>
+                            <td class="@(string.IsNullOrEmpty(prob.Source) ? "disabled" : "")" use-a>@(string.IsNullOrEmpty(prob.Source) ? "empty" : prob.Source)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

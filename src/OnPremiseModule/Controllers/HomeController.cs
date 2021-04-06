@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ccs.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Polygon.Storages;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SatelliteSite.OnPremiseModule.Controllers
 {
@@ -25,8 +29,13 @@ namespace SatelliteSite.OnPremiseModule.Controllers
 
 
         [HttpGet]
-        public IActionResult Teach()
+        [Authorize(Policy = "TenantAdmin")]
+        public async Task<IActionResult> Teach(
+            [FromServices] IContestRepository2 contests,
+            [FromServices] IProblemStore problems)
         {
+            ViewData["Contests"] = await contests.ListAsync(User, limit: 5);
+            ViewData["Problems"] = await problems.ListAsync(1, 5, User);
             ViewData["ActiveAction"] = "Teacher";
             return View();
         }
