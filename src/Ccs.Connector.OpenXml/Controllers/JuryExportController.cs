@@ -17,6 +17,13 @@ namespace Ccs.Connector.OpenXml.Controllers
     [Route("[area]/{cid:c(3)}/jury/export")]
     public class JuryExportController : JuryControllerBase<IContestContext>
     {
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
         [HttpGet("[action]")]
         public async Task<IActionResult> Scoreboard(
             [FromQuery] int[] affiliations = null,
@@ -100,6 +107,9 @@ namespace Ccs.Connector.OpenXml.Controllers
                     }
                 }
             }
+
+            // sentinel worksheet
+            workbook.AddWorksheet("Sheet0");
 
             var memoryStream = new MemoryStream();
             workbook.SaveAs(memoryStream);
