@@ -17,4 +17,8 @@
     <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ccs.Connector.OpenXml\Ccs.Connector.OpenXml.csproj" />
+  </ItemGroup>
+
 </Project>
