@@ -7,6 +7,6 @@
     <CcsVersion>1.0.6</CcsVersion>
     <PolygonVersion>1.0.13</PolygonVersion>
     <PlagVersion>1.2.18</PlagVersion>
-    <TenantVersion>1.0.8</TenantVersion>
+    <TenantVersion>1.0.9</TenantVersion>
   </PropertyGroup>
 </Project>
