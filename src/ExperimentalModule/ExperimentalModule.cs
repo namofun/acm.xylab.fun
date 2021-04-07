@@ -18,7 +18,6 @@ namespace SatelliteSite.ExperimentalModule
                 menu.HasEntry(100)
                     .HasTitle("fas fa-feather", "Dashboard (Preview)")
                     .HasLink("Dashboard", "TeachingCenter", "Index")
-                    .WithMetadata("ExcludeMenuNameAt", MenuNameDefaults.DashboardNavbar)
                     .WithMetadata("RequiredPolicy", "TenantAdmin");
             });
 

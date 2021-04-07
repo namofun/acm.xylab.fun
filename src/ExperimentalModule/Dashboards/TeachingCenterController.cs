@@ -30,9 +30,12 @@ namespace SatelliteSite.ExperimentalModule.Dashboards
 
 
         [HttpGet("[action]")]
-        public IActionResult Organization()
+        public async Task<IActionResult> Organization(
+            [FromServices] IStudentStore store)
         {
-            return Ok();
+            ViewBag.Administrators = await store.GetAdministratorsAsync(Affiliation);
+            ViewBag.UserRoles = await store.GetAdministratorRolesAsync(Affiliation);
+            return View(Affiliation);
         }
     }
 }
