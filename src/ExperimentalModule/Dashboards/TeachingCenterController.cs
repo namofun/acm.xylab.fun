@@ -27,5 +27,12 @@ namespace SatelliteSite.ExperimentalModule.Dashboards
             ViewData["ActiveAction"] = "Teacher";
             return View();
         }
+
+
+        [HttpGet("[action]")]
+        public IActionResult Organization()
+        {
+            return Ok();
+        }
     }
 }

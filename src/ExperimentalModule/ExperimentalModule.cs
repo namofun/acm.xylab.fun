@@ -13,6 +13,27 @@ namespace SatelliteSite.ExperimentalModule
 
         public override void RegisterMenu(IMenuContributor menus)
         {
+            menus.Submenu(MenuNameDefaults.UserDropdown, menu =>
+            {
+                menu.HasEntry(100)
+                    .HasTitle("fas fa-feather", "Dashboard (Preview)")
+                    .HasLink("Dashboard", "TeachingCenter", "Index")
+                    .WithMetadata("ExcludeMenuNameAt", MenuNameDefaults.DashboardNavbar)
+                    .WithMetadata("RequiredPolicy", "TenantAdmin");
+            });
+
+            menus.Menu("Menu_TeachingCenter", menu =>
+            {
+                menu.HasEntry(0)
+                    .HasTitle(string.Empty, "Teaching Center")
+                    .HasLink("Dashboard", "TeachingCenter", "Index")
+                    .ActiveWhenAction("Index");
+
+                menu.HasEntry(100)
+                    .HasTitle(string.Empty, "Organization")
+                    .HasLink("Dashboard", "TeachingCenter", "Organization")
+                    .ActiveWhenAction("Organization");
+            });
         }
 
         public override void RegisterEndpoints(IEndpointBuilder endpoints)
