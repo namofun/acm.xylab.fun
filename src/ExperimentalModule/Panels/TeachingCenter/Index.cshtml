@@ -6,6 +6,23 @@
 }
 
 @functions {
+    static string ContestState(Ccs.Models.ContestListModel c)
+    {
+        if (!c.StartTime.HasValue) return "primary";
+        if (DateTimeOffset.Now < c.StartTime) return "warning";
+        if (DateTimeOffset.Now < c.StartTime + c.Duration) return "success";
+        return "secondary";
+    }
+
+    static string ContestState2(Ccs.Models.ContestListModel c)
+    {
+        if (c.Kind == Ccs.CcsDefaults.KindProblemset) return "open";
+        if (!c.StartTime.HasValue) return "scheduling";
+        if (DateTimeOffset.Now < c.StartTime) return "pending";
+        if (DateTimeOffset.Now < c.StartTime + c.Duration) return "running";
+        return "finished";
+    }
+
     static string ContestKind(Ccs.Models.ContestListModel c)
     {
         return c.Kind switch
@@ -93,7 +110,7 @@
 {
     <tr data-toggle="gotoUrlV2" data-href="@Url.Action("Home", "Jury", new { area = "Contest", cid = cts.ContestId })">
         <td>
-            @ContestKind(cts) @cts.ShortName
+            <i class="fas fa-info-circle text-@ContestState(cts)" title="@ContestState2(cts)"></i> @ContestKind(cts) @cts.ShortName
             <br />
             @(string.IsNullOrEmpty(cts.Name) ? "(unnamed)" : cts.Name)
         </td>

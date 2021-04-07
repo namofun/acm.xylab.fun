@@ -26,23 +26,6 @@ namespace SatelliteSite.OnPremiseModule
             });
         }
 
-        public override void RegisterMenu(IMenuContributor menus)
-        {
-            menus.Menu(MenuNameDefaults.MainNavbar, menu =>
-            {
-                menu.HasEntry(100)
-                    .HasTitle("fas fa-home", "Home")
-                    .HasLink("/")
-                    .ActiveWhenViewData("HomePage");
-
-                menu.HasEntry(200)
-                    .HasTitle("fas fa-graduation-cap", "Teach")
-                    .HasLink("Xylab", "Home", "Teach")
-                    .RequireThat(c => c.HttpContext.User.IsTenantAdmin())
-                    .ActiveWhenViewData("Teacher");
-            });
-        }
-
         public override void RegisterEndpoints(IEndpointBuilder endpoints)
         {
             endpoints.MapControllers();

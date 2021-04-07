@@ -1,122 +1,168 @@
-﻿@{
+﻿@model IPagedList<Ccs.Models.ContestListModel>
+@{
     ViewData["Title"] = "Home Page";
-    ViewData["HasFooter"] = true;
-    ViewData["CompactMode"] = true;
+    (Dictionary<string, (double, double, double)>, List<Polygon.Entities.Judgehost>, DateTimeOffset) health = ViewBag.Health;
 }
 
-<script src="/lib/calendar/underscore-min.js"></script>
-<script src="/lib/calendar/calendar.js"></script>
-<link rel="stylesheet" href="/lib/calendar/calendar.css" />
-
-<style type="text/css">
-
-    #problemsets {
-        min-height: calc(-10.25em + 100vh);
+@functions {
+    static string ContestState(Ccs.Models.ContestListModel c)
+    {
+        if (!c.StartTime.HasValue) return "primary";
+        if (DateTimeOffset.Now < c.StartTime) return "warning";
+        if (DateTimeOffset.Now < c.StartTime + c.Duration) return "success";
+        return "secondary";
     }
 
-    @@media screen and (min-width:768px) {
-        #problemsets {
-            min-height: calc(-14.25em + 100vh);
-        }
+    static string ContestState2(Ccs.Models.ContestListModel c)
+    {
+        if (c.Kind == Ccs.CcsDefaults.KindProblemset) return "open";
+        if (!c.StartTime.HasValue) return "scheduling";
+        if (DateTimeOffset.Now < c.StartTime) return "pending";
+        if (DateTimeOffset.Now < c.StartTime + c.Duration) return "running";
+        return "finished";
     }
 
-    .bd-footer { font-size: 85%; text-align: center; background-color: #f7f7f7; }
-    .bd-footer a { font-weight: 500; color: #495057; }
-    .bd-footer a:hover, .bd-footer a:focus { color: #007bff; }
-    .bd-footer p { margin-bottom: 0; }
-    .bd-footer-links { padding-left: 0; margin-bottom: 1rem; }
-    .bd-footer-links li { display: inline-block; }
-    .bd-footer-links li+li { margin-left: 1rem; }
-
-    @@media all and (min-width:768px) {
-	    .bd-footer { text-align: left; }
+    static string ContestKind(Ccs.Models.ContestListModel c)
+    {
+        return c.Kind switch
+        {
+            0 => "Contest",
+            1 => "Practice",
+            2 => "Problemset",
+            _ => "Unknown",
+        };
     }
+
+    static string ContestRule(Ccs.Models.ContestListModel c)
+    {
+        return c.RankingStrategy switch
+        {
+            0 => "ACM-ICPC",
+            1 => "IOI",
+            2 => "Codeforces",
+            _ => "Unknown",
+        };
+    }
+}
+
+<link rel="stylesheet" href="/_content/SatelliteSite.ExperimentalModule/main.css" />
+<style>
+.health-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.health-title,
+.health-item-span {
+  padding-left: 5px;
+}
+
+#about-links a {
+  color: inherit;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#about-links a:hover {
+  text-decoration: none;
+  color: rgba(0,90,158,1);
+  background-color: rgba(0,0,0,.06);
+}
 </style>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <h2 class="mt-4">Contest Calendar</h2>
-            <div id="calendar" class="mb-4"></div>
-        </div>
-        <div class="col-md-4">
-            <h4 class="border-bottom border-gray mt-5 pb-2 mb-0">Pinned problemsets</h4>
-            <div class="media text-muted pt-3">
-                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff" /><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
+<div class="row">
+<div class="container card-container">
 
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">@@username</strong>
-                    Playing ping pong all night long, everything's all neon and hazy. Yeah, she's so in demand. She's sweet as pie but if you break her heart. But down to earth. It's time to face the music I'm no longer your muse. I guess that I forgot I had a choice.
-                </p>
-            </div>
-            <div class="media text-muted pt-3">
-                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#e83e8c" /><text x="50%" y="50%" fill="#e83e8c" dy=".3em">32x32</text></svg>
+<div class="card window-card container-fluid">
+<div class="card-body">
+<h2>Contests</h2>
+<div class="card-table">
+<table class="table table-hover">
+<thead>
+    <tr role="row">
+        <th scope="col" style="min-width:17em">name</th>
+        <th scope="col" style="min-width:13em">time</th>
+        <th scope="col" style="min-width:10em" class="d-none d-md-table-cell">details</th>
+    </tr>
+</thead>
+<tbody>
+@foreach (var cts in Model)
+{
+    <tr data-toggle="gotoUrlV2" data-href="@Url.Action("Home", "DomPublic", new { area = "Contest", cid = cts.ContestId })">
+        <td>
+            <i class="fas fa-info-circle text-@ContestState(cts)" title="@ContestState2(cts)"></i> @ContestKind(cts) @cts.ShortName
+            <br />
+            @(string.IsNullOrEmpty(cts.Name) ? "(unnamed)" : cts.Name)
+        </td>
+        <td>
+            <span title="start time"><i class="far fa-calendar-alt fa-fw"></i> @(cts.StartTime.HasValue ? Html.CstTime(cts.StartTime) : "N/A")</span>
+            <br />
+            <span title="duration"><i class="far fa-clock fa-fw"></i> +@(cts.Duration?.ToString() ?? "N/A")</span>
+        </td>
+        <td class="d-none d-md-table-cell">
+            <span title="# teams" class="mr-2"><i class="far fa-user fa-fw"></i> @cts.TeamCount</span>
+            <span title="# problems"><i class="far fa-file-pdf fa-fw"></i> @cts.ProblemCount</span>
+            <br />
+            <span title="rule"><i class="far fa-futbol fa-fw"></i> @ContestRule(cts)</span>
+        </td>
+    </tr>
+}
+@if (Model.Count == 0)
+{ 
+    <tr>
+        <td colspan="3" class="text-md-center">
+            No data available in table
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+    
+<div class="card window-card container-fluid">
+<div class="card-body">
+<h2>Service health</h2>
 
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">@@username</strong>
-                    Standing on the frontline when the bombs start to fall. Heaven is jealous of our love, angels are crying from up above. Can't replace you with a million rings. Boy, when you're with me I'll give you a taste. There’s no going back. Before you met me I was alright but things were kinda heavy. Heavy is the head that wears the crown.
-                </p>
-            </div>
-            <div class="media text-muted pt-3">
-                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#6f42c1" /><text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text></svg>
-
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">@@username</strong>
-                    Will you do the same for me? It's time to face the music I'm no longer your muse. Heard it's beautiful, be the judge and my girls gonna take a vote. I can feel a phoenix inside of me. Heaven is jealous of our love, angels are crying from up above. Yeah, you take me to utopia.
-                </p>
-            </div>
-            <small class="d-block text-right mt-3">
-                <a href="#">All updates</a>
-            </small>
-        </div>
+<div class="row">
+    <div class="col-12 col-md-4 mb-3">
+        <p class="mb-0 health-title"><b style="line-height:2">Version</b></p>
+        <p class="mb-0 health-item health-item-span" title="instance role"><i class="fas fa-hdd fa-fw"></i> On-Premise</p>
+        <p class="mb-0 health-item health-item-span" title="version"><i class="fas fa-code-branch fa-fw"></i> <span class="filename">@(Controllers.HomeController.ProgramVersion)</span></p>
+        <p class="mb-0 health-item health-item-span" title="runtime"><i class="fas fa-dna fa-fw"></i> .NET Core 3.1</p>
+    </div>
+    <div class="col-12 col-md-4 mb-3">
+        <p class="mb-0 health-title"><b style="line-height:2">Load</b></p>
+@foreach (var judgehost in health.Item2)
+{
+    if (!judgehost.Active) continue;
+    var lastCheckAgo = health.Item3 - judgehost.PollTime;
+    var (statStr, statIcon) = !lastCheckAgo.HasValue
+        ? ("secondary", "info") : lastCheckAgo.Value.TotalSeconds < 30
+        ? ("success", "check") : lastCheckAgo.Value.TotalSeconds < 120
+        ? ("warning", "exclamation")
+        : ("danger", "times");
+    var load = health.Item1.GetValueOrDefault(judgehost.ServerName);
+        <p class="mb-0 health-item health-item-span" title="@judgehost.ServerName"><i class="text-@statStr fas fa-@statIcon-circle"></i> @($"{load.Item1:F2}, {load.Item2:F2}, {load.Item3:F2}")</p>
+}
+    </div>
+    <div class="col-12 col-md-4 mb-3" id="about-links">
+        <p class="mb-0 health-title"><b style="line-height:2">Links</b></p>
+        <p class="mb-0 health-item"><a href="https://acm.xylab.fun" rel="me"><i class="fas fa-globe-asia fa-fw"></i> Platform</a></p>
+        <p class="mb-0 health-item"><a href="https://github.com/namofun" rel="nofollow"><i class="fab fa-github fa-fw"></i> Open Source</a></p>
+        <p class="mb-0 health-item"><a href="https://www.xylab.fun" rel="nofollow"><i class="fas fa-flask fa-fw"></i> Laboratory</a></p>
     </div>
 </div>
+</div>
+</div>
 
+</div>
+</div>
 <script>
-    $('#calendar').calendar({
-        events_source: '/events',
-        view: 'month',
-        tmpl_path: '/lib/calendar/',
-        tmpl_cache: true,
-        day: '2013-03-12',
-        onAfterEventsLoad: function (events) {
-            if (!events) {
-                return;
-            }
-            var list = $('#eventlist');
-            list.html('');
-
-            $.each(events, function (key, val) {
-                $(document.createElement('li'))
-                    .html('<a href="' + val.url + '">' + val.title + '</a>')
-                    .appendTo(list);
-            });
-        },
-        onAfterViewLoad: function (view) {
-            $('.page-header h3').text(this.getTitle());
-            $('.btn-group button').removeClass('active');
-            $('button[data-calendar-view="' + view + '"]').addClass('active');
-        },
-        classes: {
-            months: {
-                general: 'label'
-            }
-        }
+    $(function () {
+        $('tr[data-toggle="gotoUrlV2"]').each(function () {
+            $(this).replaceWith($("<a/>", { href: $(this).data('href'), role: 'row' }).append($(this).html()));
+        });
     });
 </script>
-
-@section BannerFooter {
-    <!-- #footer start -->
-    <footer class="bd-footer text-muted">
-        <div class="container-fluid p-3 p-md-5">
-            <ul class="bd-footer-links">
-                <li><a href="https://acm.xylab.fun" rel="me">Platform</a></li>
-                <li><a href="https://github.com/namofun" rel="nofollow">Open Source</a></li>
-                <li><a href="https://www.xylab.fun" rel="nofollow">Laboratory</a></li>
-            </ul>
-            <p>On-Premise Version @(Controllers.HomeController.ProgramVersion) on <a href="//dotnet.microsoft.com/" rel="nofollow">.NET Core 3.1</a>.</p>
-            <p>Hosted on <a href="//www.aliyun.com/" rel="nofollow">Aliyun Elastic Compute Service</a>.</p>
-        </div>
-    </footer>
-    <!-- #footer end -->
-}

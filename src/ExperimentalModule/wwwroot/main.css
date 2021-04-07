@@ -96,10 +96,6 @@
   font-size: 1rem;
 }
 
-body {
-  padding-top: 56px;
-}
-
 @media (max-width: 991.98px) {
   .offcanvas-collapse {
     position: fixed;
