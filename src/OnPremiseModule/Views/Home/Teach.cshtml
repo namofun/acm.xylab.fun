@@ -122,6 +122,11 @@
 .card-table thead > tr > th {
   border: 0;
 }
+
+.h2-more {
+  float: right;
+  font-size: 1rem;
+}
 </style>
 
 <div class="row">
@@ -132,7 +137,7 @@
 <h2 class="mb-3">Overview</h2>
 <div class="row">
 <div class="col-md-4">
-    <a class="breadcrumb mb-md-0 text-reset text-decoration-none" href="#">
+    <a class="breadcrumb mb-md-0 text-reset text-decoration-none" asp-area="Dashboard" asp-controller="Contests" asp-action="List">
         <div style="width:100%;color:#6c757d">
             <span>Contests</span>
             <span class="float-right"><i class="fas fa-trophy"></i></span>
@@ -143,7 +148,7 @@
     </a>
 </div>
 <div class="col-md-4">
-    <a class="breadcrumb mb-md-0 text-reset text-decoration-none" href="#">
+    <a class="breadcrumb mb-md-0 text-reset text-decoration-none" asp-area="Dashboard" asp-controller="Problems" asp-action="List">
         <div style="width:100%;color:#6c757d">
             <span>Problems</span>
             <span class="float-right"><i class="fas fa-book-open"></i></span>
@@ -154,7 +159,7 @@
     </a>
 </div>
 <div class="col-md-4">
-    <a class="breadcrumb mb-0 text-reset text-decoration-none" href="#">
+    <a class="breadcrumb mb-0 text-reset text-decoration-none" asp-area="Dashboard" asp-controller="Classes" asp-action="List">
         <div style="width:100%;color:#6c757d">
             <span>Student Groups</span>
             <span class="float-right"><i class="fas fa-users"></i></span>
@@ -170,14 +175,17 @@
 
 <div class="card window-card container-fluid">
 <div class="card-body">
-<h2>Contests</h2>
+<h2>
+    Contests
+    <a class="h2-more" asp-area="Dashboard" asp-controller="Contests" asp-action="List">More &raquo;</a>
+</h2>
 <div class="card-table">
 <table class="table table-hover">
 <thead>
     <tr role="row">
         <th scope="col" style="min-width:17em">name</th>
         <th scope="col" style="min-width:13em">time</th>
-        <th scope="col" style="min-width:10em" class="d-none d-md-table-cell"></th>
+        <th scope="col" style="min-width:10em" class="d-none d-md-table-cell">details</th>
     </tr>
 </thead>
 <tbody>
@@ -210,16 +218,16 @@
     
 <div class="card window-card container-fluid">
 <div class="card-body">
-<h2>Problems</h2>
+<h2>
+    Problems
+    <a class="h2-more" asp-area="Dashboard" asp-controller="Problems" asp-action="List">More &raquo;</a>
+</h2>
 <div class="card-table">
 <table class="table table-hover">
 <thead>
     <tr role="row">
-        <th scope="col">ID</th>
         <th scope="col">name</th>
-        <th scope="col">time limit</th>
-        <th scope="col">memory limit</th>
-        <th scope="col">output limit</th>
+        <th scope="col" class="d-none d-md-table-cell">limits</th>
         <th scope="col">source</th>
     </tr>
 </thead>
@@ -227,12 +235,19 @@
 @foreach (var prob in problems)
 {
     <tr data-toggle="gotoUrlV2" data-href="@Url.Action("Overview", "Editor", new { area = "Polygon", pid = prob.Id })">
-        <td>@prob.Id</td>
-        <td class="@(prob.AllowJudge ? "" : "disabled") @(prob.AllowSubmit ? "" : "text-decoration-del")">@prob.Title</td>
-        <td>@(prob.TimeLimit / 1000.0)s</td>
-        <td class="@(prob.MemoryLimit == 524288 ? "disabled" : "")">@(prob.MemoryLimit == 524288 ? "default" : $"{prob.MemoryLimit / 1024} MB")</td>
-        <td class="@(prob.OutputLimit == 4096 ? "disabled" : "")">@(prob.OutputLimit == 4096 ? "default" : $"{prob.OutputLimit} KB")</td>
-        <td class="@(string.IsNullOrEmpty(prob.Source) ? "disabled" : "")">@(string.IsNullOrEmpty(prob.Source) ? "empty" : prob.Source)</td>
+        <td class="align-middle">
+            @prob.Title <span asp-show-if="!prob.AllowJudge" title="disabled" class="badge badge-secondary">disabled</span>
+        </td>
+        <td class="d-none d-md-table-cell">
+            <span title="time limit"><i class="far fa-clock fa-fw"></i> @(prob.TimeLimit / 1000.0)s</span>
+            <br />
+            <span title="memory limit"><i class="far fa-chart-bar fa-fw"></i> @(prob.MemoryLimit / 1024) MB</span>
+        </td>
+        <td>
+            <span title="source" class="@(string.IsNullOrEmpty(prob.Source) ? "disabled" : "")"><i class="far fa-paper-plane fa-fw"></i> @(string.IsNullOrEmpty(prob.Source) ? "empty" : prob.Source)</span>
+            <br />
+            <span title="tags" class="@(string.IsNullOrEmpty(prob.TagName) ? "disabled" : "")"><i class="far fa-flag fa-fw"></i> @(string.IsNullOrEmpty(prob.TagName) ? "empty" : prob.TagName)</span>
+        </td>
     </tr>
 }
 </tbody>
@@ -243,27 +258,28 @@
 
 <div class="card window-card container-fluid">
 <div class="card-body">
-<h2>Student Groups</h2>
+<h2>
+    Student Groups
+    <a class="h2-more" asp-area="Dashboard" asp-controller="Classes" asp-action="List">More &raquo;</a>
+</h2>
 <div class="card-table">
 <table class="table table-striped">
 <thead>
     <tr role="row">
-        <th scope="col">ID</th>
         <th scope="col">name</th>
         <th scope="col">count</th>
-        <th scope="col">create time</th>
-        <th scope="col">creator</th>
+        <th scope="col" class="d-none d-md-table-cell">create time</th>
+        <th scope="col" class="d-none d-md-table-cell">creator</th>
     </tr>
 </thead>
 <tbody>
 @foreach (var stu in classes)
 {
     <tr data-toggle="gotoUrlV2" data-href="@Url.Action("Detail", "Classes", new { area = "Dashboard", clsid = stu.Id })">
-        <td>@stu.Id</td>
-        <td><i asp-show-if="@(!stu.UserId.HasValue)" class="fas fa-tag" title="Shared"></i> @stu.Name</td>
-        <td>@stu.Count</td>
-        <td>@Html.CstTime(stu.CreationTime)</td>
-        <td>@(stu.UserName ?? "N/A")</td>
+        <td>@stu.Name</td>
+        <td><i class="d-md-none far fa-user"></i> @stu.Count</td>
+        <td class="d-none d-md-table-cell">@Html.CstTime(stu.CreationTime)</td>
+        <td class="d-none d-md-table-cell">@(stu.UserName ?? "N/A")</td>
     </tr>
 }
 </tbody>
