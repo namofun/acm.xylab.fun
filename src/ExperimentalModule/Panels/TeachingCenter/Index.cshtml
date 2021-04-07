@@ -210,6 +210,14 @@
         </td>
     </tr>
 }
+@if (contests.Count == 0)
+{ 
+    <tr>
+        <td colspan="3" class="text-md-center">
+            No data available
+        </td>
+    </tr>
+}
 </tbody>
 </table>
 </div>
@@ -250,6 +258,14 @@
         </td>
     </tr>
 }
+@if (problems.Count == 0)
+{ 
+    <tr>
+        <td colspan="3" class="text-md-center">
+            No data available
+        </td>
+    </tr>
+}
 </tbody>
 </table>
 </div>
@@ -280,6 +296,14 @@
         <td><i class="d-md-none far fa-user"></i> @stu.Count</td>
         <td class="d-none d-md-table-cell">@Html.CstTime(stu.CreationTime)</td>
         <td class="d-none d-md-table-cell">@(stu.UserName ?? "N/A")</td>
+    </tr>
+}
+@if (classes.Count == 0)
+{ 
+    <tr>
+        <td colspan="4" class="text-md-center">
+            No data available
+        </td>
     </tr>
 }
 </tbody>

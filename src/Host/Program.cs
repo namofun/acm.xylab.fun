@@ -37,6 +37,7 @@ namespace SatelliteSite
                 .AddModule<PolygonModule.PolygonModule<Polygon.DefaultRole<DefaultContext, QueryCache>>>()
                 .AddModule<ContestModule.ContestModule<Ccs.RelationalRole<XylabUser, Role, DefaultContext>>>()
                 .AddModule<PlagModule.PlagModule<Plag.Backend.RestfulBackendRole>>()
+                .AddModule<ExperimentalModule.ExperimentalModule>()
                 .AddDatabase<DefaultContext>((c, b) => b.UseSqlServer(c.GetConnectionString("UserDbConnection"), b => b.UseBulk()))
                 .ConfigureSubstrateDefaults<DefaultContext>()
                 .ConfigureServices((context, services) =>

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ccs.Connector.OpenXml\Ccs.Connector.OpenXml.csproj" />
+    <ProjectReference Include="..\ExperimentalModule\SatelliteSite.ExperimentalModule.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,6 @@
-﻿using Ccs.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Polygon.Storages;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Tenant.Services;
 
 namespace SatelliteSite.OnPremiseModule.Controllers
 {
@@ -26,27 +20,6 @@ namespace SatelliteSite.OnPremiseModule.Controllers
         public IActionResult Index()
         {
             ViewData["ActiveAction"] = "HomePage";
-            return View();
-        }
-
-
-        [HttpGet]
-        [Authorize(Policy = "TenantAdmin")]
-        public async Task<IActionResult> Teach(
-            [FromServices] IContestRepository2 contests,
-            [FromServices] IProblemStore problems,
-            [FromServices] IStudentStore students,
-            [FromServices] IAffiliationStore affiliations)
-        {
-            var uid = int.Parse(User.GetUserId());
-            var tenantId = User.IsInRole("Administrator")
-                ? affiliations.GetQueryable().Select(a => a.Id)
-                : User.FindAll("tenant_admin").Select(a => int.Parse(a.Value));
-
-            ViewData["Contests"] = await contests.ListAsync(User, limit: 5);
-            ViewData["Problems"] = await problems.ListAsync(1, 5, User);
-            ViewData["Classes"] = await students.ListClassesAsync(tenantId, 1, 5, c => c.UserId == null || c.UserId == uid);
-            ViewData["ActiveAction"] = "Teacher";
             return View();
         }
 
