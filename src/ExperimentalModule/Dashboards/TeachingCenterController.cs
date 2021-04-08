@@ -1,6 +1,7 @@
 ﻿using Ccs.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Polygon.Entities;
 using Polygon.Storages;
 using System;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace SatelliteSite.ExperimentalModule.Dashboards
             var uid = int.Parse(User.GetUserId());
 
             ViewData["Contests"] = await contests.ListAsync(User, limit: 5);
-            ViewData["Problems"] = await problems.ListAsync(1, 5, User);
+            ViewData["Problems"] = await problems.ListAsync(1, 5, User, ascending: false, leastLevel: AuthorLevel.Creator);
             ViewData["Classes"] = await students.ListClassesAsync(Affiliation, 1, 5, uid);
             ViewData["ActiveAction"] = "Teacher";
             return View();

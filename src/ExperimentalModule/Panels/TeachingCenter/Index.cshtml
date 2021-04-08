@@ -159,7 +159,7 @@
 <tbody>
 @foreach (var prob in problems)
 {
-    <tr data-toggle="gotoUrlV2" data-href="@Url.Action("Overview", "Editor", new { area = "Polygon", pid = prob.Id })">
+    <tr data-toggle="gotoUrlV2" data-href="@Url.Action("Overview", "Editor", new { area = "Polygon", probid = prob.Id })">
         <td class="align-middle">
             @prob.Title <span asp-show-if="!prob.AllowJudge" title="disabled" class="badge badge-secondary">disabled</span>
         </td>
