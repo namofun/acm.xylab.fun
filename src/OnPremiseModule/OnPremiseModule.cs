@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,17 @@ namespace SatelliteSite.OnPremiseModule
             services.ConfigureIdentityAdvanced(options =>
             {
                 options.ShortenedClaimName = true;
+            });
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.OnAppendCookie = ctx =>
+                {
+                    if (ctx.CookieName == ".AspNet.Tenant.CurrentTenant")
+                    {
+                        ctx.CookieOptions.SameSite = SameSiteMode.Lax;
+                    }
+                };
             });
         }
 
