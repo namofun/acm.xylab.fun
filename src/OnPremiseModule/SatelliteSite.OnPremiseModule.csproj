@@ -15,6 +15,7 @@
     <PackageReference Include="SatelliteSite.ContestModule" Version="$(CcsVersion)" />
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
     <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
+    <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
   </ItemGroup>
 
   <ItemGroup>

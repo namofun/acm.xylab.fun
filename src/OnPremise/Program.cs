@@ -55,6 +55,11 @@ namespace SatelliteSite
                     {
                         options.Keyword = context.Configuration.GetConnectionString("ContestKeyword");
                     });
+
+                    services.Configure<OnPremiseModule.FileUploadShortCircuitOptions>(options =>
+                    {
+                        options.Enabled = context.Configuration.GetValue<bool?>("FileUploadShortCircuit") ?? false;
+                    });
                 });
     }
 }
