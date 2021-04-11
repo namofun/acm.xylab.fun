@@ -10,8 +10,8 @@ using SatelliteSite;
 namespace SatelliteSite.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20210325140907_BumpToCcs4")]
-    partial class BumpToCcs4
+    [Migration("20210411151412_BumpToTenant10")]
+    partial class BumpToTenant10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -231,6 +231,9 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.HasKey("ContestId", "UserId");
@@ -831,13 +834,13 @@ namespace SatelliteSite.Migrations
                     b.Property<bool>("AllowSubmit")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ComapreArguments")
+                    b.Property<bool>("CombinedRunCompare")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CompareArguments")
                         .HasColumnType("varchar(128)")
                         .HasMaxLength(128)
                         .IsUnicode(false);
-
-                    b.Property<bool>("CombinedRunCompare")
-                        .HasColumnType("bit");
 
                     b.Property<string>("CompareScript")
                         .IsRequired()
@@ -893,6 +896,9 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ProblemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "ProblemId");
@@ -1360,6 +1366,15 @@ namespace SatelliteSite.Migrations
                         },
                         new
                         {
+                            Id = -17,
+                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
+                            Description = "Team Leader",
+                            Name = "TeamLeader",
+                            NormalizedName = "TEAMLEADER",
+                            ShortName = "leader"
+                        },
+                        new
+                        {
                             Id = -10,
                             ConcurrencyStamp = "44315c39-534d-ec0c-61f0-c0a5ed981cd9",
                             Description = "(Internal/System) Judgehost",
@@ -1370,10 +1385,10 @@ namespace SatelliteSite.Migrations
                         new
                         {
                             Id = -11,
-                            ConcurrencyStamp = "215260d1-ee7b-b826-38c4-f76639a9a354",
+                            ConcurrencyStamp = "f25ae969-433c-3f4a-04ca-7ec12d2583cc",
                             Description = "Problem Provider",
-                            Name = "Problem",
-                            NormalizedName = "PROBLEM",
+                            Name = "ProblemCreator",
+                            NormalizedName = "PROBLEMCREATOR",
                             ShortName = "prob"
                         },
                         new
@@ -1529,7 +1544,7 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<bool>("StudentVerified")
                         .HasColumnType("bit");
@@ -1553,6 +1568,8 @@ namespace SatelliteSite.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -1684,14 +1701,26 @@ namespace SatelliteSite.Migrations
                     b.Property<int>("AffiliationId")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
                     b.HasKey("Id");
 
                     b.HasIndex("AffiliationId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TenantTeachingClasses");
                 });
@@ -1778,6 +1807,44 @@ namespace SatelliteSite.Migrations
                     b.HasIndex("AffiliationId");
 
                     b.ToTable("TenantStudents");
+                });
+
+            modelBuilder.Entity("Tenant.Entities.VerifyCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AffiliationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
+
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RedeemCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffiliationId");
+
+                    b.HasIndex("Code");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TenantVerifyCodes");
                 });
 
             modelBuilder.Entity("Ccs.Entities.Balloon", b =>
@@ -2127,6 +2194,14 @@ namespace SatelliteSite.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SatelliteSite.XylabUser", b =>
+                {
+                    b.HasOne("Tenant.Entities.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
             modelBuilder.Entity("Tenant.Entities.Class", b =>
                 {
                     b.HasOne("Tenant.Entities.Affiliation", "Affiliation")
@@ -2134,6 +2209,11 @@ namespace SatelliteSite.Migrations
                         .HasForeignKey("AffiliationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("SatelliteSite.XylabUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tenant.Entities.ClassStudent", b =>
@@ -2186,6 +2266,21 @@ namespace SatelliteSite.Migrations
                     b.HasOne("Tenant.Entities.Affiliation", null)
                         .WithMany()
                         .HasForeignKey("AffiliationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tenant.Entities.VerifyCode", b =>
+                {
+                    b.HasOne("Tenant.Entities.Affiliation", null)
+                        .WithMany()
+                        .HasForeignKey("AffiliationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SatelliteSite.XylabUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

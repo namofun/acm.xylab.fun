@@ -1,8 +1,11 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SatelliteSite.Migrations
 {
+    [DbContext(typeof(DefaultContext))]
+    [Migration("20210403161254_JopInit")]
     public partial class JopInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

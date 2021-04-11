@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SatelliteSite.Migrations
 {
+    [DbContext(typeof(DefaultContext))]
+    [Migration("20210325140907_BumpToCcs4")]
     public partial class BumpToCcs4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

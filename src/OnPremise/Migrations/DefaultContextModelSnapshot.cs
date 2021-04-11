@@ -1821,6 +1821,44 @@ namespace SatelliteSite.Migrations
                     b.ToTable("TenantStudents");
                 });
 
+            modelBuilder.Entity("Tenant.Entities.VerifyCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AffiliationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
+
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RedeemCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffiliationId");
+
+                    b.HasIndex("Code");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TenantVerifyCodes");
+                });
+
             modelBuilder.Entity("Ccs.Entities.Balloon", b =>
                 {
                     b.HasOne("Polygon.Entities.Submission", null)
@@ -2250,6 +2288,21 @@ namespace SatelliteSite.Migrations
                     b.HasOne("Tenant.Entities.Affiliation", null)
                         .WithMany()
                         .HasForeignKey("AffiliationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tenant.Entities.VerifyCode", b =>
+                {
+                    b.HasOne("Tenant.Entities.Affiliation", null)
+                        .WithMany()
+                        .HasForeignKey("AffiliationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SatelliteSite.XylabUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
