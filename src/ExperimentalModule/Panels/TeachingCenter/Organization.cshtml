@@ -3,6 +3,7 @@
     ViewData["Title"] = "Organization";
     IReadOnlyList<Microsoft.AspNetCore.Identity.IUser> admin = ViewBag.Administrators;
     ILookup<int, string> userRoles = ViewBag.UserRoles;
+    IReadOnlyList<Tenant.Entities.VerifyCode> verifyCodes = ViewBag.VerifyCodes;
 }
 
 <div class="row">
@@ -103,7 +104,45 @@
 { 
     <tr>
         <td colspan="3" class="text-md-center">
-            No data available
+            No data available in table
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="card window-card container-fluid">
+<div class="card-body">
+<h2>Invitation Codes</h2>
+<div class="card-table">
+<table class="table table-hover">
+<thead>
+    <tr role="row">
+        <th scope="col">code</th>
+        <th scope="col">time</th>
+        <th scope="col" class="d-none d-md-table-cell"></th>
+    </tr>
+</thead>
+<tbody>
+@foreach (var code in verifyCodes)
+{
+    <tr>
+        <td>@(code.Id)# <span class="hostname">@code.Code</span></td>
+        <td>@code.CreationTime</td>
+        <td class="d-none d-md-table-cell">
+            <span title="Redemption count"><i class="far fa-chart-bar"></i> @code.RedeemCount</span>
+            <span title="Creator"><i class="far fa-user ml-2"></i> @(admin.FirstOrDefault(u => u.Id == code.UserId)?.UserName ?? "UNKNOWN") (u@(code.UserId))</span>
+        </td>
+    </tr>
+}
+@if (verifyCodes.Count == 0)
+{ 
+    <tr>
+        <td colspan="3" class="text-md-center">
+            No data available in table
         </td>
     </tr>
 }

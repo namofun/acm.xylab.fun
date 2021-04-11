@@ -36,6 +36,7 @@ namespace SatelliteSite.ExperimentalModule.Dashboards
         {
             ViewBag.Administrators = await store.GetAdministratorsAsync(Affiliation);
             ViewBag.UserRoles = await store.GetAdministratorRolesAsync(Affiliation);
+            ViewBag.VerifyCodes = await store.GetVerifyCodesAsync(Affiliation, validOnly: true);
             return View(Affiliation);
         }
     }
