@@ -60,6 +60,8 @@ namespace SatelliteSite
                     {
                         options.Enabled = context.Configuration.GetValue<bool?>("FileUploadShortCircuit") ?? false;
                     });
+
+                    services.Configure<Services.AuthMessageSenderOptions>(context.Configuration.GetSection("Mailing"));
                 });
     }
 }
