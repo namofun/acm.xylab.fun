@@ -15,11 +15,11 @@
     <PackageReference Include="SatelliteSite.ContestModule" Version="$(CcsVersion)" />
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
     <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
+    <PackageReference Include="Ccs.Connector.OpenXml" Version="$(CcsVersion)" />
     <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ccs.Connector.OpenXml\Ccs.Connector.OpenXml.csproj" />
     <ProjectReference Include="..\ExperimentalModule\SatelliteSite.ExperimentalModule.csproj" />
   </ItemGroup>
 

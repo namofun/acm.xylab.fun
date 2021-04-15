@@ -252,6 +252,9 @@ namespace SatelliteSite.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("LastLoginIp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Temporary")
                         .HasColumnType("bit");
 
