@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Module\SatelliteSite.XylabModule.csproj" />
+    <ProjectReference Include="..\XylabModule\SatelliteSite.XylabModule.csproj" />
   </ItemGroup>
 
 </Project>
