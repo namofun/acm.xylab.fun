@@ -1,6 +1,7 @@
 ﻿@model IPagedList<Ccs.Models.ContestListModel>
 @{
     ViewData["Title"] = "Home Page";
+    ViewData["UseCardTheme"] = true;
     (Dictionary<string, (double, double, double)>, List<Polygon.Entities.Judgehost>, DateTimeOffset) health = ViewBag.Health;
 }
 
@@ -45,7 +46,6 @@
     }
 }
 
-<link rel="stylesheet" href="/_content/SatelliteSite.ExperimentalModule/main.css" />
 <style>
 .health-item {
   margin-top: 5px;
@@ -159,10 +159,3 @@
 
 </div>
 </div>
-<script>
-    $(function () {
-        $('tr[data-toggle="gotoUrlV2"]').each(function () {
-            $(this).replaceWith($("<a/>", { href: $(this).data('href'), role: 'row' }).append($(this).html()));
-        });
-    });
-</script>
