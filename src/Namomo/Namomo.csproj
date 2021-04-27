@@ -12,7 +12,6 @@
     <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
     <PackageReference Include="Polygon.Seeds" Version="$(PolygonVersion)" />
     <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
-    <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
 
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
