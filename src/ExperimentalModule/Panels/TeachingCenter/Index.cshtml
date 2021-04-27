@@ -231,10 +231,3 @@
 
 </div>
 </div>
-<script>
-    $(function () {
-        $('tr[data-toggle="gotoUrlV2"]').each(function () {
-            $(this).replaceWith($("<a/>", { href: $(this).data('href'), role: 'row' }).append($(this).html()));
-        });
-    });
-</script>

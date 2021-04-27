@@ -1,10 +1,10 @@
 ﻿@inject IMenuProvider Menu
 @{
+    ViewData["UseCardTheme"] = true;
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
 @section Banner {
-    <link rel="stylesheet" href="/_content/SatelliteSite.ExperimentalModule/main.css" />
     <style>body { padding-top: 56px; }</style>
     <div class="nav-scroller bg-white shadow-sm">
     <nav class="nav nav-underline">
