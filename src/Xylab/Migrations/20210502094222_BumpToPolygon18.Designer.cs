@@ -10,8 +10,8 @@ using SatelliteSite;
 namespace SatelliteSite.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20210411151133_BumpToTenant10")]
-    partial class BumpToTenant10
+    [Migration("20210502094222_BumpToPolygon18")]
+    partial class BumpToPolygon18
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -253,6 +253,9 @@ namespace SatelliteSite.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("LastLoginIp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Temporary")
                         .HasColumnType("bit");
@@ -567,170 +570,6 @@ namespace SatelliteSite.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Plag.Backend.Entities.PlagiarismSet<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("ContestId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset>("CreateTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ReportCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReportPending")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubmissionCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubmissionFailed")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubmissionSucceeded")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContestId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PlagiarismSets");
-                });
-
-            modelBuilder.Entity("Plag.Backend.Entities.Report<System.Guid>", b =>
-                {
-                    b.Property<Guid>("SetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SubmissionA")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubmissionB")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BiggestMatch")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("Finished")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("Justification")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("Matches")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<double>("Percent")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0);
-
-                    b.Property<double>("PercentA")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0);
-
-                    b.Property<double>("PercentB")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0);
-
-                    b.Property<int>("TokensMatched")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.HasKey("SetId", "SubmissionA", "SubmissionB");
-
-                    b.HasAlternateKey("ExternalId");
-
-                    b.HasIndex("SetId", "SubmissionB");
-
-                    b.ToTable("PlagiarismReports");
-                });
-
-            modelBuilder.Entity("Plag.Backend.Entities.Submission<System.Guid>", b =>
-                {
-                    b.Property<Guid>("SetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Error")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ExclusiveCategory")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("InclusiveCategory")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("MaxPercent")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("TokenProduced")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("Tokens")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<DateTimeOffset>("UploadTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("SetId", "Id");
-
-                    b.ToTable("PlagiarismSubmissions");
-                });
-
-            modelBuilder.Entity("Plag.Backend.Entities.SubmissionFile<System.Guid>", b =>
-                {
-                    b.Property<Guid>("SubmissionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("FileId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SubmissionId", "FileId");
-
-                    b.ToTable("PlagiarismFiles");
-                });
-
             modelBuilder.Entity("Polygon.Entities.Executable", b =>
                 {
                     b.Property<string>("Id")
@@ -848,11 +687,17 @@ namespace SatelliteSite.Migrations
                     b.Property<bool>("FullTest")
                         .HasColumnType("bit");
 
+                    b.Property<int>("PolygonVersion")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PreviousJudgingId")
                         .HasColumnType("int");
 
                     b.Property<int?>("RejudgingId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RunVerdicts")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Server")
                         .HasColumnType("varchar(64)")
@@ -1356,6 +1201,36 @@ namespace SatelliteSite.Migrations
                         },
                         new
                         {
+                            Name = "oj_Codeforces_update_time",
+                            Category = "Tenant",
+                            Description = "Last update time of Codeforces.",
+                            DisplayPriority = 0,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "oj_Vjudge_update_time",
+                            Category = "Tenant",
+                            Description = "Last update time of Vjudge.",
+                            DisplayPriority = 1,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "oj_Hdoj_update_time",
+                            Category = "Tenant",
+                            Description = "Last update time of HDOJ.",
+                            DisplayPriority = 2,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
                             Name = "process_limit",
                             Category = "Judging",
                             Description = "Maximum number of processes that the submission is allowed to start (including shell and possibly interpreters).",
@@ -1500,6 +1375,15 @@ namespace SatelliteSite.Migrations
                         },
                         new
                         {
+                            Id = -17,
+                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
+                            Description = "Team Leader",
+                            Name = "TeamLeader",
+                            NormalizedName = "TEAMLEADER",
+                            ShortName = "leader"
+                        },
+                        new
+                        {
                             Id = -10,
                             ConcurrencyStamp = "44315c39-534d-ec0c-61f0-c0a5ed981cd9",
                             Description = "(Internal/System) Judgehost",
@@ -1543,6 +1427,69 @@ namespace SatelliteSite.Migrations
                             NormalizedName = "TEMPORARYTEAMACCOUNT",
                             ShortName = "temp_team"
                         });
+                });
+
+            modelBuilder.Entity("SatelliteSite.NewsModule.Entities.News", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTimeOffset>("LastUpdate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("Source")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Tree")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
+                });
+
+            modelBuilder.Entity("SatelliteSite.OjUpdateModule.Entities.SolveRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NickName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Result")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("Category", "Grade");
+
+                    b.ToTable("TenantSolveRecord");
                 });
 
             modelBuilder.Entity("SatelliteSite.XylabUser", b =>
@@ -1800,6 +1747,54 @@ namespace SatelliteSite.Migrations
                     b.HasIndex("ClassId");
 
                     b.ToTable("TenantClassStudents");
+                });
+
+            modelBuilder.Entity("Tenant.Entities.GroupTeam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AffiliationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffiliationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TenantTrainingTeams");
+                });
+
+            modelBuilder.Entity("Tenant.Entities.GroupUser", b =>
+                {
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Accepted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("TeamId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TenantTrainingUsers");
                 });
 
             modelBuilder.Entity("Tenant.Entities.Student", b =>
@@ -2073,46 +2068,6 @@ namespace SatelliteSite.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Plag.Backend.Entities.Report<System.Guid>", b =>
-                {
-                    b.HasOne("Plag.Backend.Entities.PlagiarismSet<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("SetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Plag.Backend.Entities.Submission<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("SetId", "SubmissionA")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Plag.Backend.Entities.Submission<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("SetId", "SubmissionB")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Plag.Backend.Entities.Submission<System.Guid>", b =>
-                {
-                    b.HasOne("Plag.Backend.Entities.PlagiarismSet<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("SetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Plag.Backend.Entities.SubmissionFile<System.Guid>", b =>
-                {
-                    b.HasOne("Plag.Backend.Entities.Submission<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("SubmissionId")
-                        .HasPrincipalKey("ExternalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Polygon.Entities.Judging", b =>
                 {
                     b.HasOne("Polygon.Entities.Judging", null)
@@ -2140,7 +2095,7 @@ namespace SatelliteSite.Migrations
             modelBuilder.Entity("Polygon.Entities.JudgingRun", b =>
                 {
                     b.HasOne("Polygon.Entities.Judging", "j")
-                        .WithMany("Details")
+                        .WithMany()
                         .HasForeignKey("JudgingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2281,6 +2236,36 @@ namespace SatelliteSite.Migrations
                     b.HasOne("Tenant.Entities.Student", null)
                         .WithMany()
                         .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tenant.Entities.GroupTeam", b =>
+                {
+                    b.HasOne("Tenant.Entities.Affiliation", "Affiliation")
+                        .WithMany()
+                        .HasForeignKey("AffiliationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SatelliteSite.XylabUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tenant.Entities.GroupUser", b =>
+                {
+                    b.HasOne("Tenant.Entities.GroupTeam", null)
+                        .WithMany("Users")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SatelliteSite.XylabUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

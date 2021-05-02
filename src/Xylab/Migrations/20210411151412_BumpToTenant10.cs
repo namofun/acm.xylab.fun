@@ -1,8 +1,11 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SatelliteSite.Migrations
 {
+    [DbContext(typeof(DefaultContext))]
+    [Migration("20210411151412_BumpToTenant10")]
     public partial class BumpToTenant10 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

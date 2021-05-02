@@ -849,11 +849,17 @@ namespace SatelliteSite.Migrations
                     b.Property<bool>("FullTest")
                         .HasColumnType("bit");
 
+                    b.Property<int>("PolygonVersion")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PreviousJudgingId")
                         .HasColumnType("int");
 
                     b.Property<int?>("RejudgingId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RunVerdicts")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Server")
                         .HasColumnType("varchar(64)")
@@ -2141,7 +2147,7 @@ namespace SatelliteSite.Migrations
             modelBuilder.Entity("Polygon.Entities.JudgingRun", b =>
                 {
                     b.HasOne("Polygon.Entities.Judging", "j")
-                        .WithMany("Details")
+                        .WithMany()
                         .HasForeignKey("JudgingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
