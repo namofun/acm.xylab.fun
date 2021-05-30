@@ -55,6 +55,7 @@ namespace SatelliteSite
                     services.Configure<ContestModule.Routing.MinimalSiteOptions>(options =>
                     {
                         options.Keyword = context.Configuration.GetConnectionString("ContestKeyword");
+                        options.RealIpHeaderName = "Jluds-Cdn-Real-Ip";
                     });
 
                     services.Configure<OnPremiseModule.FileUploadShortCircuitOptions>(options =>
