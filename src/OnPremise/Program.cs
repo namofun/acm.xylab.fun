@@ -31,6 +31,7 @@ namespace SatelliteSite
                 .AddModule<IdentityModule.IdentityModule<XylabUser, Role, DefaultContext>>()
                 .AddModule<OnPremiseModule.OnPremiseModule>()
                 .AddModule<GroupModule.GroupModule<DefaultContext>>()
+                .AddModule<JobsModule.JobsModule<XylabUser, DefaultContext>>()
                 .AddModule<StudentModule.StudentModule<XylabUser, Role, DefaultContext>>()
                 .AddModule<PolygonModule.PolygonModule<Polygon.DefaultRole<DefaultContext, QueryCache>>>()
                 .AddModule<ContestModule.ContestModule<Ccs.RelationalRole<XylabUser, Role, DefaultContext>>>()
