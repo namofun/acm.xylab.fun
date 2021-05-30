@@ -59,6 +59,11 @@ namespace SatelliteSite
                         options.RealIpHeaderName = "Jluds-Cdn-Real-Ip";
                     });
 
+                    services.Configure<Ccs.Connector.Jobs.ExportPdfOptions>(options =>
+                    {
+                        options.Url = context.Configuration.GetConnectionString("PdfService");
+                    });
+
                     services.Configure<OnPremiseModule.FileUploadShortCircuitOptions>(options =>
                     {
                         options.Enabled = context.Configuration.GetValue<bool?>("FileUploadShortCircuit") ?? false;
