@@ -32,6 +32,11 @@ namespace SatelliteSite.ExperimentalModule
                     .HasTitle(string.Empty, "Organization")
                     .HasLink("Dashboard", "TeachingCenter", "Organization")
                     .ActiveWhenAction("Organization");
+
+                menu.HasEntry(200)
+                    .HasTitle(string.Empty, "Export Collection")
+                    .HasLink("Dashboard", "TeachingCenter", "BackgroundJobs")
+                    .ActiveWhenAction("BackgroundJobs");
             });
         }
 

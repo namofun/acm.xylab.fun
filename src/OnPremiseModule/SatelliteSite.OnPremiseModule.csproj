@@ -16,6 +16,7 @@
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
     <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
     <PackageReference Include="Ccs.Connector.OpenXml" Version="$(CcsVersion)" />
+    <PackageReference Include="Ccs.Connector.Jobs" Version="$(CcsVersion)" />
     <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
   </ItemGroup>
 

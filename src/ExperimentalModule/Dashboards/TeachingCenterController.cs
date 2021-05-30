@@ -1,4 +1,5 @@
 ﻿using Ccs.Services;
+using Jobs.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Polygon.Entities;
@@ -38,6 +39,17 @@ namespace SatelliteSite.ExperimentalModule.Dashboards
             ViewBag.UserRoles = await store.GetAdministratorRolesAsync(Affiliation);
             ViewBag.VerifyCodes = await store.GetVerifyCodesAsync(Affiliation, validOnly: true);
             return View(Affiliation);
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> BackgroundJobs(
+            [FromServices] IJobManager manager,
+            [FromQuery] int page = 1)
+        {
+            if (page <= 0) return BadRequest();
+            int owner = int.Parse(User.GetUserId());
+            return View(await manager.GetJobsAsync(owner, page));
         }
     }
 }
