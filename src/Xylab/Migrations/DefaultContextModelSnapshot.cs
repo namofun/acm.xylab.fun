@@ -15,7 +15,7 @@ namespace SatelliteSite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13")
+                .HasAnnotation("ProductVersion", "3.1.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -1424,6 +1424,15 @@ namespace SatelliteSite.Migrations
                             Name = "TemporaryTeamAccount",
                             NormalizedName = "TEMPORARYTEAMACCOUNT",
                             ShortName = "temp_team"
+                        },
+                        new
+                        {
+                            Id = -37,
+                            ConcurrencyStamp = "76133040-8512-5021-491b-563056c3f919",
+                            Description = "Plagiarism Detect User",
+                            Name = "PlagUser",
+                            NormalizedName = "PLAGUSER",
+                            ShortName = "plaguser"
                         });
                 });
 

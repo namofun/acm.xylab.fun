@@ -10,14 +10,14 @@ using SatelliteSite;
 namespace SatelliteSite.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20210415113525_BumpToCcs9")]
-    partial class BumpToCcs9
+    [Migration("20210530123654_AddPlagUser")]
+    partial class AddPlagUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13")
+                .HasAnnotation("ProductVersion", "3.1.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -687,11 +687,17 @@ namespace SatelliteSite.Migrations
                     b.Property<bool>("FullTest")
                         .HasColumnType("bit");
 
+                    b.Property<int>("PolygonVersion")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PreviousJudgingId")
                         .HasColumnType("int");
 
                     b.Property<int?>("RejudgingId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RunVerdicts")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Server")
                         .HasColumnType("varchar(64)")
@@ -1420,6 +1426,15 @@ namespace SatelliteSite.Migrations
                             Name = "TemporaryTeamAccount",
                             NormalizedName = "TEMPORARYTEAMACCOUNT",
                             ShortName = "temp_team"
+                        },
+                        new
+                        {
+                            Id = -37,
+                            ConcurrencyStamp = "76133040-8512-5021-491b-563056c3f919",
+                            Description = "Plagiarism Detect User",
+                            Name = "PlagUser",
+                            NormalizedName = "PLAGUSER",
+                            ShortName = "plaguser"
                         });
                 });
 
@@ -2089,7 +2104,7 @@ namespace SatelliteSite.Migrations
             modelBuilder.Entity("Polygon.Entities.JudgingRun", b =>
                 {
                     b.HasOne("Polygon.Entities.Judging", "j")
-                        .WithMany("Details")
+                        .WithMany()
                         .HasForeignKey("JudgingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

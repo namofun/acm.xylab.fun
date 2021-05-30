@@ -22,7 +22,7 @@ namespace SatelliteSite.XylabModule
             services.ConfigureApplicationBuilder(options =>
             {
                 options.SiteName = "Online Judge";
-                options.PointBeforeUrlRewriting.Add(app => app.UseMiddleware<AliyunCdnRealIpMiddleware>());
+                options.PointBeforeUrlRewriting.Insert(0, app => app.UseMiddleware<AliyunCdnRealIpMiddleware>());
             });
 
             services.ConfigureIdentityAdvanced(options =>

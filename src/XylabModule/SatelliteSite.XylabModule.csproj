@@ -21,8 +21,4 @@
     <PackageReference Include="Ccs.Connector.OpenXml" Version="$(CcsVersion)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ExperimentalModule\SatelliteSite.ExperimentalModule.csproj" />
-  </ItemGroup>
-
 </Project>
