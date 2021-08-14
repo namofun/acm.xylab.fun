@@ -194,8 +194,7 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(2048)")
-                        .HasMaxLength(2048);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ContestId")
                         .HasColumnType("int");
@@ -1651,6 +1650,9 @@ namespace SatelliteSite.Migrations
                     b.Property<int?>("ContestId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsEligible")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
@@ -1676,6 +1678,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -1,
                             Color = "#ff2bea",
+                            IsEligible = false,
                             IsPublic = false,
                             Name = "System",
                             SortOrder = 9
@@ -1684,6 +1687,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -2,
                             Color = "#33cc44",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Self-Registered",
                             SortOrder = 8
@@ -1692,6 +1696,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -3,
                             Color = "#ffffff",
+                            IsEligible = true,
                             IsPublic = true,
                             Name = "Participants",
                             SortOrder = 0
@@ -1700,6 +1705,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -4,
                             Color = "#ffcc33",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Observers",
                             SortOrder = 0
@@ -1708,6 +1714,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -5,
                             Color = "#ff99cc",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Organisation",
                             SortOrder = 1
@@ -1716,6 +1723,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -6,
                             Color = "#96d5ff",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Companies",
                             SortOrder = 1

@@ -9,8 +9,6 @@ using SatelliteSite;
 
 namespace SatelliteSite.Migrations
 {
-    [DbContext(typeof(DefaultContext))]
-    [Migration("20210606142206_BumpToCcs13")]
     partial class BumpToCcs13
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

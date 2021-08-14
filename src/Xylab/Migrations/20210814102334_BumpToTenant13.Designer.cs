@@ -9,9 +9,7 @@ using SatelliteSite;
 
 namespace SatelliteSite.Migrations
 {
-    [DbContext(typeof(DefaultContext))]
-    [Migration("20210530123654_AddPlagUser")]
-    partial class AddPlagUser
+    partial class BumpToTenant13
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,7 +36,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubmissionId");
+                    b.HasAlternateKey("SubmissionId");
 
                     b.ToTable("ContestBalloons");
                 });
@@ -196,8 +194,7 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(2048)")
-                        .HasMaxLength(2048);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ContestId")
                         .HasColumnType("int");
@@ -322,6 +319,16 @@ namespace SatelliteSite.Migrations
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
+
+                    b.Property<int>("LastAcPublic")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("LastAcRestricted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int>("PointsPublic")
                         .ValueGeneratedOnAdd()
@@ -1640,6 +1647,12 @@ namespace SatelliteSite.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ContestId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsEligible")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
@@ -1652,6 +1665,8 @@ namespace SatelliteSite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContestId");
+
                     b.HasIndex("IsPublic");
 
                     b.HasIndex("SortOrder");
@@ -1663,6 +1678,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -1,
                             Color = "#ff2bea",
+                            IsEligible = false,
                             IsPublic = false,
                             Name = "System",
                             SortOrder = 9
@@ -1671,6 +1687,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -2,
                             Color = "#33cc44",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Self-Registered",
                             SortOrder = 8
@@ -1679,6 +1696,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -3,
                             Color = "#ffffff",
+                            IsEligible = true,
                             IsPublic = true,
                             Name = "Participants",
                             SortOrder = 0
@@ -1687,6 +1705,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -4,
                             Color = "#ffcc33",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Observers",
                             SortOrder = 0
@@ -1695,6 +1714,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -5,
                             Color = "#ff99cc",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Organisation",
                             SortOrder = 1
@@ -1703,6 +1723,7 @@ namespace SatelliteSite.Migrations
                         {
                             Id = -6,
                             Color = "#96d5ff",
+                            IsEligible = false,
                             IsPublic = true,
                             Name = "Companies",
                             SortOrder = 1
@@ -2218,6 +2239,14 @@ namespace SatelliteSite.Migrations
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("Tenant.Entities.Category", b =>
+                {
+                    b.HasOne("Ccs.Entities.Contest", null)
+                        .WithMany()
+                        .HasForeignKey("ContestId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Tenant.Entities.Class", b =>
