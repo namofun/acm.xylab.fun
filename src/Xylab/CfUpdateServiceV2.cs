@@ -33,7 +33,14 @@ namespace SatelliteSite.OjUpdateModule.Services
                 catch (System.Text.Json.JsonException)
                 {
                     attempt++;
-                    await Task.Delay(1000, stoppingToken);
+                    if (attempt < 3)
+                    {
+                        await Task.Delay(1000, stoppingToken);
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
             while (attempt >= 3);
