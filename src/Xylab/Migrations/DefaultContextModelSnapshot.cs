@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SatelliteSite;
 
+#nullable disable
+
 namespace SatelliteSite.Migrations
 {
     [DbContext(typeof(DefaultContext))]
@@ -15,16 +17,18 @@ namespace SatelliteSite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.15")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Ccs.Entities.Balloon", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("Done")
                         .ValueGeneratedOnAdd()
@@ -38,15 +42,16 @@ namespace SatelliteSite.Migrations
 
                     b.HasAlternateKey("SubmissionId");
 
-                    b.ToTable("ContestBalloons");
+                    b.ToTable("ContestBalloons", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Clarification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("Answered")
                         .HasColumnType("bit");
@@ -89,23 +94,24 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("ContestId", "Sender");
 
-                    b.ToTable("ContestClarifications");
+                    b.ToTable("ContestClarifications", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Contest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<double?>("EndTimeSeconds")
-                        .HasColumnName("EndTime")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("EndTime");
 
                     b.Property<double?>("FreezeTimeSeconds")
-                        .HasColumnName("FreezeTime")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("FreezeTime");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
@@ -137,12 +143,12 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("int");
 
                     b.Property<double?>("UnfreezeTimeSeconds")
-                        .HasColumnName("UnfreezeTime")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("UnfreezeTime");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contests");
+                    b.ToTable("Contests", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.ContestProblem", b =>
@@ -165,9 +171,9 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("ShortName")
                         .IsRequired()
-                        .HasColumnType("varchar(10)")
                         .HasMaxLength(10)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ContestId", "ProblemId");
 
@@ -176,21 +182,22 @@ namespace SatelliteSite.Migrations
                     b.HasIndex("ContestId", "ShortName")
                         .IsUnique();
 
-                    b.ToTable("ContestProblems");
+                    b.ToTable("ContestProblems", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("varchar(6)")
                         .HasMaxLength(6)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(6)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -201,14 +208,14 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("EndpointId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("EndpointType")
                         .IsRequired()
-                        .HasColumnType("varchar(32)")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<DateTimeOffset>("EventTime")
                         .HasColumnType("datetimeoffset");
@@ -219,7 +226,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("EventTime");
 
-                    b.ToTable("ContestEvents");
+                    b.ToTable("ContestEvents", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Jury", b =>
@@ -237,7 +244,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContestJury");
+                    b.ToTable("ContestJury", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Member", b =>
@@ -264,15 +271,16 @@ namespace SatelliteSite.Migrations
                     b.HasIndex("ContestId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("ContestMembers");
+                    b.ToTable("ContestMembers", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Printing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("ContestId")
                         .HasColumnType("int");
@@ -282,20 +290,20 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("varchar(256)")
                         .HasMaxLength(256)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("LanguageId")
                         .IsRequired()
-                        .HasColumnType("varchar(10)")
                         .HasMaxLength(10)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<byte[]>("SourceCode")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)")
-                        .HasMaxLength(65536);
+                        .HasMaxLength(65536)
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTimeOffset>("Time")
                         .HasColumnType("datetimeoffset");
@@ -309,7 +317,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContestPrintings");
+                    b.ToTable("ContestPrintings", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.RankCache", b =>
@@ -352,7 +360,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasKey("ContestId", "TeamId");
 
-                    b.ToTable("ContestRankCache");
+                    b.ToTable("ContestRankCache", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.ScoreCache", b =>
@@ -415,7 +423,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasKey("ContestId", "TeamId", "ProblemId");
 
-                    b.ToTable("ContestScoreCache");
+                    b.ToTable("ContestScoreCache", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Team", b =>
@@ -436,8 +444,8 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTimeOffset?>("RegisterTime")
                         .HasColumnType("datetimeoffset");
@@ -447,8 +455,8 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("TeamName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("ContestId", "TeamId");
 
@@ -458,7 +466,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("ContestId", "Status");
 
-                    b.ToTable("ContestTeams");
+                    b.ToTable("ContestTeams", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Visibility", b =>
@@ -473,15 +481,16 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("AffiliationId");
 
-                    b.ToTable("ContestTenants");
+                    b.ToTable("ContestTenants", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -496,15 +505,16 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -519,7 +529,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
@@ -540,7 +550,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
@@ -555,7 +565,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -574,16 +584,16 @@ namespace SatelliteSite.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Executable", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnName("ExecId")
-                        .HasColumnType("varchar(64)")
                         .HasMaxLength(64)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("ExecId");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -591,9 +601,9 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Md5sum")
                         .IsRequired()
-                        .HasColumnType("varchar(32)")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -601,24 +611,25 @@ namespace SatelliteSite.Migrations
 
                     b.Property<byte[]>("ZipFile")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)")
-                        .HasMaxLength(1048576);
+                        .HasMaxLength(1048576)
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("ZipSize")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PolygonExecutables");
+                    b.ToTable("PolygonExecutables", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.InternalError", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ErrorId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ErrorId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("ContestId")
                         .HasColumnType("int");
@@ -648,15 +659,15 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("PolygonErrors");
+                    b.ToTable("PolygonErrors", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Judgehost", b =>
                 {
                     b.Property<string>("ServerName")
-                        .HasColumnType("varchar(64)")
                         .HasMaxLength(64)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -666,24 +677,25 @@ namespace SatelliteSite.Migrations
 
                     b.HasKey("ServerName");
 
-                    b.ToTable("PolygonJudgehosts");
+                    b.ToTable("PolygonJudgehosts", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Judging", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("JudgingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("JudgingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("CompileError")
-                        .HasColumnType("varchar(max)")
                         .HasMaxLength(131072)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<int?>("ExecuteMemory")
                         .HasColumnType("int");
@@ -707,9 +719,9 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Server")
-                        .HasColumnType("varchar(64)")
                         .HasMaxLength(64)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
 
                     b.Property<DateTimeOffset?>("StartTime")
                         .HasColumnType("datetimeoffset");
@@ -738,16 +750,17 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("SubmissionId");
 
-                    b.ToTable("PolygonJudgings");
+                    b.ToTable("PolygonJudgings", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.JudgingRun", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RunId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("RunId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTimeOffset>("CompleteTime")
                         .HasColumnType("datetimeoffset");
@@ -763,21 +776,21 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("MetaData")
                         .IsRequired()
-                        .HasColumnType("varchar(max)")
                         .HasMaxLength(131072)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<string>("OutputDiff")
                         .IsRequired()
-                        .HasColumnType("varchar(max)")
                         .HasMaxLength(131072)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<string>("OutputSystem")
                         .IsRequired()
-                        .HasColumnType("varchar(max)")
                         .HasMaxLength(131072)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -791,16 +804,16 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("TestcaseId");
 
-                    b.ToTable("PolygonJudgingRuns");
+                    b.ToTable("PolygonJudgingRuns", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Language", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnName("LangId")
-                        .HasColumnType("varchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(16)")
+                        .HasColumnName("LangId");
 
                     b.Property<bool>("AllowJudge")
                         .HasColumnType("bit");
@@ -810,21 +823,21 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("CompileScript")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
                         .HasMaxLength(64)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("FileExtension")
                         .IsRequired()
-                        .HasColumnType("varchar(32)")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(32)")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<double>("TimeFactor")
                         .HasColumnType("float");
@@ -833,16 +846,17 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("CompileScript");
 
-                    b.ToTable("PolygonLanguages");
+                    b.ToTable("PolygonLanguages", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Problem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ProblemId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ProblemId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("AllowJudge")
                         .HasColumnType("bit");
@@ -854,15 +868,15 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CompareArguments")
-                        .HasColumnType("varchar(128)")
                         .HasMaxLength(128)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("CompareScript")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
                         .HasMaxLength(64)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
 
                     b.Property<int>("MemoryLimit")
                         .HasColumnType("int");
@@ -872,30 +886,30 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("RunScript")
                         .IsRequired()
-                        .HasColumnType("varchar(64)")
                         .HasMaxLength(64)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
 
                     b.Property<bool>("Shared")
                         .HasColumnType("bit");
 
                     b.Property<string>("Source")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("TagName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("TimeLimit")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
@@ -903,7 +917,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("RunScript");
 
-                    b.ToTable("PolygonProblems");
+                    b.ToTable("PolygonProblems", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.ProblemAuthor", b =>
@@ -923,16 +937,17 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PolygonAuthors");
+                    b.ToTable("PolygonAuthors", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Rejudging", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RejudgingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("RejudgingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool?>("Applied")
                         .HasColumnType("bit");
@@ -964,16 +979,17 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("OperatedBy");
 
-                    b.ToTable("PolygonRejudgings");
+                    b.ToTable("PolygonRejudgings", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Submission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SubmissionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SubmissionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CodeLength")
                         .HasColumnType("int");
@@ -989,15 +1005,15 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Ip")
                         .IsRequired()
-                        .HasColumnType("varchar(128)")
                         .HasMaxLength(128)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("Language")
                         .IsRequired()
-                        .HasColumnType("varchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(16)");
 
                     b.Property<int>("ProblemId")
                         .HasColumnType("int");
@@ -1007,9 +1023,9 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("SourceCode")
                         .IsRequired()
-                        .HasColumnType("varchar(max)")
                         .HasMaxLength(262144)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
@@ -1029,7 +1045,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("ContestId", "TeamId");
 
-                    b.ToTable("PolygonSubmissions");
+                    b.ToTable("PolygonSubmissions", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.SubmissionStatistics", b =>
@@ -1059,16 +1075,17 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("ContestId", "TeamId");
 
-                    b.ToTable("PolygonStatistics");
+                    b.ToTable("PolygonStatistics", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Testcase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TestcaseId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TestcaseId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CustomInput")
                         .HasColumnType("nvarchar(max)");
@@ -1078,8 +1095,8 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<int>("InputLength")
                         .HasColumnType("int");
@@ -1089,15 +1106,15 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Md5sumInput")
                         .IsRequired()
-                        .HasColumnType("varchar(32)")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<string>("Md5sumOutput")
                         .IsRequired()
-                        .HasColumnType("varchar(32)")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)");
 
                     b.Property<int>("OutputLength")
                         .HasColumnType("int");
@@ -1118,29 +1135,30 @@ namespace SatelliteSite.Migrations
                     b.HasIndex("ProblemId", "Rank")
                         .IsUnique();
 
-                    b.ToTable("PolygonTestcases");
+                    b.ToTable("PolygonTestcases", (string)null);
                 });
 
             modelBuilder.Entity("SatelliteSite.Entities.Auditlog", b =>
                 {
                     b.Property<int>("LogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"), 1L, 1);
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("varchar(256)")
                         .HasMaxLength(256)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int?>("ContestId")
                         .HasColumnType("int");
 
                     b.Property<string>("DataId")
-                        .HasColumnType("varchar(256)")
                         .HasMaxLength(256)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int>("DataType")
                         .HasColumnType("int");
@@ -1159,15 +1177,15 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("DataType");
 
-                    b.ToTable("Auditlogs");
+                    b.ToTable("Auditlogs", (string)null);
                 });
 
             modelBuilder.Entity("SatelliteSite.Entities.Configuration", b =>
                 {
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(128)")
                         .HasMaxLength(128)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -1188,24 +1206,14 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.HasKey("Name");
 
-                    b.ToTable("Configurations");
+                    b.ToTable("Configurations", (string)null);
 
                     b.HasData(
-                        new
-                        {
-                            Name = "enable_register",
-                            Category = "Identity",
-                            Description = "Whether to allow user self registration.",
-                            DisplayPriority = 0,
-                            Public = true,
-                            Type = "bool",
-                            Value = "true"
-                        },
                         new
                         {
                             Name = "oj_Codeforces_update_time",
@@ -1235,6 +1243,16 @@ namespace SatelliteSite.Migrations
                             Public = false,
                             Type = "datetime",
                             Value = "null"
+                        },
+                        new
+                        {
+                            Name = "enable_register",
+                            Category = "Identity",
+                            Description = "Whether to allow user self registration.",
+                            DisplayPriority = 0,
+                            Public = true,
+                            Type = "bool",
+                            Value = "true"
                         },
                         new
                         {
@@ -1315,6 +1333,16 @@ namespace SatelliteSite.Migrations
                             Public = true,
                             Type = "int",
                             Value = "0"
+                        },
+                        new
+                        {
+                            Name = "contest_last_rating_change_time",
+                            Category = "Contest",
+                            Description = "Last rating update time.",
+                            DisplayPriority = 0,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
                         });
                 });
 
@@ -1322,8 +1350,9 @@ namespace SatelliteSite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1333,12 +1362,12 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ShortName")
                         .HasColumnType("nvarchar(max)");
@@ -1347,12 +1376,21 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
+                        new
+                        {
+                            Id = -17,
+                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
+                            Description = "Team Leader",
+                            Name = "TeamLeader",
+                            NormalizedName = "TEAMLEADER",
+                            ShortName = "leader"
+                        },
                         new
                         {
                             Id = -1,
@@ -1379,15 +1417,6 @@ namespace SatelliteSite.Migrations
                             Name = "Student",
                             NormalizedName = "STUDENT",
                             ShortName = "student"
-                        },
-                        new
-                        {
-                            Id = -17,
-                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
-                            Description = "Team Leader",
-                            Name = "TeamLeader",
-                            NormalizedName = "TEAMLEADER",
-                            ShortName = "leader"
                         },
                         new
                         {
@@ -1449,8 +1478,9 @@ namespace SatelliteSite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -1479,8 +1509,9 @@ namespace SatelliteSite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Account")
                         .IsRequired()
@@ -1505,15 +1536,16 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("Category", "Grade");
 
-                    b.ToTable("TenantSolveRecord");
+                    b.ToTable("TenantSolveRecord", (string)null);
                 });
 
             modelBuilder.Entity("SatelliteSite.XylabUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -1523,8 +1555,8 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -1536,16 +1568,16 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NickName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -1581,22 +1613,22 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.Affiliation", b =>
@@ -1609,9 +1641,9 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CountryCode")
-                        .HasColumnType("varchar(7)")
                         .HasMaxLength(7)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(7)");
 
                     b.Property<string>("EmailSuffix")
                         .HasColumnType("nvarchar(max)");
@@ -1624,7 +1656,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("Abbreviation");
 
-                    b.ToTable("TenantAffiliation");
+                    b.ToTable("TenantAffiliation", (string)null);
 
                     b.HasData(
                         new
@@ -1640,8 +1672,9 @@ namespace SatelliteSite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -1671,7 +1704,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("SortOrder");
 
-                    b.ToTable("TenantCategory");
+                    b.ToTable("TenantCategory", (string)null);
 
                     b.HasData(
                         new
@@ -1734,8 +1767,9 @@ namespace SatelliteSite.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AffiliationId")
                         .HasColumnType("int");
@@ -1745,15 +1779,15 @@ namespace SatelliteSite.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
@@ -1761,7 +1795,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TenantTeachingClasses");
+                    b.ToTable("TenantTeachingClasses", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.ClassStudent", b =>
@@ -1776,23 +1810,24 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("TenantClassStudents");
+                    b.ToTable("TenantClassStudents", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.GroupTeam", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AffiliationId")
                         .HasColumnType("int");
 
                     b.Property<string>("TeamName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTimeOffset>("Time")
                         .HasColumnType("datetimeoffset");
@@ -1806,7 +1841,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TenantTrainingTeams");
+                    b.ToTable("TenantTrainingTeams", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.GroupUser", b =>
@@ -1824,44 +1859,45 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TenantTrainingUsers");
+                    b.ToTable("TenantTrainingUsers", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.Student", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<int>("AffiliationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AffiliationId");
 
-                    b.ToTable("TenantStudents");
+                    b.ToTable("TenantStudents", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.VerifyCode", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AffiliationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTimeOffset>("CreationTime")
                         .HasColumnType("datetimeoffset");
@@ -1883,7 +1919,7 @@ namespace SatelliteSite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TenantVerifyCodes");
+                    b.ToTable("TenantVerifyCodes", (string)null);
                 });
 
             modelBuilder.Entity("Ccs.Entities.Balloon", b =>
@@ -2120,6 +2156,8 @@ namespace SatelliteSite.Migrations
                         .HasForeignKey("SubmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("s");
                 });
 
             modelBuilder.Entity("Polygon.Entities.JudgingRun", b =>
@@ -2135,6 +2173,8 @@ namespace SatelliteSite.Migrations
                         .HasForeignKey("TestcaseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("j");
                 });
 
             modelBuilder.Entity("Polygon.Entities.Language", b =>
@@ -2213,6 +2253,10 @@ namespace SatelliteSite.Migrations
                         .WithMany()
                         .HasForeignKey("RejudgingId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("l");
+
+                    b.Navigation("p");
                 });
 
             modelBuilder.Entity("Polygon.Entities.SubmissionStatistics", b =>
@@ -2261,6 +2305,8 @@ namespace SatelliteSite.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Affiliation");
                 });
 
             modelBuilder.Entity("Tenant.Entities.ClassStudent", b =>
@@ -2291,6 +2337,8 @@ namespace SatelliteSite.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Affiliation");
                 });
 
             modelBuilder.Entity("Tenant.Entities.GroupUser", b =>
@@ -2330,6 +2378,21 @@ namespace SatelliteSite.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Polygon.Entities.Submission", b =>
+                {
+                    b.Navigation("Judgings");
+                });
+
+            modelBuilder.Entity("Tenant.Entities.Class", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("Tenant.Entities.GroupTeam", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
