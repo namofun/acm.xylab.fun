@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SatelliteSite.IdentityModule.Entities;
+using SatelliteSite.OjUpdateModule.Services;
 using SatelliteSite.Services;
 using System.IO;
 
@@ -69,6 +70,16 @@ namespace SatelliteSite
                     {
                         options.DefaultContest = context.Configuration.GetValue<int?>("DefaultProblemset");
                     });
+
+                    for (int i = 0; i < services.Count; i++)
+                    {
+                        if (services[i].ServiceType == typeof(IHostedService)
+                            && services[i].ImplementationType == typeof(CfUpdateService)
+                            && services[i].Lifetime == ServiceLifetime.Singleton)
+                        {
+                            services[i] = ServiceDescriptor.Singleton<IHostedService, CfUpdateServiceV2>();
+                        }
+                    }
                 });
     }
 }
