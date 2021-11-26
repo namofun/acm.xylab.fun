@@ -11,6 +11,7 @@
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
+    <PackageReference Include="SatelliteSite.TelemetryModule" Version="$(SubstrateVersion)" />
     <PackageReference Include="XiaoYang.EntityFrameworkCore.Bulk.SqlServer" Version="$(EFCoreBulkVersion)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCoreVersion)">
       <PrivateAssets>all</PrivateAssets>
