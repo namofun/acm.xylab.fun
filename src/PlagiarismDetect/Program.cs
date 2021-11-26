@@ -1,3 +1,5 @@
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +28,15 @@ namespace SatelliteSite
                 .AddModule<TelemetryModule.TelemetryModule>()
                 .AddModule<PlagModule.PlagModule<Plag.Backend.StorageBackendRole<PdsContext>>>()
                 .AddDatabase<PdsContext>((c, b) => b.UseSqlServer(c.GetConnectionString("PlagDbConnection"), b => b.UseBulk()))
-                .ConfigureServices(services => services.ConfigureApplicationBuilder(options => options.PointBeforeEndpoint.Add(app => app.Use(FakeAuthorization))))
+                .ConfigureServices(services =>
+                {
+                    services.ConfigureApplicationBuilder(options =>
+                    {
+                        options.PointBeforeEndpoint.Add(app => app.Use(FakeAuthorization));
+                    });
+
+                    services.AddSingleton<ITelemetryInitializer, CloudRoleInitializer>();
+                })
                 .ConfigureSubstrateDefaultsCore();
 
         static Task FakeAuthorization(HttpContext httpContext, Func<Task> next)
@@ -35,6 +45,14 @@ namespace SatelliteSite
             var claimsIdentity = (ClaimsIdentity)httpContext.User.Identity;
             claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, "PlagUser"));
             return next();
+        }
+
+        private class CloudRoleInitializer : ITelemetryInitializer
+        {
+            public void Initialize(ITelemetry telemetry)
+            {
+                telemetry.Context.Cloud.RoleName = "pds.xylab.fun";
+            }
         }
     }
 }

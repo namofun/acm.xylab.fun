@@ -1,5 +1,8 @@
 using Ccs.Registration;
 using Markdig;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +64,8 @@ namespace SatelliteSite
                         options.ApplicationId = context.Configuration["ApplicationInsights:ForDisplayAppId"];
                     });
 
+                    services.AddSingleton<ITelemetryInitializer, CloudRoleInitializer>();
+
                     services.Configure<ContestModule.Routing.MinimalSiteOptions>(options =>
                     {
                         options.Keyword = context.Configuration.GetConnectionString("ContestKeyword");
@@ -81,5 +86,24 @@ namespace SatelliteSite
                         }
                     }
                 });
+
+        private class CloudRoleInitializer : ITelemetryInitializer
+        {
+            public void Initialize(ITelemetry telemetry)
+            {
+                telemetry.Context.Cloud.RoleName = "acm.xylab.fun";
+
+                if (telemetry is DependencyTelemetry dependencyTelemetry)
+                {
+                    // RemoteDependencyConstants.HTTP
+                    if (dependencyTelemetry.Type == "Http"
+                        && dependencyTelemetry.Target.StartsWith("pds.xylab.fun:"))
+                    {
+                        // Remove the port to get better correlation
+                        dependencyTelemetry.Target = "pds.xylab.fun";
+                    }
+                }
+            }
+        }
     }
 }
