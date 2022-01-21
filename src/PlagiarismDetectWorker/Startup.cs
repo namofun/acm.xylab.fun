@@ -21,6 +21,9 @@ namespace Xylab.PlagiarismDetect.Worker
                 options.ConnectionString = configuration.GetConnectionString("CosmosDbAccount");
                 options.DatabaseName = configuration.GetConnectionString("CosmosDbName");
             });
+
+            builder.Services.ReplaceSingleton<ISignalProvider, InjectSignalProvider>();
+            builder.Services.AddSingletonDowncast<InjectSignalProvider, ISignalProvider>();
         }
     }
 }
