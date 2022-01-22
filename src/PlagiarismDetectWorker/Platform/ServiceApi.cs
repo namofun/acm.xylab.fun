@@ -48,7 +48,7 @@ namespace Xylab.PlagiarismDetect.Worker
                         req.GetQueryInt("creator"),
                         req.GetQueryUInt("skip"),
                         req.GetQueryUInt("limit"),
-                        req.GetQuerySwitch("order", new[] { "asc", "desc" }, "asc") == "asc")));
+                        req.GetQuerySwitch("order", new[] { "asc", "desc" }, "desc") == "asc")));
 
         [FunctionName("PlatformGetOneSet")]
         public Task<IActionResult> GetOneSet(
@@ -120,7 +120,7 @@ namespace Xylab.PlagiarismDetect.Worker
         [FunctionName("PlatformDeleteOneSubmissionCompilation")]
         public Task<IActionResult> DeleteOneSubmissionCompilation(
             [HttpTrigger(AuthorizationLevel.User, "delete", Route = "plagiarism/sets/{sid}/submissions/{id}/compilation")] HttpRequest req,
-            [Queue(Constants.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
+            [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
             string sid,
             int id)
             => WrapExceptions(async () =>
@@ -133,8 +133,8 @@ namespace Xylab.PlagiarismDetect.Worker
         [FunctionName("PlatformRescue")]
         public Task<IActionResult> Rescue(
             [HttpTrigger(AuthorizationLevel.User, "post", Route = "plagiarism/rescue")] HttpRequest req,
-            [Queue(Constants.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
-            [Queue(Constants.ReportGeneratingQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> reportGenerator)
+            [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
+            [Queue(Startup.ReportGeneratingQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> reportGenerator)
             => WrapExceptions(async () =>
             {
                 _signalProvider.ReportSignal = reportGenerator;
@@ -221,7 +221,7 @@ namespace Xylab.PlagiarismDetect.Worker
         [FunctionName("PlatformCreateOneSubmission")]
         public Task<IActionResult> CreateOneSubmission(
             [HttpTrigger(AuthorizationLevel.User, "post", Route = "plagiarism/sets/{sid}/submissions")] HttpRequest req,
-            [Queue(Constants.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
+            [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
             string sid)
             => WrapExceptions(async () =>
             {

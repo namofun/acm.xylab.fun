@@ -10,6 +10,10 @@ namespace Xylab.PlagiarismDetect.Worker
 {
     internal class Startup : FunctionsStartup
     {
+        public const string CompilationQueue = "pds-compilation-queue";
+
+        public const string ReportGeneratingQueue = "pds-report-generating-queue";
+
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddPlagGenerationService();

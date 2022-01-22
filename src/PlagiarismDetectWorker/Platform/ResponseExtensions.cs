@@ -14,6 +14,9 @@ namespace Xylab.PlagiarismDetect.Worker
             if (result == null) return new NotFoundResult();
 
             bool useV2 = false;
+            if (httpRequest.Headers.UserAgent.Contains("PlagiarismRestful/1.2.0"))
+                useV2 = true;
+
             if (httpRequest.Headers.TryGetValue("x-plag-version", out StringValues value)
                 && value.Count == 1
                 && value[0] == "v2")

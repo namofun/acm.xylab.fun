@@ -10,8 +10,8 @@
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
-    <PackageReference Include="Plag.Backend.Generation" Version="1.3.22" />
-    <PackageReference Include="Plag.Backend.Roles.Cosmos" Version="1.3.22" />
+    <PackageReference Include="Plag.Backend.Generation" Version="1.3.23" />
+    <PackageReference Include="Plag.Backend.Roles.Cosmos" Version="1.3.23" />
   </ItemGroup>
 
   <ItemGroup>

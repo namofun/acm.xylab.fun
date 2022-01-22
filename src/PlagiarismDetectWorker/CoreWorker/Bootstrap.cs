@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Plag.Backend.Models;
+using Plag.Backend.Jobs;
 using Plag.Backend.Services;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Xylab.PlagiarismDetect.Worker
@@ -25,19 +24,7 @@ namespace Xylab.PlagiarismDetect.Worker
             [HttpTrigger("post", Route = "bootstrap")] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("Start migrating data schema.");
-
-            await _store.MigrateAsync();
-
-            log.LogInformation("Updating available language lists.");
-
-            var languageSeeds = _compiler.GetLanguages()
-                .Select(l => new LanguageInfo() { Name = l.Name, ShortName = l.ShortName, Suffixes = l.Suffixes })
-                .ToList();
-
-            await _store.UpdateLanguagesAsync(languageSeeds);
-
-            log.LogInformation("All metadata prepared.");
+            await BootstrapWorker.RunAsync(_store, _compiler, log);
             return new OkObjectResult(new { status = 200, comment = "Bootstrapping finished." });
         }
     }
