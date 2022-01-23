@@ -84,7 +84,7 @@ namespace SatelliteSite
 
                     
                     services.AddSingleton<TokenCredential>(new DefaultAzureCredential());
-                    services.AddSingleton<AzureAppAuthHttpMessageHandler>();
+                    services.AddTransient<AzureAppAuthHttpMessageHandler>();
                     services.AddHttpClient<Plag.Backend.Services.RestfulClient>()
                         .AddHttpMessageHandler<AzureAppAuthHttpMessageHandler>();
 
