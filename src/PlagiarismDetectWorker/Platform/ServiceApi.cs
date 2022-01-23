@@ -23,24 +23,24 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformGetAllLanguages")]
         public Task<IActionResult> GetAllLanguages(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/languages")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/languages")] HttpRequest req)
             => WrapExceptions(async () => req.Respond(await _service.ListLanguageAsync()));
 
         [FunctionName("PlatformGetOneLanguage")]
         public Task<IActionResult> GetOneLanguage(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/languages/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/languages/{id}")] HttpRequest req,
             string id)
             => WrapExceptions(async () => req.Respond(await _service.FindLanguageAsync(id)));
 
         [FunctionName("PlatformGetOneReport")]
         public Task<IActionResult> GetOneReport(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/reports/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/reports/{id}")] HttpRequest req,
             string id)
             => WrapExceptions(async () => req.Respond(await _service.FindReportAsync(id)));
 
         [FunctionName("PlatformGetAllSets")]
         public Task<IActionResult> GetAllSets(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets")] HttpRequest req)
             => WrapExceptions(async ()
                 => req.Respond(
                     await _service.ListSetsAsync(
@@ -52,13 +52,13 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformGetOneSet")]
         public Task<IActionResult> GetOneSet(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets/{sid}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets/{sid}")] HttpRequest req,
             string sid)
             => WrapExceptions(async () => req.Respond(await _service.FindSetAsync(sid)));
 
         [FunctionName("PlatformGetAllSubmissions")]
         public Task<IActionResult> GetAllSubmissions(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets/{sid}/submissions")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets/{sid}/submissions")] HttpRequest req,
             string sid)
             => WrapExceptions(async ()
                 => req.Respond(
@@ -75,7 +75,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformGetOneSubmission")]
         public Task<IActionResult> GetOneSubmission(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets/{sid}/submissions/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets/{sid}/submissions/{id}")] HttpRequest req,
             string sid,
             int id)
             => WrapExceptions(async ()
@@ -90,21 +90,21 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformGetOneSubmissionFile")]
         public Task<IActionResult> GetOneSubmissionFile(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets/{sid}/submissions/{id}/files")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets/{sid}/submissions/{id}/files")] HttpRequest req,
             string sid,
             int id)
             => WrapExceptions(async () => req.Respond(await _service.GetFilesAsync(sid, id)));
 
         [FunctionName("PlatformGetOneSubmissionCompilation")]
         public Task<IActionResult> GetOneSubmissionCompilation(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets/{sid}/submissions/{id}/compilation")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets/{sid}/submissions/{id}/compilation")] HttpRequest req,
             string sid,
             int id)
             => WrapExceptions(async () => req.Respond(await _service.GetCompilationAsync(sid, id)));
 
         [FunctionName("PlatformGetOneSubmissionComparisons")]
         public Task<IActionResult> GetOneSubmissionComparisons(
-            [HttpTrigger(AuthorizationLevel.User, "get", Route = "plagiarism/sets/{sid}/submissions/{id}/comparisons")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "plagiarism/sets/{sid}/submissions/{id}/comparisons")] HttpRequest req,
             string sid,
             int id)
             => WrapExceptions(async ()
@@ -119,7 +119,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformDeleteOneSubmissionCompilation")]
         public Task<IActionResult> DeleteOneSubmissionCompilation(
-            [HttpTrigger(AuthorizationLevel.User, "delete", Route = "plagiarism/sets/{sid}/submissions/{id}/compilation")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "plagiarism/sets/{sid}/submissions/{id}/compilation")] HttpRequest req,
             [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
             string sid,
             int id)
@@ -132,7 +132,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformRescue")]
         public Task<IActionResult> Rescue(
-            [HttpTrigger(AuthorizationLevel.User, "post", Route = "plagiarism/rescue")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "plagiarism/rescue")] HttpRequest req,
             [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
             [Queue(Startup.ReportGeneratingQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> reportGenerator)
             => WrapExceptions(async () =>
@@ -145,7 +145,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformPatchOneReport")]
         public Task<IActionResult> PatchOneReport(
-            [HttpTrigger(AuthorizationLevel.User, "patch", Route = "plagiarism/reports/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "patch", Route = "plagiarism/reports/{id}")] HttpRequest req,
             string id)
             => WrapExceptions(async () =>
             {
@@ -208,7 +208,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformCreateOneSet")]
         public Task<IActionResult> CreateOneSet(
-            [HttpTrigger(AuthorizationLevel.User, "post", Route = "plagiarism/sets")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "plagiarism/sets")] HttpRequest req)
             => WrapExceptions(async () =>
             {
                 if (!req.HasJsonContentType()) return new BadRequestResult();
@@ -220,7 +220,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("PlatformCreateOneSubmission")]
         public Task<IActionResult> CreateOneSubmission(
-            [HttpTrigger(AuthorizationLevel.User, "post", Route = "plagiarism/sets/{sid}/submissions")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "plagiarism/sets/{sid}/submissions")] HttpRequest req,
             [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
             string sid)
             => WrapExceptions(async () =>

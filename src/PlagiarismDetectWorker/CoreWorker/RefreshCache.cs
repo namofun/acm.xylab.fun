@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Plag.Backend.Services;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("RefreshCache")]
         public async Task<IActionResult> Run(
-            [HttpTrigger("post", Route = "refresh-cache")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "refresh-cache")] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("Refreshing cache for the system.");

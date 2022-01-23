@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Plag.Backend.Jobs;
 using Plag.Backend.Services;
@@ -21,7 +22,7 @@ namespace Xylab.PlagiarismDetect.Worker
 
         [FunctionName("Bootstrap")]
         public async Task<IActionResult> Run(
-            [HttpTrigger("post", Route = "bootstrap")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "bootstrap")] HttpRequest req,
             ILogger log)
         {
             await BootstrapWorker.RunAsync(_store, _compiler, log);

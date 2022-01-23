@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Plag.Backend.Jobs;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Xylab.PlagiarismDetect.Worker
     {
         [FunctionName("Rescue")]
         public async Task<IActionResult> Run(
-            [HttpTrigger("post", Route = "rescue")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rescue")] HttpRequest req,
             [Queue(Startup.CompilationQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> submissionTokenizer,
             [Queue(Startup.ReportGeneratingQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> reportGenerator,
             ILogger log)
