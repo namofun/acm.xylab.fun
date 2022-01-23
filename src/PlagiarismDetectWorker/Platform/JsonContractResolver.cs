@@ -71,6 +71,18 @@ namespace Xylab.PlagiarismDetect.Worker
                     property.Converter = new ReportStateConverter();
                 }
             }
+            else if (member.DeclaringType == typeof(Plag.Backend.Models.Comparison))
+            {
+                if (member.Name == nameof(Plag.Backend.Models.Comparison.Justification))
+                {
+                    property.Converter = new ReportJustificationConverter();
+                }
+                else if (member.Name == nameof(Plag.Backend.Models.Comparison.State))
+                {
+                    property.PropertyName = "pending";
+                    property.Converter = new ReportStateAnotherConverter();
+                }
+            }
 
             return property;
         }
@@ -137,6 +149,41 @@ namespace Xylab.PlagiarismDetect.Worker
                     case ReportState.Pending:
                     default:
                         writer.WriteValue(true);
+                        break;
+                }
+            }
+        }
+
+        private class ReportStateAnotherConverter : JsonConverter<ReportState>
+        {
+            public override bool CanRead => false;
+
+            public override ReportState ReadJson(
+                JsonReader reader,
+                Type objectType,
+                ReportState existingValue,
+                bool hasExistingValue,
+                JsonSerializer serializer)
+                => throw new NotSupportedException();
+
+            public override void WriteJson(
+                JsonWriter writer,
+                ReportState value,
+                JsonSerializer serializer)
+            {
+                switch (value)
+                {
+                    case ReportState.Finished:
+                        writer.WriteValue(true);
+                        break;
+
+                    case ReportState.Analyzing:
+                        writer.WriteValue(false);
+                        break;
+
+                    case ReportState.Pending:
+                    default:
+                        writer.WriteNull();
                         break;
                 }
             }

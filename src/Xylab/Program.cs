@@ -1,3 +1,5 @@
+using Azure.Core;
+using Azure.Identity;
 using Ccs.Registration;
 using Markdig;
 using Microsoft.ApplicationInsights.Channel;
@@ -14,6 +16,10 @@ using SatelliteSite.IdentityModule.Entities;
 using SatelliteSite.OjUpdateModule.Services;
 using SatelliteSite.Services;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SatelliteSite
 {
@@ -76,6 +82,12 @@ namespace SatelliteSite
                         options.DefaultContest = context.Configuration.GetValue<int?>("DefaultProblemset");
                     });
 
+                    
+                    services.AddSingleton<TokenCredential>(new DefaultAzureCredential());
+                    services.AddSingleton<AzureAppAuthHttpMessageHandler>();
+                    services.AddHttpClient<Plag.Backend.Services.RestfulClient>()
+                        .AddHttpMessageHandler<AzureAppAuthHttpMessageHandler>();
+
                     for (int i = 0; i < services.Count; i++)
                     {
                         if (services[i].ServiceType == typeof(IHostedService)
@@ -103,6 +115,40 @@ namespace SatelliteSite
                         dependencyTelemetry.Target = "pds.xylab.fun";
                     }
                 }
+            }
+        }
+
+        private class AzureAppAuthHttpMessageHandler : DelegatingHandler
+        {
+            private readonly TokenCredential _tokenProvider;
+            private readonly string _apiResource, _tenantId;
+
+            public AzureAppAuthHttpMessageHandler(
+                IConfiguration configuration,
+                TokenCredential tokenProvider)
+            {
+                _tokenProvider = tokenProvider;
+                _apiResource = configuration.GetConnectionString("PlagiarismApiResource");
+                _tenantId = configuration.GetConnectionString("PlagiarismApiTenant");
+            }
+
+            protected async override Task<HttpResponseMessage> SendAsync(
+                HttpRequestMessage request,
+                CancellationToken cancellationToken)
+            {
+                if (!string.IsNullOrEmpty(_apiResource))
+                {
+                    AccessToken authResult =
+                        await _tokenProvider.GetTokenAsync(
+                            new TokenRequestContext(new[] { _apiResource }, tenantId: _tenantId),
+                            cancellationToken);
+
+                    request.Headers.Authorization = new AuthenticationHeaderValue(
+                        "Bearer",
+                        authResult.Token);
+                }
+
+                return await base.SendAsync(request, cancellationToken);
             }
         }
     }

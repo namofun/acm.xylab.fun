@@ -14,6 +14,8 @@
     <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
     <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
 
+    <PackageReference Include="Azure.Identity" Version="1.5.0" />
+
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.TelemetryModule" Version="$(SubstrateVersion)" />
