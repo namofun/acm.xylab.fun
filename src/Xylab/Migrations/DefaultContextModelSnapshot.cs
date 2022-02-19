@@ -952,7 +952,7 @@ namespace SatelliteSite.Migrations
                     b.Property<bool?>("Applied")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ContestId")
+                    b.Property<int?>("ContestId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset?>("EndTime")
@@ -1138,6 +1138,14 @@ namespace SatelliteSite.Migrations
                     b.ToTable("PolygonTestcases", (string)null);
                 });
 
+            modelBuilder.Entity("Polygon.Storages.SingleEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+                });
+
             modelBuilder.Entity("SatelliteSite.Entities.Auditlog", b =>
                 {
                     b.Property<int>("LogId")
@@ -1216,6 +1224,16 @@ namespace SatelliteSite.Migrations
                     b.HasData(
                         new
                         {
+                            Name = "enable_register",
+                            Category = "Identity",
+                            Description = "Whether to allow user self registration.",
+                            DisplayPriority = 0,
+                            Public = true,
+                            Type = "bool",
+                            Value = "true"
+                        },
+                        new
+                        {
                             Name = "oj_Codeforces_update_time",
                             Category = "Tenant",
                             Description = "Last update time of Codeforces.",
@@ -1243,16 +1261,6 @@ namespace SatelliteSite.Migrations
                             Public = false,
                             Type = "datetime",
                             Value = "null"
-                        },
-                        new
-                        {
-                            Name = "enable_register",
-                            Category = "Identity",
-                            Description = "Whether to allow user self registration.",
-                            DisplayPriority = 0,
-                            Public = true,
-                            Type = "bool",
-                            Value = "true"
                         },
                         new
                         {
@@ -1384,15 +1392,6 @@ namespace SatelliteSite.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -17,
-                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
-                            Description = "Team Leader",
-                            Name = "TeamLeader",
-                            NormalizedName = "TEAMLEADER",
-                            ShortName = "leader"
-                        },
-                        new
-                        {
                             Id = -1,
                             ConcurrencyStamp = "9805fda4-f300-ff78-a6d8-faf0d8e418fd",
                             Description = "Administrative User",
@@ -1417,6 +1416,15 @@ namespace SatelliteSite.Migrations
                             Name = "Student",
                             NormalizedName = "STUDENT",
                             ShortName = "student"
+                        },
+                        new
+                        {
+                            Id = -17,
+                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
+                            Description = "Team Leader",
+                            Name = "TeamLeader",
+                            NormalizedName = "TEAMLEADER",
+                            ShortName = "leader"
                         },
                         new
                         {
@@ -2221,8 +2229,7 @@ namespace SatelliteSite.Migrations
                     b.HasOne("Ccs.Entities.Contest", null)
                         .WithMany()
                         .HasForeignKey("ContestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SatelliteSite.XylabUser", null)
                         .WithMany()

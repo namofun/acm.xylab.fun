@@ -11,8 +11,6 @@ using SatelliteSite;
 
 namespace SatelliteSite.Migrations
 {
-    [DbContext(typeof(DefaultContext))]
-    [Migration("20211121163454_BumpToNet6")]
     partial class BumpToNet6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
