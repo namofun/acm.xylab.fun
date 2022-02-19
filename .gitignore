@@ -433,5 +433,4 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 # Project Files
-/src/Host/Runs
-/src/Host/Problems
+/src/Xylab/blobcache
