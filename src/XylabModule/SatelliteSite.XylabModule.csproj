@@ -10,7 +10,6 @@
     <PackageReference Include="Sendgrid" Version="9.22.0" />
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.NewsModule" Version="$(TenantVersion)" />
-    <PackageReference Include="SatelliteSite.OjUpdateModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.IdentityModule" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.GroupModule" Version="$(TenantVersion)" />
     <PackageReference Include="SatelliteSite.StudentModule" Version="$(TenantVersion)" />
@@ -19,6 +18,10 @@
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
     <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
     <PackageReference Include="Ccs.Connector.OpenXml" Version="$(CcsVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OjUpdate\SatelliteSite.OjUpdateModule.csproj" />
   </ItemGroup>
 
 </Project>

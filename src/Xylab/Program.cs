@@ -13,8 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SatelliteSite.IdentityModule.Entities;
-using SatelliteSite.OjUpdateModule.Services;
-using SatelliteSite.Services;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -38,8 +36,9 @@ namespace SatelliteSite
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .MarkDomain<Program>()
-                .AddModule<TelemetryModule.TelemetryModule>()
+                .AddApplicationInsights()
                 .AddModule<IdentityModule.IdentityModule<XylabUser, Role, DefaultContext>>()
+                .EnableIdentityModuleBasicAuthentication()
                 .AddModule<XylabModule.XylabModule>()
                 .AddModule<GroupModule.GroupModule<DefaultContext>>()
                 .AddModule<StudentModule.StudentModule<XylabUser, Role, DefaultContext>>()
@@ -64,12 +63,6 @@ namespace SatelliteSite
 
                     services.AddContestRegistrationTenant();
 
-                    services.Configure<ApplicationInsightsDisplayOptions>(options =>
-                    {
-                        options.ApiKey = context.Configuration["ApplicationInsights:ForDisplayAppKey"];
-                        options.ApplicationId = context.Configuration["ApplicationInsights:ForDisplayAppId"];
-                    });
-
                     services.AddSingleton<ITelemetryInitializer, CloudRoleInitializer>();
 
                     services.Configure<ContestModule.Routing.MinimalSiteOptions>(options =>
@@ -82,21 +75,10 @@ namespace SatelliteSite
                         options.DefaultContest = context.Configuration.GetValue<int?>("DefaultProblemset");
                     });
 
-                    
                     services.AddSingleton<TokenCredential>(new DefaultAzureCredential());
                     services.AddTransient<AzureAppAuthHttpMessageHandler>();
                     services.AddHttpClient<Plag.Backend.Services.RestfulClient>()
                         .AddHttpMessageHandler<AzureAppAuthHttpMessageHandler>();
-
-                    for (int i = 0; i < services.Count; i++)
-                    {
-                        if (services[i].ServiceType == typeof(IHostedService)
-                            && services[i].ImplementationType == typeof(CfUpdateService)
-                            && services[i].Lifetime == ServiceLifetime.Singleton)
-                        {
-                            services[i] = ServiceDescriptor.Singleton<IHostedService, CfUpdateServiceV2>();
-                        }
-                    }
                 });
 
         private class CloudRoleInitializer : ITelemetryInitializer

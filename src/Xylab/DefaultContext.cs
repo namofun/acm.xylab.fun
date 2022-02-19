@@ -68,6 +68,12 @@ namespace SatelliteSite
 
     public class QueryCache : QueryCacheBase<DefaultContext>
     {
+        public QueryCache()
+            : base(
+                  (start, end) => EF.Functions.DateDiffMillisecond(start, end) / 1000.0)
+        {
+        }
+
         public override async Task<IEnumerable<(int UserId, string UserName, AuthorLevel Level)>> FetchPermittedUserAsync(DefaultContext context, int probid)
         {
             var query =
@@ -89,8 +95,5 @@ namespace SatelliteSite
                 select new SolutionAuthor(s.Id, s.ContestId, s.TeamId, u.UserName, t.TeamName);
             return query.ToListAsync();
         }
-
-        protected override Expression<Func<DateTimeOffset, DateTimeOffset, double>> CalculateDuration { get; }
-            = (start, end) => EF.Functions.DateDiffMillisecond(start, end) / 1000.0;
     }
 }

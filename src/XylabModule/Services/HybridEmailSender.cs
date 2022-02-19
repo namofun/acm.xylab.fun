@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Mailing;
 using Microsoft.Extensions.Options;
-using SatelliteSite.Services;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;

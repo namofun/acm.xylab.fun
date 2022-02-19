@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SatelliteSite.Services;
+using Microsoft.Extensions.Mailing;
 using SatelliteSite.XylabModule.Services;
 
 namespace SatelliteSite.XylabModule
