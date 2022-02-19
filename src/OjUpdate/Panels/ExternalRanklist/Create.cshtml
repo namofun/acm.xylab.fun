@@ -1,0 +1,179 @@
+﻿@{
+    ViewData["Title"] = "Create Records";
+}
+
+<form asp-action="Create" method="post">
+<h2 class="mt-2 mb-3">@ViewData["Title"]</h2>
+
+<table class="mt-4 table table-sm table-striped">
+    <thead>
+        <tr>
+            <th class="pt-2 pb-2" width="18%">category</th>
+            <th class="pt-2 pb-2" width="18%">grade</th>
+            <th class="pt-2 pb-2">nick name</th>
+            <th class="pt-2 pb-2">account</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody data-collection-holder>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"></td>
+            <td>
+                <div class="dropdown">
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-success dropdown-toggle">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button class="dropdown-item" type="button" data-add>Add single</button>
+                        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#batchModal">Add multiple</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<p>
+    <button type="submit" class="btn btn-primary">Create</button>
+</p>
+</form>
+
+<script type="text/html" data-prototype>
+    <tr class="new-collection-item">
+        <td>
+            <select name="Batch[__name__].Category" required class="category-select form-control">
+                <option value="0">HDOJ</option>
+                <option value="1">Codeforces</option>
+                <option value="2">Vjudge</option>
+            </select>
+        </td>
+        <td>
+            <select name="Batch[__name__].Grade" required class="grade-select form-control">
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+            </select>
+        </td>
+        <td>
+            <input name="Batch[__name__].NickName" type="text" required class="nick-name-text form-control" />
+        </td>
+        <td>
+            <input name="Batch[__name__].Account" type="text" required class="account-text form-control" />
+        </td>
+        <td>
+            <button type="button" data-delete class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </td>
+    </tr>
+</script>
+
+<div class="modal fade" id="batchModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Batch add the records</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="self-category">Category</label>
+                    <select id="self-category" class="category-select form-control">
+                        <option value="0">HDOJ</option>
+                        <option value="1" selected>Codeforces</option>
+                        <option value="2">Vjudge</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="self-grade">Grade</label>
+                    <select id="self-grade" class="grade-select form-control">
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020" selected>2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="batch-content">Batch</label>
+                    <textarea id="batch-content" class="form-control"></textarea>
+                    <label for="batch-content"><small class="text-muted">“昵称 账号”，中间以空格或'\t'分隔，每行一个。</small></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="batchAdd()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var $collectionHolder = $('[data-collection-holder]');
+        $collectionHolder.data('index', $collectionHolder.find('tr').length);
+        $('[data-add]').on('click', function () {
+            addCollectionItem('1', '2020', '', '');
+        });
+        $('[data-delete]').on('click', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+
+    function addCollectionItem($oj_type, $grade, $nick_name, $account) {
+        var $collectionHolder = $('[data-collection-holder]');
+        var prototype = $('[data-prototype]').text();
+        var index = $collectionHolder.data('index');
+        prototype = prototype.replace(/__name__/g, index);
+        $collectionHolder.data('index', index + 1);
+        var $prototype = $(prototype);
+        $prototype.find('[data-delete]').on('click', function () {
+            $(this).closest('tr').remove();
+        });
+        $collectionHolder.append($prototype);
+        $('.new-collection-item .category-select').val($oj_type).removeClass('category-select');
+        $('.new-collection-item .grade-select').val($grade).removeClass('grade-select');
+        $('.new-collection-item .nick-name-text').val($nick_name).removeClass('nick-name-text');
+        $('.new-collection-item .account-text').val($account).removeClass('account-text');
+        $('.new-collection-item').removeClass('new-collection-item');
+    }
+
+    function batchAdd() {
+        var $param1 = $('#self-category').val();
+        var $param2 = $('#self-grade').val();
+        var $batchContent = $('#batch-content').val();
+        var $batchContents = $batchContent.trim().split(/[\r\n]+/);
+        var feedBack = '';
+        for (i = 0; i < $batchContents.length; i++) {
+            let $item = $batchContents[i].trim();
+            if ($item === "") continue;
+            var $arr = $item.split(/\s+/);
+            if ($arr.length != 2) {
+                feedBack = feedBack + $item + '\n';
+            } else {
+                addCollectionItem($param1, $param2, $arr[0], $arr[1]);
+            }
+        }
+
+        if (feedBack === '') {
+            $('#batch-content').val('');
+            $('#batchModal').modal('hide');
+        } else {
+            $('#batch-content').val(feedBack);
+        }
+    }
+</script>

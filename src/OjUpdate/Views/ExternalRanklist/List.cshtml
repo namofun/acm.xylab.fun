@@ -1,0 +1,64 @@
+﻿@model RanklistViewModel
+@{ 
+    Layout = "_Layout";
+}
+
+<h2 class="mt-2">@ViewData["Title"]</h2>
+<h6 class="mb-3">
+    <a asp-route-year="">All</a> |
+    <a asp-route-year="2019">2019</a> |
+    <a asp-route-year="2020">2020</a> |
+    <a asp-route-year="2021">2021</a> -
+    <!--<a asp-route-name="HDOJ">HDOJ</a> |-->
+    <a asp-route-name="Codeforces">Codeforces</a> |
+    <!--<a asp-route-name="POJ">POJ</a> |-->
+    <a asp-route-name="Vjudge">Vjudge</a>
+</h6>
+
+@if (Model.IsUpdating)
+{
+    <div class="alert alert-warning" role="alert">
+        Ranklist is being refreshed. Please refresh this page later.
+    </div>
+}
+else if (Model.LastUpdate == DateTimeOffset.UnixEpoch)
+{
+    <div class="alert alert-danger" role="alert">
+        <form asp-action="Refresh" asp-route-oj="@Model.OjName" method="post" id="refreshform">
+            <b>Update failed. </b>Maybe @Model.OjName is unavailable now.
+            Click <a href="#" onclick="$('#refreshform').submit()">here</a> to refresh manually.
+        </form>
+    </div>
+}
+else
+{
+    <div class="alert alert-success" role="alert">
+        <form asp-action="Refresh" asp-route-oj="@Model.OjName" method="post" id="refreshform">
+            <b>Last Update </b>@Html.CstTime(Model.LastUpdate).
+            Click <a href="#" onclick="$('#refreshform').submit()">here</a> to refresh manually.
+        </form>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Grade</th>
+            <th>ACMer</th>
+            <th>@Model.CountColumn</th>
+        </tr>
+    </thead>
+    <tbody>
+    @{ int i = 0; }
+    @foreach (var item in Model.OjAccounts)
+    {
+        <tr>
+            <th>@(++i)</th>
+            <td>@item.Grade</td>
+            <td><a rel="nofollow" href="@string.Format(Model.AccountTemplate, item.Account)">@item.NickName</a></td>
+            <td>@Html.Raw(Model.RankTemplate(item.Solved))</td>
+        </tr>
+    }
+    </tbody>
+</table>

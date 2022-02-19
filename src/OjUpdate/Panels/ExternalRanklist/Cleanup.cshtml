@@ -1,0 +1,78 @@
+﻿@model List<SolveRecord>
+@{
+    ViewData["Title"] = "Cleanup Accounts";
+}
+
+<style>
+.cr {
+  width: 100%;
+  padding-bottom: 5px;
+  padding-top:5px;
+  margin-bottom: 0;
+}
+</style>
+
+<form asp-action="Cleanup" asp-route-category="" method="post">
+<input type="hidden" name="Category" value="@ViewBag.Category" />
+<h2 class="mt-2 mb-3">@ViewData["Title"]</h2>
+
+<div class="table-wrapper">
+    <table class="data-table table table-sm table-striped" style="width:auto">
+        <thead>
+            <tr role="row">
+                <th scope="col" class="sortable">ID</th>
+                <th scope="col" class="sortable searchable">category</th>
+                <th scope="col" class="sortable searchable">grade</th>
+                <th scope="col" class="sortable searchable">nick name</th>
+                <th scope="col" class="sortable searchable">account</th>
+                <th scope="col" class="sortable searchable">rank</th>
+            </tr>
+        </thead>
+        <tbody>
+@foreach (var rec in Model)
+{
+            <tr role="row">
+                <td data-search="@rec.Id" data-order="@rec.Id">
+                    <div class="custom-control custom-checkbox cr">
+                        <input type="checkbox" class="custom-control-input" name="ToDelete[]" value="@rec.Id" id="cust@(rec.Id)">
+                        <label class="custom-control-label" for="cust@(rec.Id)">@rec.Id</label>
+                    </div>
+                </td>
+                <td><label class="cr" for="cust@(rec.Id)">@rec.Category</label></td>
+                <td><label class="cr" for="cust@(rec.Id)">@rec.Grade</label></td>
+                <td><label class="cr" for="cust@(rec.Id)">@rec.NickName</label></td>
+                <td><label class="cr" for="cust@(rec.Id)">@rec.Account</label></td>
+                <td><label class="cr" for="cust@(rec.Id)">@(rec.Result?.ToString() ?? "N/A")</label></td>
+            </tr>
+}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $().ready(function () {
+        $('.data-table').DataTable({
+            "paging": false,
+            "searching": true,
+            "ordering": true,
+            "order": [[0, 'asc']],
+            "info": false,
+            "autoWidth": true,
+            "language": {
+                "searchPlaceholder": "filter table",
+                "search": "_INPUT_",
+            },
+            'aoColumnDefs': [
+                { aTargets: ['sortable'], bSortable: true },
+                { aTargets: ['searchable'], bSearchable: true },
+                { aTargets: ['_all'], bSortable: false, bSearchable: false }
+            ],
+        });
+    });
+</script>
+
+<p>
+    <button class="btn btn-danger" type="submit"><i class="fas fa-trash-alt"></i>&nbsp;Delete Selected Items</button>
+</p>
+
+</form>

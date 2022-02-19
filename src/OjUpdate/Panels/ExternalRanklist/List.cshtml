@@ -1,0 +1,81 @@
+﻿@model IPagedList<SolveRecord>
+@{
+    ViewData["Title"] = "External OJ Ranklist";
+}
+
+<h2 class="mt-2 mb-3">@ViewData["Title"]</h2>
+
+<div class="d-none" id="paging">
+    <pagination bs-total-page="Model.TotalPage" bs-current-page="Model.CurrentPage" />
+</div>
+
+<div class="table-wrapper">
+    <table class="data-table table table-sm table-striped" style="width:auto">
+        <thead>
+            <tr role="row">
+                <th scope="col" class="sortable">ID</th>
+                <th scope="col" class="sortable searchable">category</th>
+                <th scope="col" class="sortable searchable">grade</th>
+                <th scope="col" class="sortable searchable">nick name</th>
+                <th scope="col" class="sortable searchable">account</th>
+                <th scope="col" class="sortable searchable">rank</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+@foreach (var rec in Model)
+{
+            <tr role="row">
+                <td>@rec.Id</td>
+                <td>@rec.Category</td>
+                <td>@rec.Grade</td>
+                <td>@rec.NickName</td>
+                <td>@rec.Account</td>
+                <td>@(rec.Result?.ToString() ?? "N/A")</td>
+                <td><a asp-action="Edit" asp-route-id="@rec.Id" asp-route-page="@Model.CurrentPage" title="edit this record" data-toggle="ajaxWindow" data-target="editRec"><i class="fas fa-edit"></i></a></td>
+                <td><a asp-action="Delete" asp-route-id="@rec.Id" asp-route-page="@Model.CurrentPage" title="delete this record" data-toggle="ajaxWindow" data-target="deleteRec"><i class="fas fa-trash-alt"></i></a></td>
+            </tr>
+}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $().ready(function () {
+        $('.data-table').DataTable({
+            "paging": false,
+            "searching": true,
+            "ordering": true,
+            "order": [[0, 'asc']],
+            "info": false,
+            "autoWidth": true,
+            "language": {
+                "searchPlaceholder": "filter table",
+                "search": "_INPUT_",
+            },
+            'aoColumnDefs': [
+                { aTargets: ['sortable'], bSortable: true },
+                { aTargets: ['searchable'], bSearchable: true },
+                { aTargets: ['_all'], bSortable: false, bSearchable: false }
+            ],
+        });
+
+        $('.dataTables_wrapper .row:first-child .col-md-6:first-child').html($('#paging').html());
+        $('.dataTables_wrapper .pagination-sm').addClass('mb-0');
+    });
+</script>
+
+<div class="dropdown mt-0">
+    <a asp-action="Create" class="btn btn-primary" title="Create new records">
+        <i class="fas fa-plus"></i>&nbsp;Create
+    </a>
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-trash-alt"></i>&nbsp;Cleanup
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <!--<a class="dropdown-item" asp-action="Cleanup" asp-route-category="@@((int)RecordType.Hdoj)">HDOJ</a>-->
+        <a class="dropdown-item" asp-action="Cleanup" asp-route-category="@((int)RecordType.Codeforces)">Codeforces</a>
+        <a class="dropdown-item" asp-action="Cleanup" asp-route-category="@((int)RecordType.Vjudge)">Vjudge</a>
+    </div>
+</div>
