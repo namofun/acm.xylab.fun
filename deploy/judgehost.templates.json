@@ -1,0 +1,132 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachineName": {
+      "type": "string"
+    },
+    "virtualMachineSize": {
+      "type": "string",
+      "defaultValue": "Standard_B1ms"
+    },
+    "networkSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "prdxyljhs-nsg"
+    },
+    "virtualNetworkId": {
+      "type": "string",
+      "defaultValue": "prdxyljhs-vnet"
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "hkg-default"
+    },
+    "osImageId": {
+      "type": "string",
+      "defaultValue": "prdxyljhs-image-20220220154907"
+    },
+    "adminPublicKeyRg": {
+      "type": "string",
+      "defaultValue": "AcmXylabFun"
+    },
+    "adminPublicKeyName": {
+      "type": "string",
+      "defaultValue": "xylab-defaultsshkey"
+    }
+  },
+  "variables": {
+    "nsgId": "[resourceId('AcmJudgerRG', 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
+    "vnetId": "[resourceId('AcmJudgerRG', 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkId'))]",
+    "osImageRef": "[resourceId('AcmJudgerRG', 'Microsoft.Compute/images', parameters('osImageId'))]",
+    "vnetName": "[last(split(variables('vnetId'), '/'))]",
+    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+    "networkInterfaceName": "[concat(parameters('virtualMachineName'), '-nic')]",
+    "adminPublicKeyId": "[resourceId(parameters('adminPublicKeyRg'), 'Microsoft.Compute/sshPublicKeys', parameters('adminPublicKeyName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2021-03-01",
+      "name": "[variables('networkInterfaceName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              },
+              "privateIPAllocationMethod": "Dynamic"
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[variables('nsgId')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-07-01",
+      "name": "[parameters('virtualMachineName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('virtualMachineSize')]"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "StandardSSD_LRS"
+            },
+            "deleteOption": "Delete"
+          },
+          "imageReference": {
+            "id": "[variables('osImageRef')]"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
+              "properties": {
+                "deleteOption": "Delete"
+              }
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[parameters('virtualMachineName')]",
+          "adminUsername": "ubuntu",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "/home/ubuntu/.ssh/authorized_keys",
+                  "keyData": "[reference(variables('adminPublicKeyId'), '2021-11-01').publicKey]"
+                }
+              ]
+            }
+          }
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "adminUsername": {
+      "type": "string",
+      "value": "ubuntu"
+    }
+  }
+}
