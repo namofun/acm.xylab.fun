@@ -25,13 +25,9 @@
       "type": "string",
       "defaultValue": "prdxyljhs-image-20220220154907"
     },
-    "adminPublicKeyRg": {
-      "type": "string",
-      "defaultValue": "AcmXylabFun"
-    },
     "adminPublicKeyName": {
       "type": "string",
-      "defaultValue": "xylab-defaultsshkey"
+      "defaultValue": "xylab-judgersshkey"
     }
   },
   "variables": {
@@ -41,7 +37,7 @@
     "vnetName": "[last(split(variables('vnetId'), '/'))]",
     "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
     "networkInterfaceName": "[concat(parameters('virtualMachineName'), '-nic')]",
-    "adminPublicKeyId": "[resourceId(parameters('adminPublicKeyRg'), 'Microsoft.Compute/sshPublicKeys', parameters('adminPublicKeyName'))]"
+    "adminPublicKeyId": "[resourceId('AcmJudgerRG', 'Microsoft.Compute/sshPublicKeys', parameters('adminPublicKeyName'))]"
   },
   "resources": [
     {
