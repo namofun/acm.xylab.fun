@@ -1,5 +1,3 @@
-using Ccs.Registration;
-using Markdig;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -42,12 +40,10 @@ namespace SatelliteSite
                 .ConfigureSubstrateDefaults<DefaultContext>()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddMarkdown();
                     services.AddDbModelSupplier<DefaultContext, Polygon.Storages.PolygonIdentityEntityConfiguration<XylabUser, DefaultContext>>();
                     services.AddSingleton<ConnectionCache>();
                     services.AddSingleton<Plag.Backend.Services.ISignalProvider, StorageQueueSignalProvider>();
                     services.ConfigureOptions<ConfigureConnections>();
-                    services.AddContestRegistrationTenant();
                 });
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ccs.Registration;
+using Markdig;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +31,9 @@ namespace SatelliteSite.XylabModule
             {
                 options.ShortenedClaimName = true;
             });
+
+            services.AddMarkdown();
+            services.AddContestRegistrationTenant();
 
             services.EnsureSingleton<IEmailSender>();
             services.ReplaceSingleton<IEmailSender, HybridEmailSender>();
