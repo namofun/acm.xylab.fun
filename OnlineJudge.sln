@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xylab.OnlineJudge", "src\Xy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SatelliteSite.XylabModule", "src\XylabModule\SatelliteSite.XylabModule.csproj", "{020A712A-0EE8-4BDC-9CCF-47C96DE488DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xylab.PlagiarismDetect.Worker", "src\PlagiarismDetectWorker\Xylab.PlagiarismDetect.Worker.csproj", "{401A95C9-F305-406E-AFA6-4DA3163E336F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xylab.PlagiarismDetect", "src\PlagiarismDetectWorker\Xylab.PlagiarismDetect.csproj", "{401A95C9-F305-406E-AFA6-4DA3163E336F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SatelliteSite.OjUpdateModule", "src\OjUpdate\SatelliteSite.OjUpdateModule.csproj", "{2D09DD2D-EB6A-4E59-A127-DCF71CB485F0}"
 EndProject

@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>SatelliteSite</RootNamespace>
-    <AssemblyName>JudgeWeb</AssemblyName>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
