@@ -1,0 +1,73 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+resources:
+  repositories:
+  - repository: "Azure Repos Mirror"
+    type: git
+    name: namomo/acm.xylab.fun
+
+variables:
+- group: azure-repos-sync
+
+jobs:
+- job: Build
+  displayName: "Create Deployment Artifacts"
+
+  pool:
+    vmImage: ubuntu-latest
+
+  steps:
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: 'echo "ref: $(Build.SourceBranch)" > $(Build.SourcesDirectory)/.git/ADO_OVERRIDE_HEAD'
+    displayName: 'Set Source Branch'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'src/PlagiarismDetectWorker/Xylab.PlagiarismDetect.csproj'
+      arguments: '-c=Release'
+    displayName: 'Build Plagiarism Detect Worker'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'src/Xylab/Xylab.OnlineJudge.csproj'
+      arguments: '-c=Release'
+    displayName: 'Build Contest Control System'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        mv $(Build.SourcesDirectory)/src/PlagiarismDetectWorker/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/pds.zip
+        mv $(Build.SourcesDirectory)/src/Xylab/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/ccs.zip
+    displayName: 'Copy Artifacts'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+    displayName: 'Publish Artifacts'
+
+- job: Sync
+  displayName: "Sync with Azure Repos"
+
+  pool:
+    vmImage: windows-latest
+
+  steps:
+  - task: gitmirror@0
+    inputs:
+      GitRepoUrl: 'https://tlylz:$(SYNC_PAT)@dev.azure.com/tlylz/namomo/_git/acm.xylab.fun'
+    displayName: 'Sync via Git Tools'
