@@ -1224,6 +1224,16 @@ namespace SatelliteSite.Migrations
                     b.HasData(
                         new
                         {
+                            Name = "contest_last_rating_change_time",
+                            Category = "Contest",
+                            Description = "Last rating update time.",
+                            DisplayPriority = 0,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
                             Name = "enable_register",
                             Category = "Identity",
                             Description = "Whether to allow user self registration.",
@@ -1231,6 +1241,16 @@ namespace SatelliteSite.Migrations
                             Public = true,
                             Type = "bool",
                             Value = "true"
+                        },
+                        new
+                        {
+                            Name = "email_sender_url",
+                            Category = "Identity",
+                            Description = "The HTTP URL of logic app to send the email.",
+                            DisplayPriority = 1,
+                            Public = true,
+                            Type = "string",
+                            Value = "\"\""
                         },
                         new
                         {
@@ -1341,16 +1361,6 @@ namespace SatelliteSite.Migrations
                             Public = true,
                             Type = "int",
                             Value = "0"
-                        },
-                        new
-                        {
-                            Name = "contest_last_rating_change_time",
-                            Category = "Contest",
-                            Description = "Last rating update time.",
-                            DisplayPriority = 0,
-                            Public = false,
-                            Type = "datetime",
-                            Value = "null"
                         });
                 });
 
@@ -1390,6 +1400,33 @@ namespace SatelliteSite.Migrations
                     b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
+                        new
+                        {
+                            Id = -30,
+                            ConcurrencyStamp = "40100c40-6ca5-7bcb-48bc-41f2a939cbee",
+                            Description = "CDS API user",
+                            Name = "CDS",
+                            NormalizedName = "CDS",
+                            ShortName = "cds_api"
+                        },
+                        new
+                        {
+                            Id = -31,
+                            ConcurrencyStamp = "8f8c37e1-a309-bd2d-6708-0519df89139b",
+                            Description = "Contest Creator",
+                            Name = "ContestCreator",
+                            NormalizedName = "CONTESTCREATOR",
+                            ShortName = "cont"
+                        },
+                        new
+                        {
+                            Id = -32,
+                            ConcurrencyStamp = "d68c9040-7762-ab0b-06eb-19ce1b5a5120",
+                            Description = "Temporary Team Account",
+                            Name = "TemporaryTeamAccount",
+                            NormalizedName = "TEMPORARYTEAMACCOUNT",
+                            ShortName = "temp_team"
+                        },
                         new
                         {
                             Id = -1,
@@ -1443,33 +1480,6 @@ namespace SatelliteSite.Migrations
                             Name = "ProblemCreator",
                             NormalizedName = "PROBLEMCREATOR",
                             ShortName = "prob"
-                        },
-                        new
-                        {
-                            Id = -30,
-                            ConcurrencyStamp = "40100c40-6ca5-7bcb-48bc-41f2a939cbee",
-                            Description = "CDS API user",
-                            Name = "CDS",
-                            NormalizedName = "CDS",
-                            ShortName = "cds_api"
-                        },
-                        new
-                        {
-                            Id = -31,
-                            ConcurrencyStamp = "8f8c37e1-a309-bd2d-6708-0519df89139b",
-                            Description = "Contest Creator",
-                            Name = "ContestCreator",
-                            NormalizedName = "CONTESTCREATOR",
-                            ShortName = "cont"
-                        },
-                        new
-                        {
-                            Id = -32,
-                            ConcurrencyStamp = "d68c9040-7762-ab0b-06eb-19ce1b5a5120",
-                            Description = "Temporary Team Account",
-                            Name = "TemporaryTeamAccount",
-                            NormalizedName = "TEMPORARYTEAMACCOUNT",
-                            ShortName = "temp_team"
                         },
                         new
                         {

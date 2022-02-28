@@ -7,7 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Mailing;
+using SatelliteSite;
 using SatelliteSite.XylabModule.Services;
+using System.Linq;
+
+[assembly: ConfigurationString(1, "Identity", "email_sender_url", "", "The HTTP URL of logic app to send the email.")]
 
 namespace SatelliteSite.XylabModule
 {
@@ -35,10 +39,12 @@ namespace SatelliteSite.XylabModule
             services.AddMarkdown();
             services.AddContestRegistrationTenant();
 
-            services.EnsureSingleton<IEmailSender>();
-            services.ReplaceSingleton<IEmailSender, HybridEmailSender>();
-            services.AddOptions<HybridEmailOptions>()
-                .Bind(configuration.GetSection("SendGrid"));
+            services.AddHttpClient<IEmailSender, LogicAppsEmailSender>();
+            services.Remove(
+                services.Where(sd =>
+                    sd.ServiceType == typeof(IEmailSender)
+                    && sd.Lifetime == ServiceLifetime.Singleton)
+                .Single());
         }
 
         public override void RegisterMenu(IMenuContributor menus)

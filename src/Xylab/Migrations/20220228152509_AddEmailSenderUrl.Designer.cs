@@ -11,7 +11,7 @@ using SatelliteSite;
 
 namespace SatelliteSite.Migrations
 {
-    partial class BumpToNet6
+    partial class AddEmailSenderUrl
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -952,7 +952,7 @@ namespace SatelliteSite.Migrations
                     b.Property<bool?>("Applied")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ContestId")
+                    b.Property<int?>("ContestId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset?>("EndTime")
@@ -1138,6 +1138,14 @@ namespace SatelliteSite.Migrations
                     b.ToTable("PolygonTestcases", (string)null);
                 });
 
+            modelBuilder.Entity("Polygon.Storages.SingleEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+                });
+
             modelBuilder.Entity("SatelliteSite.Entities.Auditlog", b =>
                 {
                     b.Property<int>("LogId")
@@ -1216,6 +1224,36 @@ namespace SatelliteSite.Migrations
                     b.HasData(
                         new
                         {
+                            Name = "contest_last_rating_change_time",
+                            Category = "Contest",
+                            Description = "Last rating update time.",
+                            DisplayPriority = 0,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "enable_register",
+                            Category = "Identity",
+                            Description = "Whether to allow user self registration.",
+                            DisplayPriority = 0,
+                            Public = true,
+                            Type = "bool",
+                            Value = "true"
+                        },
+                        new
+                        {
+                            Name = "email_sender_url",
+                            Category = "Identity",
+                            Description = "The HTTP URL of logic app to send the email.",
+                            DisplayPriority = 1,
+                            Public = true,
+                            Type = "string",
+                            Value = "\"\""
+                        },
+                        new
+                        {
                             Name = "oj_Codeforces_update_time",
                             Category = "Tenant",
                             Description = "Last update time of Codeforces.",
@@ -1243,16 +1281,6 @@ namespace SatelliteSite.Migrations
                             Public = false,
                             Type = "datetime",
                             Value = "null"
-                        },
-                        new
-                        {
-                            Name = "enable_register",
-                            Category = "Identity",
-                            Description = "Whether to allow user self registration.",
-                            DisplayPriority = 0,
-                            Public = true,
-                            Type = "bool",
-                            Value = "true"
                         },
                         new
                         {
@@ -1333,16 +1361,6 @@ namespace SatelliteSite.Migrations
                             Public = true,
                             Type = "int",
                             Value = "0"
-                        },
-                        new
-                        {
-                            Name = "contest_last_rating_change_time",
-                            Category = "Contest",
-                            Description = "Last rating update time.",
-                            DisplayPriority = 0,
-                            Public = false,
-                            Type = "datetime",
-                            Value = "null"
                         });
                 });
 
@@ -1384,12 +1402,30 @@ namespace SatelliteSite.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -17,
-                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
-                            Description = "Team Leader",
-                            Name = "TeamLeader",
-                            NormalizedName = "TEAMLEADER",
-                            ShortName = "leader"
+                            Id = -30,
+                            ConcurrencyStamp = "40100c40-6ca5-7bcb-48bc-41f2a939cbee",
+                            Description = "CDS API user",
+                            Name = "CDS",
+                            NormalizedName = "CDS",
+                            ShortName = "cds_api"
+                        },
+                        new
+                        {
+                            Id = -31,
+                            ConcurrencyStamp = "8f8c37e1-a309-bd2d-6708-0519df89139b",
+                            Description = "Contest Creator",
+                            Name = "ContestCreator",
+                            NormalizedName = "CONTESTCREATOR",
+                            ShortName = "cont"
+                        },
+                        new
+                        {
+                            Id = -32,
+                            ConcurrencyStamp = "d68c9040-7762-ab0b-06eb-19ce1b5a5120",
+                            Description = "Temporary Team Account",
+                            Name = "TemporaryTeamAccount",
+                            NormalizedName = "TEMPORARYTEAMACCOUNT",
+                            ShortName = "temp_team"
                         },
                         new
                         {
@@ -1420,6 +1456,15 @@ namespace SatelliteSite.Migrations
                         },
                         new
                         {
+                            Id = -17,
+                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
+                            Description = "Team Leader",
+                            Name = "TeamLeader",
+                            NormalizedName = "TEAMLEADER",
+                            ShortName = "leader"
+                        },
+                        new
+                        {
                             Id = -10,
                             ConcurrencyStamp = "44315c39-534d-ec0c-61f0-c0a5ed981cd9",
                             Description = "(Internal/System) Judgehost",
@@ -1435,33 +1480,6 @@ namespace SatelliteSite.Migrations
                             Name = "ProblemCreator",
                             NormalizedName = "PROBLEMCREATOR",
                             ShortName = "prob"
-                        },
-                        new
-                        {
-                            Id = -30,
-                            ConcurrencyStamp = "40100c40-6ca5-7bcb-48bc-41f2a939cbee",
-                            Description = "CDS API user",
-                            Name = "CDS",
-                            NormalizedName = "CDS",
-                            ShortName = "cds_api"
-                        },
-                        new
-                        {
-                            Id = -31,
-                            ConcurrencyStamp = "8f8c37e1-a309-bd2d-6708-0519df89139b",
-                            Description = "Contest Creator",
-                            Name = "ContestCreator",
-                            NormalizedName = "CONTESTCREATOR",
-                            ShortName = "cont"
-                        },
-                        new
-                        {
-                            Id = -32,
-                            ConcurrencyStamp = "d68c9040-7762-ab0b-06eb-19ce1b5a5120",
-                            Description = "Temporary Team Account",
-                            Name = "TemporaryTeamAccount",
-                            NormalizedName = "TEMPORARYTEAMACCOUNT",
-                            ShortName = "temp_team"
                         },
                         new
                         {
@@ -2221,8 +2239,7 @@ namespace SatelliteSite.Migrations
                     b.HasOne("Ccs.Entities.Contest", null)
                         .WithMany()
                         .HasForeignKey("ContestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SatelliteSite.XylabUser", null)
                         .WithMany()

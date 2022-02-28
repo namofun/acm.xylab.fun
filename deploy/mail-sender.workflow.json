@@ -1,0 +1,73 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "Send email as noreply": {
+        "inputs": {
+          "body": {
+            "Body": "@triggerBody()?['content']",
+            "From": "noreply@xylab.fun",
+            "Importance": "Normal",
+            "IsHtml": "@triggerBody()?['isHtml']",
+            "Subject": "@triggerBody()?['subject']",
+            "To": "@triggerBody()?['to']"
+          },
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['office365']['connectionId']"
+            }
+          },
+          "method": "post",
+          "path": "/Mail"
+        },
+        "runAfter": {},
+        "type": "ApiConnection"
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "triggers": {
+      "manual": {
+        "inputs": {
+          "method": "POST",
+          "schema": {
+            "properties": {
+              "content": {
+                "type": "string"
+              },
+              "isHtml": {
+                "type": "boolean"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "kind": "Http",
+        "type": "Request"
+      }
+    }
+  },
+  "parameters": {
+    "$connections": {
+      "value": {
+        "office365": {
+          "connectionId": "/subscriptions/SUBSCRIPTION_ID/resourceGroups/LaboratoryRG/providers/Microsoft.Web/connections/office365",
+          "connectionName": "office365",
+          "id": "/subscriptions/SUBSCRIPTION_ID/providers/Microsoft.Web/locations/eastasia/managedApis/office365"
+        }
+      }
+    }
+  }
+}
