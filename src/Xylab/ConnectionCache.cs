@@ -17,13 +17,16 @@ namespace SatelliteSite
         public ConnectionCache(IConfiguration configuration, IHostEnvironment environment)
         {
             BlobServiceClient client = new(configuration.GetConnectionString("AzureStorageAccount"));
-            QueueService = new(configuration.GetConnectionString("AzureStorageAccount"));
             BlobCachePath = Path.Combine(environment.ContentRootPath, "blobcache");
 
             if (!Directory.Exists(BlobCachePath))
             {
                 Directory.CreateDirectory(BlobCachePath);
             }
+
+            QueueService = new(
+                configuration.GetConnectionString("AzureStorageAccount"),
+                new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });
 
             Acm = new(
                 client.GetBlobContainerClient("acm"),
