@@ -34,7 +34,7 @@ jobs:
       command: 'publish'
       publishWebProjects: false
       projects: 'src/PlagiarismDetectWorker/Xylab.PlagiarismDetect.csproj'
-      arguments: '-c=Release'
+      arguments: '--configuration Release --output artifacts/staging/pds/publish'
     displayName: 'Build Plagiarism Detect Worker'
 
   - task: DotNetCoreCLI@2
@@ -42,15 +42,15 @@ jobs:
       command: 'publish'
       publishWebProjects: false
       projects: 'src/Xylab/Xylab.OnlineJudge.csproj'
-      arguments: '-c=Release'
+      arguments: '--configuration Release --output artifacts/staging/ccs/publish'
     displayName: 'Build Contest Control System'
 
   - task: Bash@3
     inputs:
       targetType: 'inline'
       script: |
-        mv $(Build.SourcesDirectory)/artifacts/Xylab.PlagiarismDetect/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/pds.zip
-        mv $(Build.SourcesDirectory)/artifacts/Xylab.OnlineJudge/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/ccs.zip
+        mv $(Build.SourcesDirectory)/artifacts/staging/pds/publish.zip $(Build.ArtifactStagingDirectory)/pds.zip
+        mv $(Build.SourcesDirectory)/artifacts/staging/ccs/publish.zip $(Build.ArtifactStagingDirectory)/ccs.zip
     displayName: 'Copy Artifacts'
 
   - task: PublishBuildArtifacts@1
