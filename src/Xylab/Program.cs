@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,7 @@ namespace SatelliteSite
                     services.AddSingleton<ConnectionCache>();
                     services.AddSingleton<Plag.Backend.Services.ISignalProvider, StorageQueueSignalProvider>();
                     services.ConfigureOptions<ConfigureConnections>();
+                    services.Configure<DefaultAzureCredentialOptions>(options => options.VisualStudioTenantId = "65f7f058-fc47-4803-b7f6-1dd03a071b50");
                 });
     }
 }

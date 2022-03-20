@@ -1244,16 +1244,6 @@ namespace SatelliteSite.Migrations
                         },
                         new
                         {
-                            Name = "email_sender_url",
-                            Category = "Identity",
-                            Description = "The HTTP URL of logic app to send the email.",
-                            DisplayPriority = 1,
-                            Public = true,
-                            Type = "string",
-                            Value = "\"\""
-                        },
-                        new
-                        {
                             Name = "oj_Codeforces_update_time",
                             Category = "Tenant",
                             Description = "Last update time of Codeforces.",
