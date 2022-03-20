@@ -49,8 +49,8 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        mv $(Build.SourcesDirectory)/src/PlagiarismDetectWorker/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/pds.zip
-        mv $(Build.SourcesDirectory)/src/Xylab/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/ccs.zip
+        mv $(Build.SourcesDirectory)/artifacts/Xylab.PlagiarismDetect/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/pds.zip
+        mv $(Build.SourcesDirectory)/artifacts/Xylab.OnlineJudge/bin/Release/net6.0/publish.zip $(Build.ArtifactStagingDirectory)/ccs.zip
     displayName: 'Copy Artifacts'
 
   - task: PublishBuildArtifacts@1
