@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Plag.Backend.Models;
 using System;
 using System.Reflection;
+using Xylab.PlagiarismDetect.Backend.Models;
 using SystemJsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 using SystemJsonIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition;
 using SystemJsonPropertyNameAttribute = System.Text.Json.Serialization.JsonPropertyNameAttribute;
@@ -59,25 +59,25 @@ namespace Xylab.PlagiarismDetect.Worker
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);
 
-            if (member.DeclaringType == typeof(Plag.Backend.Models.Report))
+            if (member.DeclaringType == typeof(Backend.Models.Report))
             {
-                if (member.Name == nameof(Plag.Backend.Models.Report.Justification))
+                if (member.Name == nameof(Backend.Models.Report.Justification))
                 {
                     property.Converter = new ReportJustificationConverter();
                 }
-                else if (member.Name == nameof(Plag.Backend.Models.Report.State))
+                else if (member.Name == nameof(Backend.Models.Report.State))
                 {
                     property.PropertyName = "pending";
                     property.Converter = new ReportStateConverter();
                 }
             }
-            else if (member.DeclaringType == typeof(Plag.Backend.Models.Comparison))
+            else if (member.DeclaringType == typeof(Backend.Models.Comparison))
             {
-                if (member.Name == nameof(Plag.Backend.Models.Comparison.Justification))
+                if (member.Name == nameof(Backend.Models.Comparison.Justification))
                 {
                     property.Converter = new ReportJustificationConverter();
                 }
-                else if (member.Name == nameof(Plag.Backend.Models.Comparison.State))
+                else if (member.Name == nameof(Backend.Models.Comparison.State))
                 {
                     property.PropertyName = "pending";
                     property.Converter = new ReportStateAnotherConverter();

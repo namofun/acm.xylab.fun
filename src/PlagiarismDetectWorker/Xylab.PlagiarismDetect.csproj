@@ -6,12 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
-    <PackageReference Include="Plag.Backend.Generation" Version="$(PlagVersion)" />
-    <PackageReference Include="Plag.Backend.Roles.Cosmos" Version="$(PlagVersion)" />
+    <PackageReference Include="Xylab.PlagiarismDetect.Backend.Generation" Version="$(PlagiarismDetectVersion)" />
+    <PackageReference Include="Xylab.PlagiarismDetect.Backend.Roles.Cosmos" Version="$(PlagiarismDetectVersion)" />
   </ItemGroup>
 
   <ItemGroup>

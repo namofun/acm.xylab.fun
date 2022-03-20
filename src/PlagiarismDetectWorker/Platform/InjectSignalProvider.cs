@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.WebJobs;
-using Plag.Backend.Services;
 using System;
 using System.Threading.Tasks;
+using Xylab.PlagiarismDetect.Backend.Services;
 
 namespace Xylab.PlagiarismDetect.Worker
 {

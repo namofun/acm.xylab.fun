@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Plag.Backend.Jobs;
 using System.Threading.Tasks;
+using Xylab.PlagiarismDetect.Backend.Jobs;
 
 namespace Xylab.PlagiarismDetect.Worker
 {
