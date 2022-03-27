@@ -25,7 +25,7 @@ namespace SatelliteSite.OjUpdateModule.Services
         /// </summary>
         /// <param name="id">The record ID.</param>
         /// <returns>The task for fetching record.</returns>
-        Task<SolveRecord> FindAsync(int id);
+        Task<SolveRecord> FindAsync(string id);
 
         /// <summary>
         /// Find all solve record for category.
@@ -52,17 +52,10 @@ namespace SatelliteSite.OjUpdateModule.Services
         /// <summary>
         /// Delete the solve record.
         /// </summary>
-        /// <param name="record">The solve record.</param>
-        /// <returns>The task for deleting.</returns>
-        Task DeleteAsync(SolveRecord record);
-
-        /// <summary>
-        /// Delete the solve record.
-        /// </summary>
         /// <param name="type">The solve record type.</param>
         /// <param name="ids">The target IDs.</param>
         /// <returns>The task for deleting, returning the deleted items.</returns>
-        Task<int> DeleteAsync(RecordType type, int[] ids);
+        Task<int> DeleteAsync(RecordType type, string[] ids);
 
         /// <summary>
         /// Find all OJ account model for category and grade.
@@ -134,18 +127,19 @@ namespace SatelliteSite.OjUpdateModule.Services
                 .ToPagedListAsync(currentPage, takeCount);
         }
 
-        public Task<SolveRecord> FindAsync(int id)
+        public Task<SolveRecord> FindAsync(string id)
         {
-            return Context.Set<SolveRecord>()
-                .AsNoTracking()
-                .Where(s => s.Id == id)
-                .SingleOrDefaultAsync();
-        }
-
-        public Task DeleteAsync(SolveRecord record)
-        {
-            Context.Set<SolveRecord>().Remove(record);
-            return Context.SaveChangesAsync();
+            if (int.TryParse(id, out int iid))
+            {
+                return Context.Set<SolveRecord>()
+                    .AsNoTracking()
+                    .Where(s => s.Id == iid)
+                    .SingleOrDefaultAsync();
+            }
+            else
+            {
+                return Task.FromResult<SolveRecord>(null);
+            }
         }
 
         public async Task CreateAsync(List<SolveRecord> records)
@@ -155,10 +149,19 @@ namespace SatelliteSite.OjUpdateModule.Services
             await Context.SaveChangesAsync();
         }
 
-        public Task<int> DeleteAsync(RecordType type, int[] ids)
+        public Task<int> DeleteAsync(RecordType type, string[] ids)
         {
+            List<int> parsedIds = new(capacity: ids.Length);
+            for (int i = 0; i < ids.Length; i++)
+            {
+                if (int.TryParse(ids[i], out int iid))
+                {
+                    parsedIds.Add(iid);
+                }
+            }
+
             return Context.Set<SolveRecord>()
-                .Where(r => r.Category == type && ids.Contains(r.Id))
+                .Where(r => r.Category == type && parsedIds.Contains(r.Id))
                 .BatchDeleteAsync();
         }
     }

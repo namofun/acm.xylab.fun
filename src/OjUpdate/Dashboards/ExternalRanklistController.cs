@@ -56,7 +56,7 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
         public async Task<IActionResult> Cleanup(CleanupModel model)
         {
             var category = (RecordType)model.Category;
-            var toDelete = model.ToDelete ?? Array.Empty<int>();
+            var toDelete = model.ToDelete ?? Array.Empty<string>();
             
             if (toDelete.Length == 0)
             {
@@ -101,7 +101,7 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
 
         [HttpGet("{id}/[action]")]
-        public async Task<IActionResult> Delete(int id, int page)
+        public async Task<IActionResult> Delete(string id, int page)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
@@ -115,18 +115,18 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
         [HttpPost("{id}/[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, int page, bool post = true)
+        public async Task<IActionResult> Delete(string id, int page, bool post = true)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
-            await Store.DeleteAsync(item);
+            await Store.DeleteAsync(item.Category, new[] { id });
             StatusMessage = "Successfully deleted.";
             return RedirectToAction(nameof(List), new { page });
         }
 
 
         [HttpGet("{id}/[action]")]
-        public async Task<IActionResult> Edit(int id, int page)
+        public async Task<IActionResult> Edit(string id, int page)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
@@ -137,7 +137,7 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
         [HttpPost("{id}/[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int page, SolveRecord model)
+        public async Task<IActionResult> Edit(string id, int page, SolveRecord model)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
