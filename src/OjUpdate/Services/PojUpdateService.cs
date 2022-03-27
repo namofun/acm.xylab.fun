@@ -74,8 +74,10 @@ namespace SatelliteSite.OjUpdateModule.Services
         }
 
         /// <inheritdoc />
-        protected override async Task UpdateOne(HttpClient httpClient,
-            SolveRecord id, CancellationToken stoppingToken)
+        protected override async Task UpdateOne(
+            HttpClient httpClient,
+            IRecord id,
+            CancellationToken stoppingToken)
         {
             await base.UpdateOne(httpClient, id, stoppingToken);
             await Task.Delay(10000, stoppingToken);

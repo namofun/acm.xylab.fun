@@ -134,7 +134,7 @@ namespace SatelliteSite.OjUpdateModule.Services
         /// <param name="httpClient">The <see cref="HttpClient"/> instance.</param>
         /// <param name="id">The account information entity.</param>
         /// <param name="stoppingToken">The cancellation token.</param>
-        protected virtual async Task UpdateOne(HttpClient httpClient, SolveRecord id, CancellationToken stoppingToken)
+        protected virtual async Task UpdateOne(HttpClient httpClient, IRecord id, CancellationToken stoppingToken)
         {
             var getSrc = GenerateGetSource(id.Account);
             var resp = await httpClient.GetAsync(getSrc, stoppingToken);
@@ -201,7 +201,7 @@ namespace SatelliteSite.OjUpdateModule.Services
                 using (var scope = ServiceProvider.CreateScope())
                 {
                     var store = scope.ServiceProvider.GetRequiredService<ISolveRecordStore>();
-                    var names = await store.ListAsync(CategoryId);
+                    var names = await store.GetAllAsync(CategoryId);
 
                     foreach (var id in names)
                     {

@@ -1,14 +1,14 @@
 ﻿namespace SatelliteSite.OjUpdateModule.Entities
 {
     /// <summary>
-    /// The entity class for problem solving record.
+    /// The entity interface for problem solving record.
     /// </summary>
-    public class SolveRecord : IRecord
+    public interface IRecord
     {
         /// <summary>
         /// The internal item ID
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The grade
@@ -34,11 +34,5 @@
         /// The saved fetching result
         /// </summary>
         public int? Result { get; set; }
-
-        string IRecord.Id
-        {
-            get => this.Id.ToString();
-            set => this.Id = int.Parse(value);
-        }
     }
 }

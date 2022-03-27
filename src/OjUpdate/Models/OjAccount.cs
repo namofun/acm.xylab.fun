@@ -1,5 +1,4 @@
-﻿using SatelliteSite.OjUpdateModule.Entities;
-using System;
+﻿using System;
 
 namespace SatelliteSite.OjUpdateModule.Models
 {
@@ -27,15 +26,6 @@ namespace SatelliteSite.OjUpdateModule.Models
         /// The solved count
         /// </summary>
         public int? Solved { get; set; }
-
-        /// <summary>
-        /// Instantiate an <see cref="OjAccount"/> via <see cref="SolveRecord"/>.
-        /// </summary>
-        /// <param name="p">The solve record.</param>
-        public OjAccount(SolveRecord p)
-            : this(p.Account, p.NickName, p.Result, p.Grade)
-        {
-        }
 
         /// <summary>
         /// Instantiate an <see cref="OjAccount"/>.

@@ -4,7 +4,7 @@ using SatelliteSite.OjUpdateModule.Entities;
 using SatelliteSite.OjUpdateModule.Models;
 using SatelliteSite.OjUpdateModule.Services;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SatelliteSite.OjUpdateModule.Dashboards
@@ -26,11 +26,9 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
 
         [HttpGet]
-        public async Task<IActionResult> List(int page = 1)
+        public async Task<IActionResult> List()
         {
-            if (page <= 0) return BadRequest();
-            var model = await Store.ListAsync(page, ItemsPerPage);
-            return View(model);
+            return View(await Store.ListAsync());
         }
 
 
@@ -39,7 +37,7 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
         {
             ViewBag.Category = category;
             var record = (RecordType)category;
-            var model = await Store.ListAsync(record);
+            var model = await Store.GetAllAsync(record);
             
             if (model.Count == 0)
             {
@@ -81,18 +79,13 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Create(
-            [FromForm] SolveRecord[] Batch)
+            [FromForm] CreateRecordModel[] Batch)
         {
-            var results = new List<SolveRecord>();
-            foreach (var item in Batch)
-            {
-                if (string.IsNullOrWhiteSpace(item.Account) ||
-                    string.IsNullOrWhiteSpace(item.NickName))
-                    continue;
-                item.Id = 0;
-                item.Result = null;
-                results.Add(item);
-            }
+            var results = Batch
+                .Where(item
+                    => !string.IsNullOrWhiteSpace(item.Account)
+                    && !string.IsNullOrWhiteSpace(item.NickName))
+                .ToList();
 
             await Store.CreateAsync(results);
             StatusMessage = $"Successfully added {results.Count} items!";
@@ -101,43 +94,41 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
 
         [HttpGet("{id}/[action]")]
-        public async Task<IActionResult> Delete(string id, int page)
+        public async Task<IActionResult> Delete(string id)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
             return AskPost(
                 title: $"Delete record {id}",
                 message: $"Are you sure to remove {item.NickName} - {item.Category}, {item.Grade}?",
-                routeValues: new { id, page },
                 type: BootstrapColor.danger);
         }
 
 
         [HttpPost("{id}/[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id, int page, bool post = true)
+        public async Task<IActionResult> Delete(string id, bool post = true)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
             await Store.DeleteAsync(item.Category, new[] { id });
             StatusMessage = "Successfully deleted.";
-            return RedirectToAction(nameof(List), new { page });
+            return RedirectToAction(nameof(List));
         }
 
 
         [HttpGet("{id}/[action]")]
-        public async Task<IActionResult> Edit(string id, int page)
+        public async Task<IActionResult> Edit(string id)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
-            ViewBag.Page = page;
             return Window(item);
         }
 
 
         [HttpPost("{id}/[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, int page, SolveRecord model)
+        public async Task<IActionResult> Edit(string id, CreateRecordModel model)
         {
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
@@ -149,7 +140,7 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
 
             await Store.UpdateAsync(item, resultOnly: false);
             StatusMessage = "Successfully updated.";
-            return RedirectToAction(nameof(List), new { page });
+            return RedirectToAction(nameof(List));
         }
     }
 }
