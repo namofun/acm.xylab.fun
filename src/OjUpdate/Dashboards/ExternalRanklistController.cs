@@ -94,9 +94,9 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
                 results.Add(item);
             }
 
-            var tot = await Store.CreateAsync(results);
+            await Store.CreateAsync(results);
             StatusMessage = $"Successfully added {results.Count} items!";
-            return RedirectToAction(nameof(List), new { page = (tot - 1) / ItemsPerPage + 1 });
+            return RedirectToAction(nameof(List));
         }
 
 

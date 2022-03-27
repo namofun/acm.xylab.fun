@@ -39,7 +39,7 @@ namespace SatelliteSite.OjUpdateModule.Services
         /// </summary>
         /// <param name="records">The solve records.</param>
         /// <returns>The task for creating, returning the minimal record ID.</returns>
-        Task<int> CreateAsync(List<SolveRecord> records);
+        Task CreateAsync(List<SolveRecord> records);
 
         /// <summary>
         /// Update the solve record.
@@ -148,20 +148,11 @@ namespace SatelliteSite.OjUpdateModule.Services
             return Context.SaveChangesAsync();
         }
 
-        public async Task<int> CreateAsync(List<SolveRecord> records)
+        public async Task CreateAsync(List<SolveRecord> records)
         {
-            if (records.Count == 0)
-            {
-                return await Context.Set<SolveRecord>().CountAsync();
-            }
-
+            if (records.Count == 0) return;
             Context.Set<SolveRecord>().AddRange(records);
             await Context.SaveChangesAsync();
-            var minId = records.Min(m => m.Id);
-
-            return await Context.Set<SolveRecord>()
-                .Where(s => s.Id <= minId)
-                .CountAsync();
         }
 
         public Task<int> DeleteAsync(RecordType type, int[] ids)
