@@ -84,18 +84,19 @@ namespace SatelliteSite.OjUpdateModule.Services
         }
 
         /// <inheritdoc />
-        protected override async Task UpdateOne(
+        protected override async Task<int?> UpdateOne(
             HttpClient httpClient,
             IRecord id,
             CancellationToken stoppingToken)
         {
+            int? result = null;
             int attempt = 0;
 
             do
             {
                 try
                 {
-                    await base.UpdateOne(httpClient, id, stoppingToken);
+                    result = await base.UpdateOne(httpClient, id, stoppingToken);
                     attempt = int.MaxValue;
                 }
                 catch (System.Text.Json.JsonException)
@@ -112,6 +113,8 @@ namespace SatelliteSite.OjUpdateModule.Services
                 }
             }
             while (attempt >= 3);
+
+            return result;
         }
     }
 }

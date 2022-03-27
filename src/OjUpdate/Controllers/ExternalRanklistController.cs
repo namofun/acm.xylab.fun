@@ -15,7 +15,7 @@ namespace SatelliteSite.OjUpdateModule.Controllers
         public async Task<IActionResult> List(
             [FromRoute] string name,
             [FromRoute] int? year,
-            [FromServices] ISolveRecordStore store)
+            [FromServices] IRecordStorage store)
         {
             if (!OjUpdateService.OjList.TryGetValue(name, out var oj))
                 return NotFound();

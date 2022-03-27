@@ -17,9 +17,9 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
     {
         const int ItemsPerPage = 50;
 
-        private ISolveRecordStore Store { get; }
+        private IRecordStorage Store { get; }
 
-        public ExternalRanklistController(ISolveRecordStore store)
+        public ExternalRanklistController(IRecordStorage store)
         {
             Store = store;
         }
@@ -133,12 +133,7 @@ namespace SatelliteSite.OjUpdateModule.Dashboards
             var item = await Store.FindAsync(id);
             if (item == null) return NotFound();
 
-            item.Account = model.Account;
-            item.Category = model.Category;
-            item.Grade = model.Grade;
-            item.NickName = model.NickName;
-
-            await Store.UpdateAsync(item, resultOnly: false);
+            await Store.UpdateAsync(item, model);
             StatusMessage = "Successfully updated.";
             return RedirectToAction(nameof(List));
         }

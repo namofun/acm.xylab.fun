@@ -4,12 +4,12 @@ using SatelliteSite.OjUpdateModule.Entities;
 
 namespace SatelliteSite.OjUpdateModule
 {
-    public class OjUpdateEntityConfiguration<TContext> :
+    public class RecordV1EntityConfiguration<TContext> :
         EntityTypeConfigurationSupplier<TContext>,
-        IEntityTypeConfiguration<SolveRecord>
+        IEntityTypeConfiguration<RecordV1>
         where TContext : DbContext
     {
-        public void Configure(EntityTypeBuilder<SolveRecord> entity)
+        public void Configure(EntityTypeBuilder<RecordV1> entity)
         {
             entity.ToTable("TenantSolveRecord");
 

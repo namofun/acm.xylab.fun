@@ -8,31 +8,31 @@
         /// <summary>
         /// The internal item ID
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; }
 
         /// <summary>
         /// The grade
         /// </summary>
-        public int Grade { get; set; }
+        public int Grade { get; }
 
         /// <summary>
         /// The nick name
         /// </summary>
-        public string NickName { get; set; }
+        public string NickName { get; }
 
         /// <summary>
         /// The login name of external OJ
         /// </summary>
-        public string Account { get; set; }
+        public string Account { get; }
 
         /// <summary>
         /// The category of record
         /// </summary>
-        public RecordType Category { get; set; }
+        public RecordType Category { get; }
 
         /// <summary>
         /// The saved fetching result
         /// </summary>
-        public int? Result { get; set; }
+        public int? Result { get; }
     }
 }

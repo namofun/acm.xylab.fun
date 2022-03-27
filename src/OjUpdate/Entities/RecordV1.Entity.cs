@@ -3,7 +3,7 @@
     /// <summary>
     /// The entity class for problem solving record.
     /// </summary>
-    public class SolveRecord : IRecord
+    public class RecordV1 : IRecord
     {
         /// <summary>
         /// The internal item ID
@@ -35,10 +35,6 @@
         /// </summary>
         public int? Result { get; set; }
 
-        string IRecord.Id
-        {
-            get => this.Id.ToString();
-            set => this.Id = int.Parse(value);
-        }
+        string IRecord.Id => this.Id.ToString();
     }
 }

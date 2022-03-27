@@ -134,12 +134,12 @@ namespace SatelliteSite.OjUpdateModule.Services
         /// <param name="httpClient">The <see cref="HttpClient"/> instance.</param>
         /// <param name="id">The account information entity.</param>
         /// <param name="stoppingToken">The cancellation token.</param>
-        protected virtual async Task UpdateOne(HttpClient httpClient, IRecord id, CancellationToken stoppingToken)
+        protected virtual async Task<int?> UpdateOne(HttpClient httpClient, IRecord id, CancellationToken stoppingToken)
         {
             var getSrc = GenerateGetSource(id.Account);
-            var resp = await httpClient.GetAsync(getSrc, stoppingToken);
-            var result = await resp.Content.ReadAsStringAsync();
-            id.Result = MatchCount(result);
+            using var resp = await httpClient.GetAsync(getSrc, stoppingToken);
+            var result = await resp.Content.ReadAsStringAsync(stoppingToken);
+            return MatchCount(result);
         }
 
         /// <summary>
@@ -200,13 +200,13 @@ namespace SatelliteSite.OjUpdateModule.Services
 
                 using (var scope = ServiceProvider.CreateScope())
                 {
-                    var store = scope.ServiceProvider.GetRequiredService<ISolveRecordStore>();
+                    var store = scope.ServiceProvider.GetRequiredService<IRecordStorage>();
                     var names = await store.GetAllAsync(CategoryId);
 
                     foreach (var id in names)
                     {
-                        await UpdateOne(httpClient, id, stoppingToken);
-                        await store.UpdateAsync(id, resultOnly: true);
+                        var res = await UpdateOne(httpClient, id, stoppingToken);
+                        await store.UpdateAsync(id, res);
                     }
                 }
 
