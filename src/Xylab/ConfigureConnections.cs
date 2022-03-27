@@ -29,19 +29,19 @@ namespace SatelliteSite
 
         public void Configure(ContestFileOptions options)
         {
-            options.ContestFileProvider = _connections.Acm;
+            options.ContestFileProvider = _connections.BlobContainer_Acm;
         }
 
         public void Configure(PolygonPhysicalOptions options)
         {
-            options.ProblemFileProvider = _connections.Acm;
-            options.JudgingFileProvider = _connections.AcmArchive;
+            options.ProblemFileProvider = _connections.BlobContainer_Acm;
+            options.JudgingFileProvider = _connections.BlobContainer_AcmArchive;
         }
 
         public void Configure(AzureBlobWwwrootOptions options)
         {
             options.LocalCachePath = _connections.BlobCachePath;
-            options.BlobContainerClient = _connections.Acm.ContainerClient;
+            options.BlobContainerClient = _connections.BlobContainer_Acm.ContainerClient;
             options.AllowedFolders = new[] { "/images/" };
         }
 

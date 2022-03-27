@@ -9,8 +9,8 @@ namespace SatelliteSite
 {
     public class ConnectionCache
     {
-        public AzureStorageAccount Acm { get; }
-        public AzureStorageAccount AcmArchive { get; }
+        public AzureStorageAccount BlobContainer_Acm { get; }
+        public AzureStorageAccount BlobContainer_AcmArchive { get; }
         public QueueServiceClient QueueService { get; }
         public string BlobCachePath { get; }
 
@@ -28,11 +28,11 @@ namespace SatelliteSite
                 configuration.GetConnectionString("AzureStorageAccount"),
                 new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });
 
-            Acm = new(
+            BlobContainer_Acm = new(
                 client.GetBlobContainerClient("acm"),
                 BlobCachePath);
 
-            AcmArchive = new(
+            BlobContainer_AcmArchive = new(
                 client.GetBlobContainerClient("acm-archive"),
                 BlobCachePath,
                 false,
