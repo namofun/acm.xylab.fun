@@ -34,6 +34,7 @@ namespace SatelliteSite.OjUpdateModule
             services.AddScoped<IRecordStorage, RecordV1Storage<TContext>>();
             services.AddHostedService<CfUpdateService>();
             services.AddHostedService<VjUpdateService>();
+            services.AddHostedService<HdojUpdateService>();
             services.AddDbModelSupplier<TContext, RecordV1EntityConfiguration<TContext>>();
 
             services.Configure<AuthorizationOptions>(options =>
