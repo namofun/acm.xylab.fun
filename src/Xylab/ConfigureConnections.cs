@@ -7,6 +7,7 @@ using Plag.Backend;
 using Polygon;
 using SatelliteSite.ContestModule.Components.ContestStatistics;
 using SatelliteSite.ContestModule.Routing;
+using SatelliteSite.OjUpdateModule.Services;
 
 namespace SatelliteSite
 {
@@ -16,6 +17,7 @@ namespace SatelliteSite
         IConfigureOptions<PlagBackendCosmosOptions>,
         IConfigureOptions<MinimalSiteOptions>,
         IConfigureOptions<ContestStatisticsOptions>,
+        IConfigureOptions<RecordV2Options>,
         IConfigureOptions<AzureBlobWwwrootOptions>
     {
         private readonly ConnectionCache _connections;
@@ -59,6 +61,11 @@ namespace SatelliteSite
         public void Configure(ContestStatisticsOptions options)
         {
             options.DefaultContest = 13;
+        }
+
+        public void Configure(RecordV2Options options)
+        {
+            options.ConnectionString = _configuration.GetConnectionString("CosmosDbAccount");
         }
     }
 }

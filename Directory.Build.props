@@ -13,7 +13,7 @@
     <CcsVersion>1.1.16</CcsVersion>
     <PolygonVersion>1.1.22</PolygonVersion>
     <PlagVersion>1.3.24</PlagVersion>
-    <PlagiarismDetectVersion>1.3.26</PlagiarismDetectVersion>
+    <PlagiarismDetectVersion>1.3.27</PlagiarismDetectVersion>
     <TenantVersion>1.1.15</TenantVersion>
   </PropertyGroup>
 

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace SatelliteSite.OjUpdateModule.Entities
 {
     /// <summary>
     /// The enum for OJ record type.
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RecordType
     {
         /// <summary>

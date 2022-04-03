@@ -31,11 +31,10 @@ namespace SatelliteSite.OjUpdateModule
             if (length < 60) length = 24 * 7 * 60;
 
             OjUpdateService.SleepLength = length;
-            services.AddScoped<IRecordStorage, RecordV1Storage<TContext>>();
+            services.AddSingleton<IRecordStorage, RecordV2Storage>();
             services.AddHostedService<CfUpdateService>();
             services.AddHostedService<VjUpdateService>();
             services.AddHostedService<HdojUpdateService>();
-            services.AddDbModelSupplier<TContext, RecordV1EntityConfiguration<TContext>>();
 
             services.Configure<AuthorizationOptions>(options =>
             {
