@@ -1,12 +1,11 @@
 ﻿#nullable enable
 using Microsoft.Extensions.Logging;
-using SatelliteSite.OjUpdateModule.Entities;
 using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SatelliteSite.OjUpdateModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The update service for <see cref="RecordType.Poj"/>.

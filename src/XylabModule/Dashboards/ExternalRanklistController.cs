@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SatelliteSite.OjUpdateModule.Entities;
-using SatelliteSite.OjUpdateModule.Models;
-using SatelliteSite.OjUpdateModule.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Xylab.BricksService.OjUpdate;
 
 namespace SatelliteSite.XylabModule.Dashboards
 {

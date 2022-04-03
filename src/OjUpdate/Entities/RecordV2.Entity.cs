@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SatelliteSite.OjUpdateModule.Models;
-using SatelliteSite.OjUpdateModule.Services;
 using System;
 
-namespace SatelliteSite.OjUpdateModule.Entities
+namespace Xylab.BricksService.OjUpdate
 {
     public class RecordV2 : IRecord
     {

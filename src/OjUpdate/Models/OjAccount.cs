@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SatelliteSite.OjUpdateModule.Models
+namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The account model for result display.

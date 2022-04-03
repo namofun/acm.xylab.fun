@@ -1,4 +1,4 @@
-﻿namespace SatelliteSite.OjUpdateModule.Models
+﻿namespace Xylab.BricksService.OjUpdate
 {
     public class CleanupModel
     {

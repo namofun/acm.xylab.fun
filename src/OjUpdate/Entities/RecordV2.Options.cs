@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Threading;
 
-namespace SatelliteSite.OjUpdateModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     public class RecordV2Options
     {

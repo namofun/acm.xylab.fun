@@ -7,7 +7,7 @@ using Plag.Backend;
 using Polygon;
 using SatelliteSite.ContestModule.Components.ContestStatistics;
 using SatelliteSite.ContestModule.Routing;
-using SatelliteSite.OjUpdateModule.Services;
+using Xylab.BricksService.OjUpdate;
 
 namespace SatelliteSite
 {

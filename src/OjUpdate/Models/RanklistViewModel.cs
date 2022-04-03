@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SatelliteSite.OjUpdateModule.Models
+namespace Xylab.BricksService.OjUpdate
 {
     public class RanklistViewModel
     {

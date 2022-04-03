@@ -9,10 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Mailing;
 using SatelliteSite;
-using SatelliteSite.OjUpdateModule.Services;
 using SatelliteSite.XylabModule.Services;
 using System;
 using System.Linq;
+using Xylab.BricksService.OjUpdate;
 
 [assembly: RoleDefinition(17, "TeamLeader", "leader", "Team Leader")]
 [assembly: ConfigurationItem(0, "Tenant", "oj_Codeforces_update_time", typeof(DateTimeOffset?), null!, "Last update time of Codeforces.", IsPublic = false)]
@@ -59,14 +59,6 @@ namespace SatelliteSite.XylabModule
             services.AddHostedService<CfUpdateService>();
             services.AddHostedService<VjUpdateService>();
             services.AddHostedService<HdojUpdateService>();
-
-            services.Configure<AuthorizationOptions>(options =>
-            {
-                if (options.GetPolicy("ExternalRanklistReader") == null)
-                {
-                    options.AddPolicy("ExternalRanklistReader", b => b.RequireAssertion(_ => true));
-                }
-            });
         }
 
         public override void RegisterMenu(IMenuContributor menus)

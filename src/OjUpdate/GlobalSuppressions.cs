@@ -5,5 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Design", "CA1036:Override methods on comparable types", Justification = "No use.", Scope = "type", Target = "~T:SatelliteSite.OjUpdateModule.Models.OjAccount")]
-[assembly: SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Needed.", Scope = "member", Target = "~P:SatelliteSite.OjUpdateModule.Models.CleanupModel.ToDelete")]
+[assembly: SuppressMessage("Design", "CA1036:Override methods on comparable types", Justification = "No use.", Scope = "type", Target = "~T:Xylab.BricksService.OjUpdate.OjAccount")]
+[assembly: SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Needed.", Scope = "member", Target = "~P:Xylab.BricksService.OjUpdate.CleanupModel.ToDelete")]

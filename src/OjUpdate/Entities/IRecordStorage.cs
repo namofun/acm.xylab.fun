@@ -1,9 +1,7 @@
-﻿using SatelliteSite.OjUpdateModule.Entities;
-using SatelliteSite.OjUpdateModule.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SatelliteSite.OjUpdateModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The store interface for <see cref="IRecord"/>.

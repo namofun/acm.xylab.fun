@@ -1,15 +1,13 @@
 ﻿using Microsoft.Extensions.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SatelliteSite.OjUpdateModule.Entities;
-using SatelliteSite.OjUpdateModule.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xylab.DataAccess.Cosmos;
 using PartitionKey = Microsoft.Azure.Cosmos.PartitionKey;
 
-namespace SatelliteSite.OjUpdateModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     public class RecordV2Storage : ConnectionBase, IRecordStorage
     {

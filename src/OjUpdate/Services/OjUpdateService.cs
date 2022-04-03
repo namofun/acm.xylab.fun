@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SatelliteSite.OjUpdateModule.Entities;
 using SatelliteSite.Services;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SatelliteSite.OjUpdateModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The abstract base for external OJ updating.

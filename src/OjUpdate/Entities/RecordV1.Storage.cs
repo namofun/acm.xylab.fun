@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SatelliteSite.OjUpdateModule.Entities;
-using SatelliteSite.OjUpdateModule.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SatelliteSite.OjUpdateModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     internal class RecordV1Storage<TContext> : IRecordStorage
         where TContext : DbContext

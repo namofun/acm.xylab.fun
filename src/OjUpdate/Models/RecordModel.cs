@@ -1,6 +1,4 @@
-﻿using SatelliteSite.OjUpdateModule.Entities;
-
-namespace SatelliteSite.OjUpdateModule.Models
+﻿namespace Xylab.BricksService.OjUpdate
 {
     public class CreateRecordModel
     {

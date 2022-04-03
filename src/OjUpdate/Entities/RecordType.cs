@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace SatelliteSite.OjUpdateModule.Entities
+namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The enum for OJ record type.

@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SatelliteSite.OjUpdateModule.Entities;
 
-namespace SatelliteSite.OjUpdateModule
+namespace Xylab.BricksService.OjUpdate
 {
     public class RecordV1EntityConfiguration<TContext> :
         EntityTypeConfigurationSupplier<TContext>,

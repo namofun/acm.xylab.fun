@@ -1,4 +1,4 @@
-﻿namespace SatelliteSite.OjUpdateModule.Entities
+﻿namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The entity class for problem solving record.
