@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SatelliteSite.XylabModule.Services;
 using System;
 using System.Threading.Tasks;
 using Xylab.BricksService.OjUpdate;
@@ -22,16 +23,16 @@ namespace SatelliteSite.XylabModule.Controllers
             if (year.HasValue) title += " " + year;
             ViewData["Title"] = title;
 
-            var ojac = await store.ListAsync(oj.CategoryId, year);
+            var ojac = await store.ListAsync(oj.Driver.Category, year);
             ojac.Sort();
             return View(new RanklistViewModel
             {
                 OjName = name,
                 LastUpdate = oj.LastUpdate ?? DateTimeOffset.UnixEpoch,
                 IsUpdating = oj.IsUpdating,
-                RankTemplate = oj.RankTemplate,
-                AccountTemplate = oj.AccountTemplate,
-                CountColumn = oj.ColumnName,
+                RankTemplate = oj.Driver.RankTemplate,
+                AccountTemplate = oj.Driver.AccountTemplate,
+                CountColumn = oj.Driver.ColumnName,
                 OjAccounts = ojac,
             });
         }

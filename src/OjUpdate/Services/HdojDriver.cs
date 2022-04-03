@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -9,20 +8,13 @@ namespace Xylab.BricksService.OjUpdate
     /// <summary>
     /// The update service for <see cref="RecordType.Hdoj"/>.
     /// </summary>
-    public class HdojUpdateService : OjUpdateService
+    public class HdojDriver : UpdateDriver
     {
-        /// <summary>
-        /// Construct a <see cref="HdojUpdateService"/>.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        public HdojUpdateService(
-            ILogger<HdojUpdateService> logger, IServiceProvider serviceProvider)
-            : base(logger, serviceProvider,
-                   RecordType.Hdoj, "HDOJ",
-                   "http://acm.hdu.edu.cn/userstatus.php?user={0}")
-        {
-        }
+        public override string SiteName => "HDOJ";
+
+        public override string AccountTemplate => "http://acm.hdu.edu.cn/userstatus.php?user={0}";
+
+        public override RecordType Category => RecordType.Hdoj;
 
         /// <inheritdoc />
         public override string RankTemplate(int? rk)

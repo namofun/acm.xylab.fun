@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -11,20 +10,13 @@ namespace Xylab.BricksService.OjUpdate
     /// The update service for <see cref="RecordType.Poj"/>.
     /// </summary>
     [Obsolete]
-    public class PojUpdateService : OjUpdateService
+    public class PkuojDriver : UpdateDriver
     {
-        /// <summary>
-        /// Construct a <see cref="PojUpdateService"/>.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        public PojUpdateService(
-            ILogger<PojUpdateService> logger, IServiceProvider serviceProvider)
-            : base(logger, serviceProvider,
-                   RecordType.Poj, "POJ",
-                   "http://poj.org/userstatus?user_id={0}")
-        {
-        }
+        public override string SiteName => "POJ";
+
+        public override string AccountTemplate => "http://poj.org/userstatus?user_id={0}";
+
+        public override RecordType Category => RecordType.Poj;
 
         /// <inheritdoc />
         public override string RankTemplate(int? rk)

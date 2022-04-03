@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -9,20 +8,13 @@ namespace Xylab.BricksService.OjUpdate
     /// <summary>
     /// The update service for <see cref="RecordType.Vjudge"/>.
     /// </summary>
-    public class VjUpdateService : OjUpdateService
+    public class VjudgeDriver : UpdateDriver
     {
-        /// <summary>
-        /// Construct a <see cref="VjUpdateService"/>.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        public VjUpdateService(
-            ILogger<VjUpdateService> logger, IServiceProvider serviceProvider)
-            : base(logger, serviceProvider,
-                   RecordType.Vjudge, "Vjudge",
-                   "https://vjudge.net/user/{0}")
-        {
-        }
+        public override string SiteName => "Vjudge";
+
+        public override string AccountTemplate => "https://vjudge.net/user/{0}";
+
+        public override RecordType Category => RecordType.Vjudge;
 
         /// <inheritdoc />
         public override string RankTemplate(int? rk)

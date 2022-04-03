@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Text.Json.Serialization;
@@ -11,21 +10,15 @@ namespace Xylab.BricksService.OjUpdate
     /// <summary>
     /// The update service for <see cref="RecordType.Codeforces"/>.
     /// </summary>
-    public class CfUpdateService : OjUpdateService
+    public class CodeforcesDriver : UpdateDriver
     {
-        /// <summary>
-        /// Construct a <see cref="CfUpdateService"/>.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="serviceProvider">The service provider.</param>
-        public CfUpdateService(
-            ILogger<CfUpdateService> logger, IServiceProvider serviceProvider)
-            : base(logger, serviceProvider,
-                   RecordType.Codeforces, "Codeforces",
-                   "http://codeforces.com/profile/{0}")
-        {
-            ColumnName = "Rating";
-        }
+        public override string ColumnName => "Rating";
+
+        public override string SiteName => "Codeforces";
+
+        public override string AccountTemplate => "http://codeforces.com/profile/{0}";
+
+        public override RecordType Category => RecordType.Codeforces;
 
         private class Rootobject
         {

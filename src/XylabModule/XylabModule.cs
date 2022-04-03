@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Mailing;
 using SatelliteSite;
 using SatelliteSite.XylabModule.Services;
@@ -56,9 +57,9 @@ namespace SatelliteSite.XylabModule
 
             OjUpdateService.SleepLength = length;
             services.AddSingleton<IRecordStorage, RecordV2Storage>();
-            services.AddHostedService<CfUpdateService>();
-            services.AddHostedService<VjUpdateService>();
-            services.AddHostedService<HdojUpdateService>();
+            services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new CodeforcesDriver()));
+            services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new VjudgeDriver()));
+            services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new HdojDriver()));
         }
 
         public override void RegisterMenu(IMenuContributor menus)
