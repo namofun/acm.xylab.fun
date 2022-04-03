@@ -15,9 +15,7 @@ namespace SatelliteSite.OjUpdateModule.Services
     {
         internal const string PartitionName = "record";
         private readonly Container<RecordV2> ExternalRanklist;
-
-        private static readonly IReadOnlySet<char> _idChars =
-            "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-|".ToHashSet();
+        private static readonly IReadOnlySet<char> _idChars = RecordV2Options.Base32Chars.ToHashSet();
 
         public RecordV2Storage(
             IOptions<RecordV2Options> options,
