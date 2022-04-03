@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OjUpdate\SatelliteSite.OjUpdateModule.csproj" />
+    <ProjectReference Include="..\OjUpdate\Xylab.BricksService.OjUpdate.csproj" />
   </ItemGroup>
 
 </Project>

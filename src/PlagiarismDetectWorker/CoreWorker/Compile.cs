@@ -1,4 +1,5 @@
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,12 +13,18 @@ namespace Xylab.PlagiarismDetect.Worker
         private readonly IJobContext _store;
         private readonly IConvertService2 _converter;
         private readonly ICompileService _compiler;
+        private readonly ITelemetryClient _telemetryClient;
 
-        public Compile(IJobContext store, IConvertService2 converter, ICompileService compiler)
+        public Compile(
+            IJobContext store,
+            IConvertService2 converter,
+            ICompileService compiler,
+            ITelemetryClient telemetryClient)
         {
             _store = store;
             _converter = converter;
             _compiler = compiler;
+            _telemetryClient = telemetryClient;
         }
 
         [FunctionName("Compile")]
@@ -35,6 +42,7 @@ namespace Xylab.PlagiarismDetect.Worker
                 log,
                 new AsyncCollectorSignalBroker(compilationContinuation),
                 new AsyncCollectorSignalBroker(reportGenerator),
+                _telemetryClient,
                 cancellationToken);
     }
 }

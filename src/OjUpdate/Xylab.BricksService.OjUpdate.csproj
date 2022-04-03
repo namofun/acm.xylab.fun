@@ -1,13 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="Xylab.DataAccess.Cosmos" Version="$(PlagiarismDetectVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(AspNetCoreVersion)" />
   </ItemGroup>

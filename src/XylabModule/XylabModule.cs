@@ -8,8 +8,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Mailing;
+using SatelliteSite;
+using SatelliteSite.OjUpdateModule.Services;
 using SatelliteSite.XylabModule.Services;
+using System;
 using System.Linq;
+
+[assembly: RoleDefinition(17, "TeamLeader", "leader", "Team Leader")]
+[assembly: ConfigurationItem(0, "Tenant", "oj_Codeforces_update_time", typeof(DateTimeOffset?), null!, "Last update time of Codeforces.", IsPublic = false)]
+[assembly: ConfigurationItem(1, "Tenant", "oj_Vjudge_update_time", typeof(DateTimeOffset?), null!, "Last update time of Vjudge.", IsPublic = false)]
+[assembly: ConfigurationItem(2, "Tenant", "oj_Hdoj_update_time", typeof(DateTimeOffset?), null!, "Last update time of HDOJ.", IsPublic = false)]
+// [assembly: ConfigurationItem(3, "Tenant", "oj_Poj_update_time", typeof(DateTimeOffset?), null!, "Last update time of POJ.", IsPublic = false)]
 
 namespace SatelliteSite.XylabModule
 {
@@ -41,6 +50,23 @@ namespace SatelliteSite.XylabModule
             services.AddSingleton<ITelemetryInitializer, LogicAppsInitializer>();
             services.AddHttpClient<IEmailSender, LogicAppsEmailSender>()
                 .AddAzureAuthHandler(new[] { "https://logic.azure.com/.default" });
+
+            var length = configuration.GetValue<int>("OjUpdateServiceSleepLength");
+            if (length < 60) length = 24 * 7 * 60;
+
+            OjUpdateService.SleepLength = length;
+            services.AddSingleton<IRecordStorage, RecordV2Storage>();
+            services.AddHostedService<CfUpdateService>();
+            services.AddHostedService<VjUpdateService>();
+            services.AddHostedService<HdojUpdateService>();
+
+            services.Configure<AuthorizationOptions>(options =>
+            {
+                if (options.GetPolicy("ExternalRanklistReader") == null)
+                {
+                    options.AddPolicy("ExternalRanklistReader", b => b.RequireAssertion(_ => true));
+                }
+            });
         }
 
         public override void RegisterMenu(IMenuContributor menus)
@@ -66,6 +92,14 @@ namespace SatelliteSite.XylabModule
                     .HasTitle("fas fa-rocket", "Gyms")
                     .HasLink("Xylab", "Home", "Gyms")
                     .ActiveWhenViewData("ListGym");
+            });
+
+            menus.Submenu(MenuNameDefaults.DashboardUsers, menu =>
+            {
+                menu.HasEntry(300)
+                    .HasLink("Dashboard", "ExternalRanklist", "List")
+                    .HasTitle(string.Empty, "External OJ Ranklist")
+                    .RequireRoles("Administrator,TeamLeader");
             });
         }
 
