@@ -5,9 +5,9 @@ using SatelliteSite.OjUpdateModule.Services;
 using System;
 using System.Threading.Tasks;
 
-namespace SatelliteSite.OjUpdateModule.Controllers
+namespace SatelliteSite.XylabModule.Controllers
 {
-    [Area("Tenant")]
+    [Area("Xylab")]
     [Authorize(Policy = "ExternalRanklistReader")]
     public class ExternalRanklistController : ViewControllerBase
     {

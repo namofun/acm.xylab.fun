@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SatelliteSite.OjUpdateModule.Dashboards
+namespace SatelliteSite.XylabModule.Dashboards
 {
     [Area("Dashboard")]
     [Authorize(Roles = "Administrator,TeamLeader")]

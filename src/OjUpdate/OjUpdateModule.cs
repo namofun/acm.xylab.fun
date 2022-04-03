@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,11 +42,6 @@ namespace SatelliteSite.OjUpdateModule
                     options.AddPolicy("ExternalRanklistReader", b => b.RequireAssertion(_ => true));
                 }
             });
-        }
-
-        public override void RegisterEndpoints(IEndpointBuilder endpoints)
-        {
-            endpoints.MapControllers();
         }
 
         public override void RegisterMenu(IMenuContributor menus)
