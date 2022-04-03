@@ -68,7 +68,7 @@
         <i class="fas fa-trash-alt"></i>&nbsp;Cleanup
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <!--<a class="dropdown-item" asp-action="Cleanup" asp-route-category="@@((int)RecordType.Hdoj)">HDOJ</a>-->
+        <a class="dropdown-item" asp-action="Cleanup" asp-route-category="@@((int)RecordType.Hdoj)">HDOJ</a>
         <a class="dropdown-item" asp-action="Cleanup" asp-route-category="@((int)RecordType.Codeforces)">Codeforces</a>
         <a class="dropdown-item" asp-action="Cleanup" asp-route-category="@((int)RecordType.Vjudge)">Vjudge</a>
     </div>
