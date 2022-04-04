@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Xylab.BricksService.OjUpdate
 {
-    internal class RecordV1Storage<TContext> : IRecordStorage
+    public class RecordV1Storage<TContext> : IRecordStorage
         where TContext : DbContext
     {
         private TContext Context { get; }

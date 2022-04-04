@@ -56,7 +56,6 @@ namespace SatelliteSite.XylabModule
             if (length < 60) length = 24 * 7 * 60;
 
             OjUpdateService.SleepLength = length;
-            services.AddSingleton<IRecordStorage, RecordV2Storage>();
             services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new CodeforcesDriver()));
             services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new VjudgeDriver()));
             services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new HdojDriver()));
