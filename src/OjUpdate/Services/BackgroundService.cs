@@ -5,16 +5,17 @@ using Microsoft.Extensions.Logging;
 using SatelliteSite.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Xylab.BricksService.OjUpdate;
 
-namespace SatelliteSite.XylabModule.Services
+namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The abstract base for external OJ updating.
     /// </summary>
-    public class OjUpdateService : BackgroundService
+    public class OjUpdateService : BackgroundService, IUpdateStatus, IUpdateOrchestrator
     {
         private CancellationTokenSource? manualCancellatinSource;
         private bool firstUpdate = true;
@@ -44,14 +45,14 @@ namespace SatelliteSite.XylabModule.Services
         /// <summary>
         /// Update driver
         /// </summary>
-        public UpdateDriver Driver { get; }
+        public IUpdateDriver Driver { get; }
 
         /// <summary>
         /// Construct the base of <see cref="OjUpdateService"/>.
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="updateDriver">The update driver.</param>
-        public OjUpdateService(IServiceProvider serviceProvider, UpdateDriver updateDriver)
+        public OjUpdateService(IServiceProvider serviceProvider, IUpdateDriver updateDriver)
         {
             OjList[updateDriver.SiteName] = this;
             _sp = serviceProvider;
@@ -62,9 +63,10 @@ namespace SatelliteSite.XylabModule.Services
         /// <summary>
         /// Request the update and send the signal.
         /// </summary>
-        public void RequestUpdate()
+        public Task RequestUpdate()
         {
             manualCancellatinSource?.Cancel();
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
@@ -141,6 +143,26 @@ namespace SatelliteSite.XylabModule.Services
             }
 
             _logger.LogDebug("Fetch service stopped.");
+        }
+
+        Task<IUpdateStatus> IUpdateOrchestrator.GetStatus()
+        {
+            return Task.FromResult<IUpdateStatus>(this);
+        }
+    }
+
+    public class BackgroundServiceUpdateProvider : IUpdateProvider
+    {
+        private readonly IReadOnlyDictionary<string, IUpdateOrchestrator> _ojs;
+
+        public BackgroundServiceUpdateProvider(IEnumerable<IHostedService> hostedServices)
+        {
+            _ojs = hostedServices.OfType<IUpdateOrchestrator>().ToDictionary(k => k.Driver.SiteName);
+        }
+
+        public bool TryGetOrchestrator(string key, [MaybeNullWhen(false)] out IUpdateOrchestrator value)
+        {
+            return _ojs.TryGetValue(key, out value);
         }
     }
 }

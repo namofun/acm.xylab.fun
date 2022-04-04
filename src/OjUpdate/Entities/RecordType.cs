@@ -27,7 +27,7 @@ namespace Xylab.BricksService.OjUpdate
         /// <summary>
         /// <c>poj.org</c>
         /// </summary>
-        [Obsolete]
+        [Obsolete("Not in use")]
         Poj,
     }
 }

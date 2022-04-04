@@ -9,7 +9,7 @@ namespace Xylab.BricksService.OjUpdate
     /// <summary>
     /// The update service for <see cref="RecordType.Poj"/>.
     /// </summary>
-    [Obsolete]
+    [Obsolete("Not in use")]
     public class PkuojDriver : UpdateDriver
     {
         public override string SiteName => "POJ";
@@ -18,20 +18,17 @@ namespace Xylab.BricksService.OjUpdate
 
         public override RecordType Category => RecordType.Poj;
 
-        /// <inheritdoc />
         public override string RankTemplate(int? rk)
         {
             return rk == null ? "N/A" : rk.Value.ToString();
         }
 
-        /// <inheritdoc />
         protected override void ConfigureHandler(HttpClientHandler handler)
         {
             handler.CookieContainer = new System.Net.CookieContainer();
             handler.UseCookies = true;
         }
 
-        /// <inheritdoc />
         protected override void ConfigureHttpClient(HttpClient httpClient)
         {
             httpClient.BaseAddress = new Uri("http://poj.org/");
@@ -42,13 +39,11 @@ namespace Xylab.BricksService.OjUpdate
                 "Chrome/64.0.3282.140 Safari/537.36 Edge/18.17763");
         }
 
-        /// <inheritdoc />
         protected override string GenerateGetSource(string account)
         {
             return "userstatus?user_id=" + account;
         }
 
-        /// <inheritdoc />
         protected override int? MatchCount(string html)
         {
             const string stt = "<td width=15% align=left>Solved:</td>\r\n" +
@@ -64,7 +59,6 @@ namespace Xylab.BricksService.OjUpdate
             return success ? ans : default(int?);
         }
 
-        /// <inheritdoc />
         protected override async Task<int?> UpdateOne(
             HttpClient httpClient,
             IRecord id,

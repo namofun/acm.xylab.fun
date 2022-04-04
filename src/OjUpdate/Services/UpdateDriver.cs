@@ -8,13 +8,52 @@ using System.Threading.Tasks;
 namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
-    /// The abstract base for external OJ updating.
+    /// The interface for external OJ updating.
     /// </summary>
-    public abstract class UpdateDriver
+    public interface IUpdateDriver
     {
         /// <summary>
         /// The site name of external OJ
         /// </summary>
+        string SiteName { get; }
+
+        /// <summary>
+        /// The HTML template to show ranks.
+        /// </summary>
+        /// <param name="rk">The rank value.</param>
+        string RankTemplate(int? rk);
+
+        /// <summary>
+        /// The URL template for goto account page
+        /// </summary>
+        string AccountTemplate { get; }
+
+        /// <summary>
+        /// The name displayed on web page
+        /// </summary>
+        string ColumnName { get; }
+
+        /// <summary>
+        /// The category ID
+        /// </summary>
+        RecordType Category { get; }
+
+        /// <summary>
+        /// Try one update action.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="storage">The record storage.</param>
+        /// <param name="stoppingToken">The cancellation token.</param>
+        /// <returns>The task for updating.</returns>
+        Task<DateTimeOffset?> TryUpdateAsync(ILogger logger, IRecordStorage storage, CancellationToken stoppingToken);
+    }
+
+    /// <summary>
+    /// The abstract base for external OJ updating.
+    /// </summary>
+    public abstract class UpdateDriver : IUpdateDriver
+    {
+        /// <inheritdoc />
         public abstract string SiteName { get; }
 
         /// <summary>

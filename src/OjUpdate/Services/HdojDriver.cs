@@ -16,26 +16,22 @@ namespace Xylab.BricksService.OjUpdate
 
         public override RecordType Category => RecordType.Hdoj;
 
-        /// <inheritdoc />
         public override string RankTemplate(int? rk)
         {
             return rk == null ? "N/A" : rk.Value.ToString();
         }
 
-        /// <inheritdoc />
         protected override void ConfigureHttpClient(HttpClient httpClient)
         {
             httpClient.BaseAddress = new Uri("http://acm.hdu.edu.cn/");
             httpClient.Timeout = TimeSpan.FromSeconds(10);
         }
 
-        /// <inheritdoc />
         protected override string GenerateGetSource(string account)
         {
             return "userstatus.php?user=" + account;
         }
 
-        /// <inheritdoc />
         protected override int? MatchCount(string html)
         {
             var cnt = Regex.Match(html,

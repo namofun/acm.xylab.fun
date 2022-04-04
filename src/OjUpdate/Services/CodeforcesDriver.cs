@@ -38,7 +38,6 @@ namespace Xylab.BricksService.OjUpdate
             }
         }
 
-        /// <inheritdoc />
         public override string RankTemplate(int? rk)
         {
             if (!rk.HasValue) return "N/A";
@@ -53,20 +52,17 @@ namespace Xylab.BricksService.OjUpdate
             return $"<b><font color=\"#aa0000\">{rk}</font></b>";
         }
 
-        /// <inheritdoc />
         protected override void ConfigureHttpClient(HttpClient httpClient)
         {
             httpClient.BaseAddress = new Uri("http://codeforces.com/");
             httpClient.Timeout = TimeSpan.FromSeconds(20);
         }
 
-        /// <inheritdoc />
         protected override string GenerateGetSource(string account)
         {
             return "api/user.info?handles=" + account;
         }
 
-        /// <inheritdoc />
         protected override int? MatchCount(string html)
         {
             var obj = html.AsJson<Rootobject>();
@@ -75,7 +71,6 @@ namespace Xylab.BricksService.OjUpdate
             return obj.Result[0].Rating ?? -1000;
         }
 
-        /// <inheritdoc />
         protected override async Task<int?> UpdateOne(
             HttpClient httpClient,
             IRecord id,

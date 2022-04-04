@@ -60,6 +60,7 @@ namespace SatelliteSite.XylabModule
             services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new CodeforcesDriver()));
             services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new VjudgeDriver()));
             services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new HdojDriver()));
+            services.AddSingleton<IUpdateProvider, BackgroundServiceUpdateProvider>();
         }
 
         public override void RegisterMenu(IMenuContributor menus)

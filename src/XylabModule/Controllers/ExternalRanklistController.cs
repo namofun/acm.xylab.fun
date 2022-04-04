@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SatelliteSite.XylabModule.Services;
 using System;
 using System.Threading.Tasks;
 using Xylab.BricksService.OjUpdate;
@@ -15,21 +14,23 @@ namespace SatelliteSite.XylabModule.Controllers
         public async Task<IActionResult> List(
             [FromRoute] string name,
             [FromRoute] int? year,
-            [FromServices] IRecordStorage store)
+            [FromServices] IRecordStorage store,
+            [FromServices] IUpdateProvider provider)
         {
-            if (!OjUpdateService.OjList.TryGetValue(name, out var oj))
+            if (!provider.TryGetOrchestrator(name, out var oj))
                 return NotFound();
             var title = name + " Ranklist";
             if (year.HasValue) title += " " + year;
             ViewData["Title"] = title;
 
+            var stat = await oj.GetStatus();
             var ojac = await store.ListAsync(oj.Driver.Category, year);
             ojac.Sort();
             return View(new RanklistViewModel
             {
                 OjName = name,
-                LastUpdate = oj.LastUpdate ?? DateTimeOffset.UnixEpoch,
-                IsUpdating = oj.IsUpdating,
+                LastUpdate = stat.LastUpdate ?? DateTimeOffset.UnixEpoch,
+                IsUpdating = stat.IsUpdating,
                 RankTemplate = oj.Driver.RankTemplate,
                 AccountTemplate = oj.Driver.AccountTemplate,
                 CountColumn = oj.Driver.ColumnName,
@@ -41,12 +42,15 @@ namespace SatelliteSite.XylabModule.Controllers
         [HttpPost("/ranklist/{oj}/[action]")]
         [ValidateAntiForgeryToken]
         [AuditPoint(AuditlogType.Scoreboard)]
-        public async Task<IActionResult> Refresh(string oj)
+        public async Task<IActionResult> Refresh(
+            [FromRoute] string oj,
+            [FromServices] IUpdateProvider provider)
         {
-            if (OjUpdateService.OjList.TryGetValue(oj ?? string.Empty, out var ojs) && !ojs.IsUpdating)
+            if (provider.TryGetOrchestrator(oj ?? string.Empty, out var ojs)
+                && !(await ojs.GetStatus()).IsUpdating)
             {
                 await HttpContext.AuditAsync("requested refresh", "external", oj);
-                ojs.RequestUpdate();
+                await ojs.RequestUpdate();
                 StatusMessage = "Ranklist will be refreshed in minutes... Please refresh this page a minute later.";
                 return RedirectToAction(nameof(List), new { name = oj });
             }
