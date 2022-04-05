@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Xylab.DataAccess.Cosmos;
+using CosmosException = Microsoft.Azure.Cosmos.CosmosException;
 using PartitionKey = Microsoft.Azure.Cosmos.PartitionKey;
 
 namespace Xylab.BricksService.OjUpdate
@@ -116,10 +118,31 @@ namespace Xylab.BricksService.OjUpdate
 
         public async Task UpdateAsync(IRecord rec, int? result)
         {
-            await ExternalRanklist
-                .Patch(rec.Id, new PartitionKey(PartitionName))
-                .SetProperty(r => r.Result, result)
-                .ExecuteWithRetryAsync();
+            for (int tries = 0; ; tries++)
+            {
+                try
+                {
+                    await ExternalRanklist
+                        .Patch(rec.Id, new PartitionKey(PartitionName))
+                        .SetProperty(r => r.Result, result)
+                        .ExecuteAsync();
+
+                    return;
+                }
+                catch (CosmosException ex)
+                    when (ex.StatusCode == HttpStatusCode.TooManyRequests ||
+                          ex.StatusCode == HttpStatusCode.RequestTimeout)
+                {
+                    if (ex.RetryAfter.HasValue)
+                    {
+                        await Task.Delay(ex.RetryAfter.Value);
+                    }
+                    else if (tries >= 2)
+                    {
+                        throw;
+                    }
+                }
+            }
         }
 
         public async Task UpdateAsync(IRecord rec, CreateRecordModel properties)
