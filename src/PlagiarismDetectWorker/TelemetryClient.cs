@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Xylab.PlagiarismDetect.Worker
+namespace Microsoft.Azure.Functions.Extensions.DependencyInjection
 {
     internal class FunctionsTelemetryClient : ITelemetryClient
     {
