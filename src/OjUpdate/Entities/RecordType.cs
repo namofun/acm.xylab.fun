@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using SysJson = System.Text.Json.Serialization;
+using NtsJson = Newtonsoft.Json;
 
 namespace Xylab.BricksService.OjUpdate
 {
     /// <summary>
     /// The enum for OJ record type.
     /// </summary>
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [SysJson.JsonConverter(typeof(SysJson.JsonStringEnumConverter))]
+    [NtsJson.JsonConverter(typeof(NtsJson.Converters.StringEnumConverter))]
     public enum RecordType
     {
         /// <summary>

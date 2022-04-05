@@ -48,6 +48,12 @@ namespace Xylab.BricksService.OjUpdate
                     policy.ExcludedPaths.Add(new() { Path = "/" });
                 },
             },
+
+            DeclaredTypes =
+            {
+                typeof(RecordV2),
+                typeof(RecordV2Status),
+            },
         };
 
         public Task CreateAsync(List<CreateRecordModel> records)

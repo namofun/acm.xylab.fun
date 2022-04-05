@@ -1,38 +1,38 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Xylab.BricksService.OjUpdate
 {
     public class RecordV2 : IRecord
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public RecordType Category { get; set; }
 
-        [JsonProperty("nick_name")]
+        [JsonPropertyName("nick_name")]
         public string NickName { get; set; }
 
-        [JsonProperty("account")]
+        [JsonPropertyName("account")]
         public string Account { get; set; }
 
-        [JsonProperty("grade")]
+        [JsonPropertyName("grade")]
         public int Grade { get; set; }
 
-        [JsonProperty("result")]
+        [JsonPropertyName("result")]
         public int? Result { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; } = RecordV2Storage.PartitionName;
 
-        [JsonProperty("_ts")]
+        [JsonPropertyName("_ts")]
         public long? Timestamp { get; set; }
 
-        [JsonProperty("_cr")]
+        [JsonPropertyName("_cr")]
         public DateTimeOffset WhenCreated { get; set; }
 
-        [JsonProperty("_etag")]
+        [JsonPropertyName("_etag")]
         public string ETag { get; set; }
 
         public static RecordV2 Create(CreateRecordModel model)

@@ -45,7 +45,7 @@ namespace Xylab.BricksService.OjUpdate
         /// <param name="storage">The record storage.</param>
         /// <param name="stoppingToken">The cancellation token.</param>
         /// <returns>The task for updating.</returns>
-        Task<DateTimeOffset?> TryUpdateAsync(ILogger logger, IRecordStorage storage, CancellationToken stoppingToken);
+        Task<DateTimeOffset?> TryUpdateAsync(ILogger logger, IRecordStorage storage, CancellationToken stoppingToken = default);
     }
 
     /// <summary>

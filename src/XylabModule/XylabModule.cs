@@ -56,10 +56,11 @@ namespace SatelliteSite.XylabModule
             if (length < 60) length = 24 * 7 * 60;
 
             OjUpdateService.SleepLength = length;
-            services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new CodeforcesDriver()));
-            services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new VjudgeDriver()));
-            services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, new HdojDriver()));
             services.AddSingleton<IUpdateProvider, BackgroundServiceUpdateProvider>();
+            foreach ((_, IUpdateDriver driver) in ServiceConstants.GetDrivers())
+            {
+                services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, driver));
+            }
         }
 
         public override void RegisterMenu(IMenuContributor menus)
