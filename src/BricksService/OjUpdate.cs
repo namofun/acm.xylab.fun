@@ -70,23 +70,25 @@ namespace Xylab.BricksService.OjUpdate
 
         [FunctionName("OjUpdate_Manage")]
         public async Task<IEnumerable<DurableOrchestrationStatus>> RunManage(
-            [HttpTrigger(AuthorizationLevel.Admin, new[] { "get", "post" }, Route = "bricks/manage/OjUpdate")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, new[] { "get", "post" }, Route = "bricks/manage/OjUpdate")] HttpRequest request,
             [DurableClient] IDurableOrchestrationClient client,
             ILogger log)
         {
             if (request.Method == "POST")
             {
-                if (HasKey("stop")) await StopAll();
-                else if (HasKey("init")) await InitAll();
+                if (HasKey("stop", out var value) && value == "true") await StopAll();
+                else if (HasKey("init", out value) && value == "true") await InitAll();
+                else if (HasKey("trigger", out value) && Enum.TryParse<RecordType>(value, out var type)) await TriggerOne(type);
             }
 
-            return await client.ListInstancesAsync();
+            return (await client.ListInstancesAsync()).Where(e => e.Name == "OjUpdate");
 
-            bool HasKey(string key)
+            bool HasKey(string key, out string value)
             {
-                return request.Query.TryGetValue(key, out var value)
-                    && value.Count == 1
-                    && value[0] == "true";
+                value = null;
+                return request.Query.TryGetValue(key, out var values)
+                    && values.Count == 1
+                    && (value = values[0]) != null;
             }
 
             async Task StopAll()
@@ -120,6 +122,11 @@ namespace Xylab.BricksService.OjUpdate
                     await client.StartNewAsync("OjUpdate", "OjUpdate_" + category, category);
                     await _storage.CreateStatusAsync(category);
                 }
+            }
+
+            async Task TriggerOne(RecordType type)
+            {
+                await client.RaiseEventAsync("OjUpdate_" + type, "ManualReset");
             }
         }
     }

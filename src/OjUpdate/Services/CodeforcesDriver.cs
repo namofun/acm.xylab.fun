@@ -99,7 +99,7 @@ namespace Xylab.BricksService.OjUpdate
                     }
                 }
             }
-            while (attempt >= 3);
+            while (attempt <= 3);
 
             return result;
         }
