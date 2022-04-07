@@ -3,6 +3,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -47,16 +48,31 @@ namespace Xylab.BricksService.OjUpdate
         [FunctionName("OjUpdate_FetchScope")]
         public async Task RunFetchScope([ActivityTrigger] RecordType category, ILogger log)
         {
-            log.LogInformation($"Fetch scope started for {category}.");
-            IUpdateDriver driver = ServiceConstants.GetDriver(category);
-            await driver.TryUpdateAsync(log, _storage);
-            log.LogInformation($"Fetch scope stopped for {category}.");
+            await _storage.UpdateStatusAsync(category, true, null);
+
+            DateTimeOffset? lastUpdated;
+            try
+            {
+                log.LogInformation($"Fetch scope started for {category}.");
+                IUpdateDriver driver = ServiceConstants.GetDriver(category);
+                await driver.TryUpdateAsync(log, _storage);
+                log.LogInformation($"Fetch scope stopped for {category}.");
+                lastUpdated = DateTimeOffset.Now;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Unexpected exception happened.");
+                lastUpdated = null;
+            }
+
+            await _storage.UpdateStatusAsync(category, false, lastUpdated);
         }
 
         [FunctionName("OjUpdate_Manage")]
-        public static async Task<IEnumerable<DurableOrchestrationStatus>> RunManage(
+        public async Task<IEnumerable<DurableOrchestrationStatus>> RunManage(
             [HttpTrigger(AuthorizationLevel.Admin, new[] { "get", "post" }, Route = "bricks/manage/OjUpdate")] HttpRequest request,
-            [DurableClient] IDurableOrchestrationClient client)
+            [DurableClient] IDurableOrchestrationClient client,
+            ILogger log)
         {
             if (request.Method == "POST")
             {
@@ -78,24 +94,31 @@ namespace Xylab.BricksService.OjUpdate
                 var result = await client.ListInstancesAsync();
                 foreach (var instance in result.Where(r => r.Name == "OjUpdate"))
                 {
-                    if (instance.RuntimeStatus != OrchestrationRuntimeStatus.Terminated)
+                    try
                     {
-                        await client.TerminateAsync(instance.InstanceId, "Manual stopped");
-                    }
+                        if (instance.RuntimeStatus != OrchestrationRuntimeStatus.Terminated)
+                        {
+                            await client.TerminateAsync(instance.InstanceId, "Manual stopped");
+                        }
 
-                    await client.PurgeInstanceHistoryAsync(instance.InstanceId);
+                        await client.PurgeInstanceHistoryAsync(instance.InstanceId);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError(ex, "Unexpected exception happened during stopping. Please retry if possible.");
+                    }
                 }
             }
 
             async Task InitAll()
             {
+                await _storage.MigrateAsync();
+
                 var result = await client.ListInstancesAsync();
                 foreach ((RecordType category, _) in ServiceConstants.GetDrivers())
                 {
-                    if (!result.Any(c => c.Name == category.ToString()))
-                    {
-                        await client.StartNewAsync("OjUpdate", "OjUpdate_" + category, category);
-                    }
+                    await client.StartNewAsync("OjUpdate", "OjUpdate_" + category, category);
+                    await _storage.CreateStatusAsync(category);
                 }
             }
         }

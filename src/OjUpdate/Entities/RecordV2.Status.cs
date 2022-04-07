@@ -17,8 +17,5 @@ namespace Xylab.BricksService.OjUpdate
 
         [JsonPropertyName("last_update")]
         public DateTimeOffset? LastUpdate { get; set; }
-
-        [JsonPropertyName("orchestration")]
-        public string? Orchestration { get; set; }
     }
 }

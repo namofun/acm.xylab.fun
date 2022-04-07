@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,6 +15,7 @@ namespace Xylab.BricksService.OjUpdate
     public class RecordV2Storage : ConnectionBase, IRecordStorage
     {
         internal const string PartitionName = "record";
+        private readonly RecordV2Options _options;
         private readonly Container<RecordV2> ExternalRanklist;
         private static readonly IReadOnlySet<char> _idChars = RecordV2Options.Base32Chars.ToHashSet();
 
@@ -28,6 +30,7 @@ namespace Xylab.BricksService.OjUpdate
                   logger,
                   telemetryClient)
         {
+            _options = options.Value;
             ExternalRanklist = Container<RecordV2>(options.Value.ContainerName);
         }
 
@@ -155,6 +158,33 @@ namespace Xylab.BricksService.OjUpdate
                 .SetProperty(r => r.Category, properties.Category)
                 .SetProperty(r => r.Result, null)
                 .ExecuteWithRetryAsync();
+        }
+
+        public Task<RecordV2Status> GetStatusAsync(RecordType type)
+        {
+            var Status = Container<RecordV2Status>(_options.ContainerName);
+            return Status.FindAsync(type.ToString(), new PartitionKey("status"));
+        }
+
+        public Task UpdateStatusAsync(RecordType type, bool isUpdating, DateTimeOffset? lastUpdate)
+        {
+            var Status = Container<RecordV2Status>(_options.ContainerName);
+            return Status.Patch(type.ToString(), new PartitionKey("status"))
+                .SetProperty(s => s.IsUpdating, isUpdating)
+                .SetProperty(s => s.LastUpdate, lastUpdate)
+                .ExecuteAsync();
+        }
+
+        public Task CreateStatusAsync(RecordType type)
+        {
+            var Status = Container<RecordV2Status>(_options.ContainerName);
+            return Status.UpsertAsync(new RecordV2Status
+            {
+                Category = type,
+                IsUpdating = false,
+                LastUpdate = null,
+            },
+            new PartitionKey("status"));
         }
     }
 }
