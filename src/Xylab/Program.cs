@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SatelliteSite.IdentityModule.Entities;
-using Xylab.BricksService.OjUpdate;
 
 namespace SatelliteSite
 {
@@ -46,9 +45,6 @@ namespace SatelliteSite
                     services.AddSingleton<Plag.Backend.Services.ISignalProvider, StorageQueueSignalProvider>();
                     services.ConfigureOptions<ConfigureConnections>();
                     services.Configure<DefaultAzureCredentialOptions>(options => options.VisualStudioTenantId = "65f7f058-fc47-4803-b7f6-1dd03a071b50");
-                    services.AddSingleton<IRecordStorage, RecordV2Storage>();
-                    // services.AddScoped<IRecordStorage, RecordV1Storage<DefaultContext>>();
-                    // services.AddDbModelSupplier<DefaultContext, RecordV1EntityConfiguration<DefaultContext>>();
                 });
     }
 }

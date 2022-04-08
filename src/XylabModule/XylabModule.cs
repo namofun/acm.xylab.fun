@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Mailing;
 using SatelliteSite;
 using SatelliteSite.XylabModule.Services;
@@ -52,15 +51,12 @@ namespace SatelliteSite.XylabModule
             services.AddHttpClient<IEmailSender, LogicAppsEmailSender>()
                 .AddAzureAuthHandler(new[] { "https://logic.azure.com/.default" });
 
-            var length = configuration.GetValue<int>("OjUpdateServiceSleepLength");
-            if (length < 60) length = 24 * 7 * 60;
+            services.AddHttpClient("BricksService")
+                .ConfigureHttpClient(client => client.BaseAddress = new Uri("https://bricks.xylab.fun/"))
+                .AddAzureAuthHandler(new[] { "api://bricks.xylab.fun/.default" });
 
-            OjUpdateService.SleepLength = length;
-            services.AddSingleton<IUpdateProvider, BackgroundServiceUpdateProvider>();
-            foreach ((_, IUpdateDriver driver) in ServiceConstants.GetDrivers())
-            {
-                services.AddSingleton<IHostedService>(sp => new OjUpdateService(sp, driver));
-            }
+            services.AddOjUpdateRemoteService();
+            services.AddOjUpdateCosmosDbStore();
         }
 
         public override void RegisterMenu(IMenuContributor menus)
