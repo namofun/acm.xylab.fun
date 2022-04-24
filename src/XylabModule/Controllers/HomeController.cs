@@ -68,5 +68,17 @@ namespace SatelliteSite.XylabModule.Controllers
             return View(
                 await store.ListAsync(User, CcsDefaults.KindGym, page));
         }
+
+
+        [HttpGet("/api/smoketest")]
+        public IActionResult SmokeTest()
+        {
+            return Json(new
+            {
+                version = ProgramVersion,
+                time = DateTimeOffset.Now,
+                instance = Environment.MachineName,
+            });
+        }
     }
 }
