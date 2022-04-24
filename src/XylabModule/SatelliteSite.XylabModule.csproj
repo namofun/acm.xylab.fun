@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Sendgrid" Version="9.22.0" />
     <PackageReference Include="SatelliteSite.AzureCloud" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.NewsModule" Version="$(TenantVersion)" />
@@ -17,9 +16,9 @@
     <PackageReference Include="SatelliteSite.PolygonModule" Version="$(PolygonVersion)" />
     <PackageReference Include="SatelliteSite.ContestModule" Version="$(CcsVersion)" />
     <PackageReference Include="SatelliteSite.PlagModule" Version="$(PlagVersion)" />
-    <PackageReference Include="Ccs.Registration.TenantRelated" Version="$(CcsVersion)" />
-    <PackageReference Include="Ccs.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
-    <PackageReference Include="Ccs.Connector.OpenXml" Version="$(CcsVersion)" />
+    <PackageReference Include="Xylab.Contesting.Registration.TenantRelated" Version="$(CcsVersion)" />
+    <PackageReference Include="Xylab.Contesting.Connector.PlagiarismDetect" Version="$(CcsVersion)" />
+    <PackageReference Include="Xylab.Contesting.Connector.OpenXml" Version="$(CcsVersion)" />
   </ItemGroup>
 
   <ItemGroup>

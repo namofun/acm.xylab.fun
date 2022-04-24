@@ -1,5 +1,4 @@
-﻿using Ccs.Registration;
-using Markdig;
+﻿using Markdig;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -13,12 +12,9 @@ using SatelliteSite.XylabModule.Services;
 using System;
 using System.Linq;
 using Xylab.BricksService.OjUpdate;
+using Xylab.Contesting.Registration;
 
 [assembly: RoleDefinition(17, "TeamLeader", "leader", "Team Leader")]
-[assembly: ConfigurationItem(0, "Tenant", "oj_Codeforces_update_time", typeof(DateTimeOffset?), null!, "Last update time of Codeforces.", IsPublic = false)]
-[assembly: ConfigurationItem(1, "Tenant", "oj_Vjudge_update_time", typeof(DateTimeOffset?), null!, "Last update time of Vjudge.", IsPublic = false)]
-[assembly: ConfigurationItem(2, "Tenant", "oj_Hdoj_update_time", typeof(DateTimeOffset?), null!, "Last update time of HDOJ.", IsPublic = false)]
-// [assembly: ConfigurationItem(3, "Tenant", "oj_Poj_update_time", typeof(DateTimeOffset?), null!, "Last update time of POJ.", IsPublic = false)]
 
 namespace SatelliteSite.XylabModule
 {

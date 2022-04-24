@@ -33,16 +33,16 @@ namespace SatelliteSite
                 .AddModule<GroupModule.GroupModule<DefaultContext>>()
                 .AddModule<StudentModule.StudentModule<XylabUser, Role, DefaultContext>>()
                 .AddModule<NewsModule.NewsModule<DefaultContext>>()
-                .AddModule<PolygonModule.PolygonModule<Polygon.DefaultRole<DefaultContext, QueryCache>>>()
-                .AddModule<ContestModule.ContestModule<Ccs.RelationalRole<XylabUser, Role, DefaultContext>>>()
-                .AddModule<PlagModule.PlagModule<Plag.Backend.CosmosBackendRole>>()
+                .AddModule<PolygonModule.PolygonModule<Xylab.Polygon.DefaultRole<DefaultContext, QueryCache>>>()
+                .AddModule<ContestModule.ContestModule<Xylab.Contesting.RelationalRole<XylabUser, Role, DefaultContext>>>()
+                .AddModule<PlagModule.PlagModule<Xylab.PlagiarismDetect.Backend.CosmosBackendRole>>()
                 .AddDatabase<DefaultContext>((c, b) => b.UseSqlServer(c.GetConnectionString("UserDbConnection"), b => b.UseBulk()))
                 .ConfigureSubstrateDefaults<DefaultContext>()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddDbModelSupplier<DefaultContext, Polygon.Storages.PolygonIdentityEntityConfiguration<XylabUser, DefaultContext>>();
+                    services.AddDbModelSupplier<DefaultContext, Xylab.Polygon.Storages.PolygonIdentityEntityConfiguration<XylabUser, DefaultContext>>();
                     services.AddSingleton<ConnectionCache>();
-                    services.AddSingleton<Plag.Backend.Services.ISignalProvider, StorageQueueSignalProvider>();
+                    services.AddSingleton<Xylab.PlagiarismDetect.Backend.Services.ISignalProvider, StorageQueueSignalProvider>();
                     services.ConfigureOptions<ConfigureConnections>();
                     services.Configure<DefaultAzureCredentialOptions>(options => options.VisualStudioTenantId = "65f7f058-fc47-4803-b7f6-1dd03a071b50");
                 });

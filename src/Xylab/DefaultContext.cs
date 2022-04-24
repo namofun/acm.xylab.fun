@@ -1,18 +1,18 @@
-﻿using Ccs.Entities;
-using Ccs.Services;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Polygon.Entities;
-using Polygon.Models;
-using Polygon.Storages;
 using SatelliteSite.IdentityModule.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Tenant.Entities;
+using Xylab.Contesting.Entities;
+using Xylab.Contesting.Services;
+using Xylab.Polygon.Entities;
+using Xylab.Polygon.Models;
+using Xylab.Polygon.Storages;
+using Xylab.Tenant.Entities;
 
 namespace SatelliteSite
 {

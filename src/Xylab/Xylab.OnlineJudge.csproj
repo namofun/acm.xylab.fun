@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Queues" Version="12.8.0" />
-    <PackageReference Include="Plag.Backend.Roles.Cosmos" Version="$(PlagVersion)" />
-    <PackageReference Include="Polygon.DataAccess" Version="$(PolygonVersion)" />
-    <PackageReference Include="Polygon.Seeds" Version="$(PolygonVersion)" />
-    <PackageReference Include="Ccs.Storage.Relational" Version="$(CcsVersion)" />
+    <PackageReference Include="Xylab.PlagiarismDetect.Backend.Roles.Cosmos" Version="$(PlagVersion)" />
+    <PackageReference Include="Xylab.Polygon.DataAccess" Version="$(PolygonVersion)" />
+    <PackageReference Include="Xylab.Polygon.Seeds" Version="$(PolygonVersion)" />
+    <PackageReference Include="Xylab.Contesting.Storage.Relational" Version="$(CcsVersion)" />
     <PackageReference Include="SatelliteSite.Substrate" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.HostBuilder" Version="$(SubstrateVersion)" />
     <PackageReference Include="SatelliteSite.AzureCloud" Version="$(SubstrateVersion)" />

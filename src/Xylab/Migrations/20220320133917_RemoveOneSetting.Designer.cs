@@ -22,6 +22,602 @@ namespace SatelliteSite.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("SatelliteSite.Entities.Auditlog", b =>
+                {
+                    b.Property<int>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"), 1L, 1);
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<int?>("ContestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DataId")
+                        .HasMaxLength(256)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExtraInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LogId");
+
+                    b.HasIndex("DataType");
+
+                    b.ToTable("Auditlogs", (string)null);
+                });
+
+            modelBuilder.Entity("SatelliteSite.Entities.Configuration", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DisplayPriority")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Public")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Configurations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "contest_last_rating_change_time",
+                            Category = "Contest",
+                            Description = "Last rating update time.",
+                            DisplayPriority = 0,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "enable_register",
+                            Category = "Identity",
+                            Description = "Whether to allow user self registration.",
+                            DisplayPriority = 0,
+                            Public = true,
+                            Type = "bool",
+                            Value = "true"
+                        },
+                        new
+                        {
+                            Name = "oj_Codeforces_update_time",
+                            Category = "Tenant",
+                            Description = "Last update time of Codeforces.",
+                            DisplayPriority = 0,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "oj_Vjudge_update_time",
+                            Category = "Tenant",
+                            Description = "Last update time of Vjudge.",
+                            DisplayPriority = 1,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "oj_Hdoj_update_time",
+                            Category = "Tenant",
+                            Description = "Last update time of HDOJ.",
+                            DisplayPriority = 2,
+                            Public = false,
+                            Type = "datetime",
+                            Value = "null"
+                        },
+                        new
+                        {
+                            Name = "process_limit",
+                            Category = "Judging",
+                            Description = "Maximum number of processes that the submission is allowed to start (including shell and possibly interpreters).",
+                            DisplayPriority = 1,
+                            Public = true,
+                            Type = "int",
+                            Value = "64"
+                        },
+                        new
+                        {
+                            Name = "script_timelimit",
+                            Category = "Judging",
+                            Description = "Maximum seconds available for compile/compare scripts. This is a safeguard against malicious code and buggy scripts, so a reasonable but large amount should do.",
+                            DisplayPriority = 2,
+                            Public = true,
+                            Type = "int",
+                            Value = "30"
+                        },
+                        new
+                        {
+                            Name = "script_memory_limit",
+                            Category = "Judging",
+                            Description = "Maximum memory usage (in kB) by compile/compare scripts. This is a safeguard against malicious code and buggy script, so a reasonable but large amount should do.",
+                            DisplayPriority = 3,
+                            Public = true,
+                            Type = "int",
+                            Value = "2097152"
+                        },
+                        new
+                        {
+                            Name = "script_filesize_limit",
+                            Category = "Judging",
+                            Description = "Maximum filesize (in kB) compile/compare scripts may write. Submission will fail with compiler-error when trying to write more, so this should be greater than any *intermediate or final* result written by compilers.",
+                            DisplayPriority = 4,
+                            Public = true,
+                            Type = "int",
+                            Value = "540672"
+                        },
+                        new
+                        {
+                            Name = "timelimit_overshoot",
+                            Category = "Judging",
+                            Description = "Time that submissions are kept running beyond timelimit before being killed. Specify as \"Xs\" for X seconds, \"Y%\" as percentage, or a combination of both separated by one of \"+|&\" for the sum, maximum, or minimum of both.",
+                            DisplayPriority = 5,
+                            Public = true,
+                            Type = "string",
+                            Value = "\"1s|10%\""
+                        },
+                        new
+                        {
+                            Name = "output_storage_limit",
+                            Category = "Judging",
+                            Description = "Maximum size of error/system output stored in the database (in bytes); use \"-1\" to disable any limits.",
+                            DisplayPriority = 6,
+                            Public = true,
+                            Type = "int",
+                            Value = "60000"
+                        },
+                        new
+                        {
+                            Name = "diskspace_error",
+                            Category = "Judging",
+                            Description = "Minimum free disk space (in kB) on judgehosts.",
+                            DisplayPriority = 7,
+                            Public = true,
+                            Type = "int",
+                            Value = "1048576"
+                        },
+                        new
+                        {
+                            Name = "update_judging_seconds",
+                            Category = "Judging",
+                            Description = "Post updates to a judging every X seconds. Set to 0 to update after each judging_run.",
+                            DisplayPriority = 8,
+                            Public = true,
+                            Type = "int",
+                            Value = "0"
+                        });
+                });
+
+            modelBuilder.Entity("SatelliteSite.IdentityModule.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ShortName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -30,
+                            ConcurrencyStamp = "40100c40-6ca5-7bcb-48bc-41f2a939cbee",
+                            Description = "CDS API user",
+                            Name = "CDS",
+                            NormalizedName = "CDS",
+                            ShortName = "cds_api"
+                        },
+                        new
+                        {
+                            Id = -31,
+                            ConcurrencyStamp = "8f8c37e1-a309-bd2d-6708-0519df89139b",
+                            Description = "Contest Creator",
+                            Name = "ContestCreator",
+                            NormalizedName = "CONTESTCREATOR",
+                            ShortName = "cont"
+                        },
+                        new
+                        {
+                            Id = -32,
+                            ConcurrencyStamp = "d68c9040-7762-ab0b-06eb-19ce1b5a5120",
+                            Description = "Temporary Team Account",
+                            Name = "TemporaryTeamAccount",
+                            NormalizedName = "TEMPORARYTEAMACCOUNT",
+                            ShortName = "temp_team"
+                        },
+                        new
+                        {
+                            Id = -1,
+                            ConcurrencyStamp = "9805fda4-f300-ff78-a6d8-faf0d8e418fd",
+                            Description = "Administrative User",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR",
+                            ShortName = "admin"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            ConcurrencyStamp = "f1722fb1-cd10-256b-48bb-71afd116ae66",
+                            Description = "Blocked User",
+                            Name = "Blocked",
+                            NormalizedName = "BLOCKED",
+                            ShortName = "blocked"
+                        },
+                        new
+                        {
+                            Id = -16,
+                            ConcurrencyStamp = "c8259cc1-f159-cbf3-9348-ee1d3967d3ac",
+                            Description = "Verified Student",
+                            Name = "Student",
+                            NormalizedName = "STUDENT",
+                            ShortName = "student"
+                        },
+                        new
+                        {
+                            Id = -17,
+                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
+                            Description = "Team Leader",
+                            Name = "TeamLeader",
+                            NormalizedName = "TEAMLEADER",
+                            ShortName = "leader"
+                        },
+                        new
+                        {
+                            Id = -10,
+                            ConcurrencyStamp = "44315c39-534d-ec0c-61f0-c0a5ed981cd9",
+                            Description = "(Internal/System) Judgehost",
+                            Name = "Judgehost",
+                            NormalizedName = "JUDGEHOST",
+                            ShortName = "judgehost"
+                        },
+                        new
+                        {
+                            Id = -11,
+                            ConcurrencyStamp = "f25ae969-433c-3f4a-04ca-7ec12d2583cc",
+                            Description = "Problem Provider",
+                            Name = "ProblemCreator",
+                            NormalizedName = "PROBLEMCREATOR",
+                            ShortName = "prob"
+                        },
+                        new
+                        {
+                            Id = -37,
+                            ConcurrencyStamp = "76133040-8512-5021-491b-563056c3f919",
+                            Description = "Plagiarism Detect User",
+                            Name = "PlagUser",
+                            NormalizedName = "PLAGUSER",
+                            ShortName = "plaguser"
+                        });
+                });
+
+            modelBuilder.Entity("SatelliteSite.NewsModule.Entities.News", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTimeOffset>("LastUpdate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("Source")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Tree")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
+                });
+
+            modelBuilder.Entity("SatelliteSite.OjUpdateModule.Entities.SolveRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NickName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Result")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("Category", "Grade");
+
+                    b.ToTable("TenantSolveRecord", (string)null);
+                });
+
+            modelBuilder.Entity("SatelliteSite.XylabUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NickName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Plan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("RegisterTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<bool>("StudentVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SubscribeNews")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("Ccs.Entities.Balloon", b =>
                 {
                     b.Property<int>("Id")
@@ -482,109 +1078,6 @@ namespace SatelliteSite.Migrations
                     b.HasIndex("AffiliationId");
 
                     b.ToTable("ContestTenants", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Polygon.Entities.Executable", b =>
@@ -1144,499 +1637,6 @@ namespace SatelliteSite.Migrations
                         .HasColumnType("int");
 
                     b.ToTable((string)null);
-                });
-
-            modelBuilder.Entity("SatelliteSite.Entities.Auditlog", b =>
-                {
-                    b.Property<int>("LogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"), 1L, 1);
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<int?>("ContestId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DataId")
-                        .HasMaxLength(256)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<int>("DataType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ExtraInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("Time")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LogId");
-
-                    b.HasIndex("DataType");
-
-                    b.ToTable("Auditlogs", (string)null);
-                });
-
-            modelBuilder.Entity("SatelliteSite.Entities.Configuration", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(128)");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DisplayPriority")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Public")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("Configurations", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "contest_last_rating_change_time",
-                            Category = "Contest",
-                            Description = "Last rating update time.",
-                            DisplayPriority = 0,
-                            Public = false,
-                            Type = "datetime",
-                            Value = "null"
-                        },
-                        new
-                        {
-                            Name = "enable_register",
-                            Category = "Identity",
-                            Description = "Whether to allow user self registration.",
-                            DisplayPriority = 0,
-                            Public = true,
-                            Type = "bool",
-                            Value = "true"
-                        },
-                        new
-                        {
-                            Name = "oj_Codeforces_update_time",
-                            Category = "Tenant",
-                            Description = "Last update time of Codeforces.",
-                            DisplayPriority = 0,
-                            Public = false,
-                            Type = "datetime",
-                            Value = "null"
-                        },
-                        new
-                        {
-                            Name = "oj_Vjudge_update_time",
-                            Category = "Tenant",
-                            Description = "Last update time of Vjudge.",
-                            DisplayPriority = 1,
-                            Public = false,
-                            Type = "datetime",
-                            Value = "null"
-                        },
-                        new
-                        {
-                            Name = "oj_Hdoj_update_time",
-                            Category = "Tenant",
-                            Description = "Last update time of HDOJ.",
-                            DisplayPriority = 2,
-                            Public = false,
-                            Type = "datetime",
-                            Value = "null"
-                        },
-                        new
-                        {
-                            Name = "process_limit",
-                            Category = "Judging",
-                            Description = "Maximum number of processes that the submission is allowed to start (including shell and possibly interpreters).",
-                            DisplayPriority = 1,
-                            Public = true,
-                            Type = "int",
-                            Value = "64"
-                        },
-                        new
-                        {
-                            Name = "script_timelimit",
-                            Category = "Judging",
-                            Description = "Maximum seconds available for compile/compare scripts. This is a safeguard against malicious code and buggy scripts, so a reasonable but large amount should do.",
-                            DisplayPriority = 2,
-                            Public = true,
-                            Type = "int",
-                            Value = "30"
-                        },
-                        new
-                        {
-                            Name = "script_memory_limit",
-                            Category = "Judging",
-                            Description = "Maximum memory usage (in kB) by compile/compare scripts. This is a safeguard against malicious code and buggy script, so a reasonable but large amount should do.",
-                            DisplayPriority = 3,
-                            Public = true,
-                            Type = "int",
-                            Value = "2097152"
-                        },
-                        new
-                        {
-                            Name = "script_filesize_limit",
-                            Category = "Judging",
-                            Description = "Maximum filesize (in kB) compile/compare scripts may write. Submission will fail with compiler-error when trying to write more, so this should be greater than any *intermediate or final* result written by compilers.",
-                            DisplayPriority = 4,
-                            Public = true,
-                            Type = "int",
-                            Value = "540672"
-                        },
-                        new
-                        {
-                            Name = "timelimit_overshoot",
-                            Category = "Judging",
-                            Description = "Time that submissions are kept running beyond timelimit before being killed. Specify as \"Xs\" for X seconds, \"Y%\" as percentage, or a combination of both separated by one of \"+|&\" for the sum, maximum, or minimum of both.",
-                            DisplayPriority = 5,
-                            Public = true,
-                            Type = "string",
-                            Value = "\"1s|10%\""
-                        },
-                        new
-                        {
-                            Name = "output_storage_limit",
-                            Category = "Judging",
-                            Description = "Maximum size of error/system output stored in the database (in bytes); use \"-1\" to disable any limits.",
-                            DisplayPriority = 6,
-                            Public = true,
-                            Type = "int",
-                            Value = "60000"
-                        },
-                        new
-                        {
-                            Name = "diskspace_error",
-                            Category = "Judging",
-                            Description = "Minimum free disk space (in kB) on judgehosts.",
-                            DisplayPriority = 7,
-                            Public = true,
-                            Type = "int",
-                            Value = "1048576"
-                        },
-                        new
-                        {
-                            Name = "update_judging_seconds",
-                            Category = "Judging",
-                            Description = "Post updates to a judging every X seconds. Set to 0 to update after each judging_run.",
-                            DisplayPriority = 8,
-                            Public = true,
-                            Type = "int",
-                            Value = "0"
-                        });
-                });
-
-            modelBuilder.Entity("SatelliteSite.IdentityModule.Entities.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -30,
-                            ConcurrencyStamp = "40100c40-6ca5-7bcb-48bc-41f2a939cbee",
-                            Description = "CDS API user",
-                            Name = "CDS",
-                            NormalizedName = "CDS",
-                            ShortName = "cds_api"
-                        },
-                        new
-                        {
-                            Id = -31,
-                            ConcurrencyStamp = "8f8c37e1-a309-bd2d-6708-0519df89139b",
-                            Description = "Contest Creator",
-                            Name = "ContestCreator",
-                            NormalizedName = "CONTESTCREATOR",
-                            ShortName = "cont"
-                        },
-                        new
-                        {
-                            Id = -32,
-                            ConcurrencyStamp = "d68c9040-7762-ab0b-06eb-19ce1b5a5120",
-                            Description = "Temporary Team Account",
-                            Name = "TemporaryTeamAccount",
-                            NormalizedName = "TEMPORARYTEAMACCOUNT",
-                            ShortName = "temp_team"
-                        },
-                        new
-                        {
-                            Id = -1,
-                            ConcurrencyStamp = "9805fda4-f300-ff78-a6d8-faf0d8e418fd",
-                            Description = "Administrative User",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR",
-                            ShortName = "admin"
-                        },
-                        new
-                        {
-                            Id = -2,
-                            ConcurrencyStamp = "f1722fb1-cd10-256b-48bb-71afd116ae66",
-                            Description = "Blocked User",
-                            Name = "Blocked",
-                            NormalizedName = "BLOCKED",
-                            ShortName = "blocked"
-                        },
-                        new
-                        {
-                            Id = -16,
-                            ConcurrencyStamp = "c8259cc1-f159-cbf3-9348-ee1d3967d3ac",
-                            Description = "Verified Student",
-                            Name = "Student",
-                            NormalizedName = "STUDENT",
-                            ShortName = "student"
-                        },
-                        new
-                        {
-                            Id = -17,
-                            ConcurrencyStamp = "89679840-61ae-1966-f3cc-56e0d6eb43a3",
-                            Description = "Team Leader",
-                            Name = "TeamLeader",
-                            NormalizedName = "TEAMLEADER",
-                            ShortName = "leader"
-                        },
-                        new
-                        {
-                            Id = -10,
-                            ConcurrencyStamp = "44315c39-534d-ec0c-61f0-c0a5ed981cd9",
-                            Description = "(Internal/System) Judgehost",
-                            Name = "Judgehost",
-                            NormalizedName = "JUDGEHOST",
-                            ShortName = "judgehost"
-                        },
-                        new
-                        {
-                            Id = -11,
-                            ConcurrencyStamp = "f25ae969-433c-3f4a-04ca-7ec12d2583cc",
-                            Description = "Problem Provider",
-                            Name = "ProblemCreator",
-                            NormalizedName = "PROBLEMCREATOR",
-                            ShortName = "prob"
-                        },
-                        new
-                        {
-                            Id = -37,
-                            ConcurrencyStamp = "76133040-8512-5021-491b-563056c3f919",
-                            Description = "Plagiarism Detect User",
-                            Name = "PlagUser",
-                            NormalizedName = "PLAGUSER",
-                            ShortName = "plaguser"
-                        });
-                });
-
-            modelBuilder.Entity("SatelliteSite.NewsModule.Entities.News", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<DateTimeOffset>("LastUpdate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<byte[]>("Source")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Tree")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("News");
-                });
-
-            modelBuilder.Entity("SatelliteSite.OjUpdateModule.Entities.SolveRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Account")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NickName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Result")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Category");
-
-                    b.HasIndex("Category", "Grade");
-
-                    b.ToTable("TenantSolveRecord", (string)null);
-                });
-
-            modelBuilder.Entity("SatelliteSite.XylabUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NickName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Plan")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("RegisterTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(32)");
-
-                    b.Property<bool>("StudentVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SubscribeNews")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Tenant.Entities.Affiliation", b =>

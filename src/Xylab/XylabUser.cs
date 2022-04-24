@@ -1,5 +1,5 @@
 ﻿using SatelliteSite.IdentityModule.Entities;
-using Tenant.Entities;
+using Xylab.Tenant.Entities;
 
 namespace SatelliteSite
 {

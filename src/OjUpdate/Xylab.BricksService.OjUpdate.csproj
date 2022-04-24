@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xylab.DataAccess.Cosmos" Version="$(PlagiarismDetectVersion)" />
+    <PackageReference Include="Xylab.DataAccess.Cosmos" Version="$(PlagVersion)" />
     <PackageReference Include="SatelliteSite.DataAccess" Version="$(SubstrateVersion)" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(AspNetCoreVersion)" />
   </ItemGroup>

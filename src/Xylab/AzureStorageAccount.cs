@@ -1,11 +1,11 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Ccs.Services;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.AzureBlob;
-using Polygon.Storages;
 using System.IO;
 using System.Threading.Tasks;
+using Xylab.Contesting.Services;
+using Xylab.Polygon.Storages;
 
 namespace SatelliteSite
 {

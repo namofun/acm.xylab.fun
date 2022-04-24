@@ -1,10 +1,11 @@
-﻿using Ccs.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SatelliteSite.NewsModule.Services;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Xylab.Contesting;
+using Xylab.Contesting.Services;
 
 namespace SatelliteSite.XylabModule.Controllers
 {
@@ -45,7 +46,7 @@ namespace SatelliteSite.XylabModule.Controllers
             ViewData["ActiveAction"] = "Problemset";
 
             return View(
-                await store.ListAsync(User, Ccs.CcsDefaults.KindProblemset, page));
+                await store.ListAsync(User, CcsDefaults.KindProblemset, page));
         }
 
 
@@ -55,7 +56,7 @@ namespace SatelliteSite.XylabModule.Controllers
             ViewData["ActiveAction"] = "ListContest";
 
             return View(
-                await store.ListAsync(User, Ccs.CcsDefaults.KindDom, page));
+                await store.ListAsync(User, CcsDefaults.KindDom, page));
         }
 
 
@@ -65,7 +66,7 @@ namespace SatelliteSite.XylabModule.Controllers
             ViewData["ActiveAction"] = "ListGym";
 
             return View(
-                await store.ListAsync(User, Ccs.CcsDefaults.KindGym, page));
+                await store.ListAsync(User, CcsDefaults.KindGym, page));
         }
     }
 }

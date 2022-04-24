@@ -1,13 +1,13 @@
-﻿using Ccs.Services;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Plag.Backend;
-using Polygon;
 using SatelliteSite.ContestModule.Components.ContestStatistics;
 using SatelliteSite.ContestModule.Routing;
 using Xylab.BricksService.OjUpdate;
+using Xylab.Contesting.Services;
+using Xylab.PlagiarismDetect.Backend;
+using Xylab.Polygon;
 
 namespace SatelliteSite
 {
