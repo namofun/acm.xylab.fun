@@ -83,7 +83,7 @@
             <ul style="list-style:none;padding-left:0">
             @foreach (var item in Model)
             {
-                <li><a asp-area="Tenant" asp-controller="News" asp-action="Show" asp-route-nid="@item.NewsId">@item.Title</a></li>
+                <li><a asp-area="News" asp-controller="News" asp-action="Show" asp-route-nid="@item.NewsId">@item.Title</a></li>
             }
             </ul>
         </div>
