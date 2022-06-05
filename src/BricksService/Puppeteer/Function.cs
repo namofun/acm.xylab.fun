@@ -1,16 +1,17 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using PuppeteerSharp;
-using System.Runtime.InteropServices;
-using Azure.Storage.Blobs;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Xylab.BricksService.Puppeteer
 {
@@ -48,15 +49,36 @@ namespace Xylab.BricksService.Puppeteer
                 RenderOptions options = await RenderOptions.FromRequest(req);
                 await using Browser browser = await GetBrowser(chromiumZipBlob, options);
 
-                var page = await browser.NewPageAsync();
+                Page page = await browser.NewPageAsync();
+                page.Console += (sender, e) =>
+                {
+                    log.LogInformation("PAGE LOG: {log}", e.Message.Text);
+                };
 
-                page.Console += (sender, e) => log.LogInformation("PAGE LOG: {log}", e.Message.Text);
-                page.Error += (sender, e) => { log.LogError("Error event emitted: {msg}", e.Error); browser.CloseAsync(); };
+                page.Error += (sender, e) =>
+                {
+                    log.LogError("Error event emitted: {msg}", e.Error);
+                    browser.CloseAsync();
+                };
+
+                List<HttpActivity> failedResponses = new();
+                page.RequestFailed += (sender, e) =>
+                {
+                    failedResponses.Add(e.Request);
+                };
+
+                page.Response += (sender, e) =>
+                {
+                    if (e.Response.Status >= HttpStatusCode.BadRequest)
+                    {
+                        failedResponses.Add(e.Response);
+                    }
+                };
 
                 try
                 {
                     log.LogInformation("Set browser viewport..");
-                    await page.SetViewportAsync(options.ViewPort.Reassign());
+                    await page.SetViewportAsync(options.ViewPort);
 
                     if (options.EmulateScreenMedia)
                     {
@@ -64,42 +86,101 @@ namespace Xylab.BricksService.Puppeteer
                         await page.EmulateMediaTypeAsync(PuppeteerSharp.Media.MediaType.Screen);
                     }
 
+                    /*
+                    if (options.Cookies != null && options.Cookies.Length > 0)
+                    {
+                        log.LogInformation("Setting cookies..");
+
+                        CDPSession client = await page.Target.CreateCDPSessionAsync();
+                        await client.SendAsync("Network.enable");
+                        await client.SendAsync("Network.setCookies", new { cookies = options.Cookies });
+                    }
+                    */
+
                     if (!string.IsNullOrEmpty(options.Html))
                     {
                         log.LogInformation("Set HTML..");
-                        await page.SetContentAsync(options.Html, options.Goto.Reassign());
+                        await page.SetContentAsync(options.Html, options.Goto);
                     }
                     else
                     {
                         log.LogInformation("Goto url '{url}'..", options.Url);
-                        await page.GoToAsync(options.Url, options.Goto.Reassign());
+                        await page.GoToAsync(options.Url, options.Goto);
+                    }
+
+                    if (options.WaitFor != null)
+                    {
+                        throw new NotImplementedException();
                     }
 
                     if (options.ScrollPage)
                     {
                         log.LogInformation("Scroll page..");
-                        throw new NotImplementedException();
+                        await ScrollPage(page);
                     }
 
-                    // FailedResponses
+                    if (failedResponses.Count > 0)
+                    {
+                        log.LogWarning(
+                            "Number of failed requests: {count}\r\n" +
+                            "{requests}",
+                            failedResponses.Count,
+                            string.Join("\r\n", failedResponses.Select(e => $"- {e.Status} {e.Url}")));
 
-                    // FailEarly
+                        if (options.FailEarly == FailureHandling.all)
+                        {
+                            throw new BricksException(
+                                $"{failedResponses.Count} requests have failed. " +
+                                $"See server log for more details.",
+                                HttpStatusCode.PreconditionFailed);
+                        }
+                    }
 
-                    Stream data;
+                    var activity = failedResponses.Cast<HttpActivity?>().LastOrDefault(e => e.Value.Url == options.Url);
+                    if (options.FailEarly == FailureHandling.page && activity?.Response?.Status != HttpStatusCode.OK)
+                    {
+                        throw new BricksException(
+                            $"Request for {options.Url} did not directly succeed and returned status {activity?.Status}",
+                            HttpStatusCode.PreconditionFailed);
+                    }
+
                     log.LogInformation("Rendering..");
                     if (options.Output == OutputType.pdf)
                     {
                         if (options.Pdf.FullPage)
                         {
-                            throw new NotImplementedException();
+                            options.Pdf.Height = (await GetFullPageHeight(page)).ToString();
                         }
 
-                        data = await page.PdfStreamAsync();
+                        Stream data = await page.PdfStreamAsync(options.Pdf);
                         return new FileStreamResult(data, "application/pdf");
+                    }
+                    else if (options.Output == OutputType.html)
+                    {
+                        string innerHtml = await page.EvaluateExpressionAsync<string>("document.documentElement.innerHTML");
+                        return new ContentResult { Content = innerHtml, ContentType = "text/html" };
                     }
                     else
                     {
-                        throw new NotImplementedException();
+                        Stream data;
+                        PuppeteerSharp.ScreenshotOptions opt = options.Screenshot;
+                        if (options.Screenshot.Selector == null)
+                        {
+                            data = await page.ScreenshotStreamAsync(opt);
+                        }
+                        else
+                        {
+                            ElementHandle element = await page.QuerySelectorAsync(options.Screenshot.Selector);
+                            if (element == null)
+                            {
+                                throw new Exception("Element not found.");
+                            }
+
+                            opt.FullPage = false;
+                            data = await element.ScreenshotStreamAsync(opt);
+                        }
+
+                        return new FileStreamResult(data, "image/" + options.Screenshot.Type);
                     }
                 }
                 catch (Exception ex)
@@ -118,6 +199,51 @@ namespace Xylab.BricksService.Puppeteer
                     StatusCode = (int)ex.StatusCode,
                 };
             }
+        }
+
+        private static Task<double> GetFullPageHeight(Page page)
+        {
+            return page.EvaluateExpressionAsync<double>(
+@"
+                Math.max(
+                  document.body.scrollHeight,
+                  document.body.offsetHeight,
+                  document.documentElement.clientHeight,
+                  document.documentElement.scrollHeight,
+                  document.documentElement.offsetHeight
+                )
+");
+        }
+
+        private static Task ScrollPage(Page page)
+        {
+            return page.EvaluateFunctionAsync(
+@"
+                const scrollInterval = 100;
+                const scrollStep = Math.floor(window.innerHeight / 2);
+                const bottomThreshold = 400;
+
+                function bottomPos() {
+                    return window.pageYOffset + window.innerHeight;
+                }
+
+                return new Promise((resolve, reject) => {
+                    function scrollDown() {
+                        window.scrollBy(0, scrollStep);
+
+                        if (document.body.scrollHeight - bottomPos() < bottomThreshold) {
+                            window.scrollTo(0, 0);
+                            setTimeout(resolve, 500);
+                            return;
+                        }
+
+                        setTimeout(scrollDown, scrollInterval);
+                    }
+
+                    setTimeout(reject, 30000);
+                    scrollDown();
+                });
+");
         }
     }
 }

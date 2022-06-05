@@ -7,6 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Clip = PuppeteerSharp.Media.Clip;
+using InteropMarginOptions = PuppeteerSharp.Media.MarginOptions;
+using InteropNavigationOptions = PuppeteerSharp.NavigationOptions;
+using InteropPdfOptions = PuppeteerSharp.PdfOptions;
+using InteropScreenshotOptions = PuppeteerSharp.ScreenshotOptions;
+using InteropViewPortOptions = PuppeteerSharp.ViewPortOptions;
+using PaperFormat = PuppeteerSharp.Media.PaperFormat;
+using WaitUntilNavigation = PuppeteerSharp.WaitUntilNavigation;
 
 namespace Xylab.BricksService.Puppeteer
 {
@@ -37,15 +45,15 @@ namespace Xylab.BricksService.Puppeteer
         [JsonProperty("isLandscape")]
         public bool? IsLandscape { get; set; }
 
-        public PuppeteerSharp.ViewPortOptions Reassign()
+        public static implicit operator InteropViewPortOptions(ViewPortOptions @this)
         {
-            PuppeteerSharp.ViewPortOptions options = new();
-            options.Width = this.Width;
-            options.Height = this.Height;
-            options.DeviceScaleFactor = this.DeviceScaleFactor ?? options.DeviceScaleFactor;
-            options.IsMobile = this.IsMobile ?? options.IsMobile;
-            options.HasTouch = this.HasTouch ?? options.HasTouch;
-            options.IsLandscape = this.IsLandscape ?? options.IsLandscape;
+            InteropViewPortOptions options = new();
+            options.Width = @this.Width;
+            options.Height = @this.Height;
+            options.DeviceScaleFactor = @this.DeviceScaleFactor ?? options.DeviceScaleFactor;
+            options.IsMobile = @this.IsMobile ?? options.IsMobile;
+            options.HasTouch = @this.HasTouch ?? options.HasTouch;
+            options.IsLandscape = @this.IsLandscape ?? options.IsLandscape;
             return options;
         }
     }
@@ -58,20 +66,20 @@ namespace Xylab.BricksService.Puppeteer
         [JsonProperty("waitUntil")]
         public string WaitUntil { get; set; } = "networkidle0";
 
-        private static readonly Dictionary<string, PuppeteerSharp.WaitUntilNavigation> map
+        private static readonly Dictionary<string, WaitUntilNavigation> map
             = new(StringComparer.OrdinalIgnoreCase)
             {
-                ["Load"] = PuppeteerSharp.WaitUntilNavigation.Load,
-                ["DOMContentLoaded"] = PuppeteerSharp.WaitUntilNavigation.DOMContentLoaded,
-                ["Networkidle0"] = PuppeteerSharp.WaitUntilNavigation.Networkidle0,
-                ["Networkidle2"] = PuppeteerSharp.WaitUntilNavigation.Networkidle2,
+                ["Load"] = WaitUntilNavigation.Load,
+                ["DOMContentLoaded"] = WaitUntilNavigation.DOMContentLoaded,
+                ["Networkidle0"] = WaitUntilNavigation.Networkidle0,
+                ["Networkidle2"] = WaitUntilNavigation.Networkidle2,
             };
 
-        public PuppeteerSharp.NavigationOptions Reassign()
+        public static implicit operator InteropNavigationOptions(GotoOptions @this)
         {
-            PuppeteerSharp.NavigationOptions options = new();
-            options.Timeout = this.Timeout;
-            options.WaitUntil = this.WaitUntil.Split(',').Select(e => map[e]).ToArray();
+            InteropNavigationOptions options = new();
+            options.Timeout = @this.Timeout;
+            options.WaitUntil = @this.WaitUntil.Split(',').Select(e => map[e]).ToArray();
             return options;
         }
     }
@@ -89,6 +97,17 @@ namespace Xylab.BricksService.Puppeteer
 
         [JsonProperty("left")]
         public string Left { get; set; }
+
+        public static implicit operator InteropMarginOptions(MarginOptions @this)
+        {
+            return new()
+            {
+                Bottom = @this?.Bottom,
+                Left = @this?.Left,
+                Right = @this?.Right,
+                Top = @this?.Top,
+            };
+        }
     }
 
     public class PdfOptions
@@ -97,7 +116,7 @@ namespace Xylab.BricksService.Puppeteer
         public bool FullPage { get; set; }
 
         [JsonProperty("scale")]
-        public double Scale { get; set; }
+        public decimal Scale { get; set; } = 1;
 
         [JsonProperty("displayHeaderFooter")]
         public bool DisplayHeaderFooter { get; set; }
@@ -106,7 +125,7 @@ namespace Xylab.BricksService.Puppeteer
         public string FooterTemplate { get; set; }
 
         [JsonProperty("headerTemplate")]
-        public bool HeaderTemplate { get; set; }
+        public string HeaderTemplate { get; set; }
 
         [JsonProperty("landscape")]
         public bool Landscape { get; set; }
@@ -128,39 +147,123 @@ namespace Xylab.BricksService.Puppeteer
 
         [JsonProperty("printBackground")]
         public bool PrintBackground { get; set; } = true;
+
+        [JsonProperty("omitBackground")]
+        public bool OmitBackground { get; set; } = true;
+
+        public static implicit operator InteropPdfOptions(PdfOptions pdfOptions)
+        {
+            PaperFormat format;
+            if (pdfOptions.Format == null)
+            {
+                format = null;
+            }
+            else if (KnownPaperFormat.ContainsKey(pdfOptions.Format))
+            {
+                format = KnownPaperFormat[pdfOptions.Format];
+            }
+            else if (pdfOptions.Format.Split('x') is { Length: 2 } splitted
+                && decimal.TryParse(splitted[0], out decimal width)
+                && decimal.TryParse(splitted[1], out decimal height))
+            {
+                format = new PaperFormat(width, height);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unexpected format");
+            }
+
+            return new InteropPdfOptions
+            {
+                DisplayHeaderFooter = pdfOptions.DisplayHeaderFooter,
+                FooterTemplate = pdfOptions.FooterTemplate,
+                HeaderTemplate = pdfOptions.HeaderTemplate,
+                Landscape = pdfOptions.Landscape,
+                PageRanges = pdfOptions.PageRanges,
+                PrintBackground = pdfOptions.PrintBackground,
+                Width = pdfOptions.Width,
+                Height = pdfOptions.Height,
+                Scale = pdfOptions.Scale,
+                OmitBackground = pdfOptions.OmitBackground,
+                Format = format,
+                MarginOptions = pdfOptions.Margin,
+            };
+        }
+
+        private static readonly IReadOnlyDictionary<string, PaperFormat> KnownPaperFormat
+            = new Dictionary<string, PaperFormat>(StringComparer.OrdinalIgnoreCase)
+            {
+                [nameof(PaperFormat.A0)] = PaperFormat.A0,
+                [nameof(PaperFormat.A1)] = PaperFormat.A1,
+                [nameof(PaperFormat.A2)] = PaperFormat.A2,
+                [nameof(PaperFormat.A3)] = PaperFormat.A3,
+                [nameof(PaperFormat.A4)] = PaperFormat.A4,
+                [nameof(PaperFormat.A5)] = PaperFormat.A5,
+                [nameof(PaperFormat.A6)] = PaperFormat.A6,
+                [nameof(PaperFormat.Ledger)] = PaperFormat.Ledger,
+                [nameof(PaperFormat.Legal)] = PaperFormat.Legal,
+                [nameof(PaperFormat.Letter)] = PaperFormat.Letter,
+                [nameof(PaperFormat.Tabloid)] = PaperFormat.Tabloid,
+            };
     }
 
     public class ClipOptions
     {
         [JsonProperty("x")]
-        public string X { get; set; }
+        public decimal? X { get; set; }
 
         [JsonProperty("y")]
-        public string Y { get; set; }
+        public decimal? Y { get; set; }
 
         [JsonProperty("width")]
-        public string Width { get; set; }
+        public decimal? Width { get; set; }
 
         [JsonProperty("height")]
-        public string Height { get; set; }
+        public decimal? Height { get; set; }
+
+        [JsonProperty("scale")]
+        public int? Scale { get; set; }
+
+        public static implicit operator Clip(ClipOptions @this)
+        {
+            if (@this == null
+                || @this.Height == null
+                || @this.Width == null
+                || @this.X == null
+                || @this.Y == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new Clip
+                {
+                    Scale = @this.Scale ?? 1,
+                    Height = @this.Height.Value,
+                    Width = @this.Width.Value,
+                    X = @this.X.Value,
+                    Y = @this.Y.Value,
+                };
+            }
+        }
     }
 
     public enum ScreenshotType
     {
-        png,
         jpeg,
+        png,
     }
 
     public class ScreenshotOptions
     {
         [JsonProperty("fullPage")]
-        public bool FullPage { get; set; }
+        public bool? FullPage { get; set; }
 
         [JsonProperty("quality")]
-        public string Quality { get; set; }
+        public int? Quality { get; set; }
 
         [JsonProperty("type")]
-        public ScreenshotType Type { get; set; }
+        public ScreenshotType Type { get; set; } = ScreenshotType.png;
 
         [JsonProperty("clip")]
         public ClipOptions Clip { get; set; }
@@ -170,6 +273,24 @@ namespace Xylab.BricksService.Puppeteer
 
         [JsonProperty("omitBackground")]
         public bool OmitBackground { get; set; }
+
+        public static implicit operator InteropScreenshotOptions(ScreenshotOptions @this)
+        {
+            return new InteropScreenshotOptions()
+            {
+                Type = (PuppeteerSharp.ScreenshotType)@this.Type,
+                OmitBackground = @this.OmitBackground,
+                Clip = @this.Clip,
+                FullPage = @this.FullPage ?? false,
+                Quality = @this.Quality,
+            };
+        }
+    }
+
+    public enum FailureHandling
+    {
+        all,
+        page,
     }
 
     public class RenderOptions
@@ -189,7 +310,7 @@ namespace Xylab.BricksService.Puppeteer
         [JsonProperty("emulateScreenMedia")]
         public bool EmulateScreenMedia { get; set; }
 
-        [JsonProperty("EnableGPU")]
+        [JsonProperty("enableGpu")]
         public bool EnableGPU { get; set; }
 
         [JsonProperty("ignoreHttpsErrors")]
@@ -212,6 +333,9 @@ namespace Xylab.BricksService.Puppeteer
 
         [JsonProperty("screenshot")]
         public ScreenshotOptions Screenshot { get; set; } = new();
+
+        [JsonProperty("failEarly")]
+        public FailureHandling FailEarly { get; set; }
 
         private static RenderOptions GetOptionsFromQuery(IQueryCollection query)
         {
@@ -302,5 +426,30 @@ namespace Xylab.BricksService.Puppeteer
             RenderOptions options = await ParseRequestCore(request);
             return options;
         }
+    }
+
+    internal struct HttpActivity
+    {
+        public readonly PuppeteerSharp.Request Request;
+        public readonly PuppeteerSharp.Response Response;
+
+        public HttpActivity(PuppeteerSharp.Request request)
+        {
+            this.Request = request;
+            this.Response = null;
+        }
+
+        public HttpActivity(PuppeteerSharp.Response response)
+        {
+            this.Request = null;
+            this.Response = response;
+        }
+
+        public HttpStatusCode Status => (this.Request?.Response ?? this.Response)?.Status ?? 0;
+
+        public string Url => this.Request?.Url ?? this.Response?.Url;
+
+        public static implicit operator HttpActivity(PuppeteerSharp.Request request) => new(request);
+        public static implicit operator HttpActivity(PuppeteerSharp.Response response) => new(response);
     }
 }
