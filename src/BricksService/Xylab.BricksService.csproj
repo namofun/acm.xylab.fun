@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OjUpdate\Xylab.BricksService.OjUpdate.csproj" />
+    <ProjectReference Include="..\Puppeteer\Xylab.BricksService.Puppeteer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

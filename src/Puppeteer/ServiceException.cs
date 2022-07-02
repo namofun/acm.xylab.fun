@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Net;
 
-namespace Xylab.BricksService
+namespace Xylab.BricksService.Puppeteer
 {
-    public sealed class BricksException : Exception
+    public sealed class ServiceException : Exception
     {
         public HttpStatusCode StatusCode { get; }
 
-        public BricksException(string message, HttpStatusCode statusCode)
+        public ServiceException(string message, HttpStatusCode statusCode)
             : base(message)
         {
             StatusCode = statusCode;
         }
 
-        public BricksException(Exception innerException, string message, HttpStatusCode statusCode)
+        public ServiceException(Exception innerException, string message, HttpStatusCode statusCode)
             : base(message, innerException)
         {
             StatusCode = statusCode;
