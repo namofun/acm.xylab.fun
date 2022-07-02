@@ -41,9 +41,17 @@ jobs:
     inputs:
       command: 'publish'
       publishWebProjects: false
-      projects: 'src/BricksService/Xylab.BricksService.csproj'
+      projects: 'src/BricksService/Xylab.BricksAggregator.Windows.csproj'
       arguments: '--configuration Release --output artifacts/staging/b2s/publish'
-    displayName: 'Build Bricks Service'
+    displayName: 'Build Bricks Service Windows'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'src/BricksService.Linux/Xylab.BricksAggregator.Linux.csproj'
+      arguments: '--configuration Release --output artifacts/staging/b2l/publish'
+    displayName: 'Build Bricks Service Linux'
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -60,6 +68,7 @@ jobs:
         mv $(Build.SourcesDirectory)/artifacts/staging/pds/publish/PlagiarismDetectWorker.zip $(Build.ArtifactStagingDirectory)/pds.zip
         mv $(Build.SourcesDirectory)/artifacts/staging/ccs/publish/Xylab.zip $(Build.ArtifactStagingDirectory)/ccs.zip
         mv $(Build.SourcesDirectory)/artifacts/staging/b2s/publish/BricksService.zip $(Build.ArtifactStagingDirectory)/b2s.zip
+        mv $(Build.SourcesDirectory)/artifacts/staging/b2l/publish/BricksService.Linux.zip $(Build.ArtifactStagingDirectory)/b2l.zip
     displayName: 'Copy Artifacts'
 
   - task: PublishBuildArtifacts@1

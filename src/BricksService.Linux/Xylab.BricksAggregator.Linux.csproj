@@ -8,15 +8,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.5.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     <PackageReference Include="PuppeteerSharp" Version="7.0.0" />
+    <PackageReference Include="SatelliteSite.Abstraction" Version="$(SubstrateVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OjUpdate\Xylab.BricksService.OjUpdate.csproj" />
     <ProjectReference Include="..\Puppeteer\Xylab.BricksService.Puppeteer.csproj" />
   </ItemGroup>
 
