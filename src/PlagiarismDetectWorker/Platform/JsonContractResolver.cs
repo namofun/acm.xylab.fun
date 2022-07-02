@@ -17,7 +17,7 @@ namespace Xylab.PlagiarismDetect.Worker
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);
 
-            if (member.DeclaringType?.Namespace == "Plag.Backend.Models")
+            if (member.DeclaringType?.Namespace == typeof(Xylab.PlagiarismDetect.Backend.Models.Report).Namespace)
             {
                 SystemJsonIgnoreAttribute ignoreAttribute = member.GetCustomAttribute<SystemJsonIgnoreAttribute>();
                 if (ignoreAttribute != null)
