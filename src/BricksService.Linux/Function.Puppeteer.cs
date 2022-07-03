@@ -2,7 +2,6 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using PuppeteerSharp;
 using System.IO;
@@ -14,7 +13,7 @@ namespace Xylab.BricksService.Puppeteer
     {
         [FunctionName("Puppeteer_UpdateBrowser")]
         public static async Task<RevisionInfo> RunUpdateBrowser(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Puppeteer/UpdateBrowser")] HttpRequest req,
+            [HttpTrigger("post", Route = "Puppeteer/UpdateBrowser")] HttpRequest req,
             [Blob(BrowserDownloader.ChromiumBlobUrl, FileAccess.Write)] BlobClient blob,
             ILogger log)
         {
@@ -23,7 +22,7 @@ namespace Xylab.BricksService.Puppeteer
 
         [FunctionName("Puppeteer_Convert")]
         public static async Task<IActionResult> RunConvert(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Puppeteer/Convert")] HttpRequest req,
+            [HttpTrigger("get", "post", Route = "Puppeteer/Convert")] HttpRequest req,
             [Blob(BrowserDownloader.ChromiumBlobUrl, FileAccess.Read)] BlobClient chromiumZipBlob,
             ILogger log)
         {

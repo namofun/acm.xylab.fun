@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,66 +67,77 @@ namespace Xylab.BricksService.OjUpdate
             await _storage.UpdateStatusAsync(category, false, lastUpdated);
         }
 
-        [FunctionName("OjUpdate_Manage")]
-        public async Task<IEnumerable<DurableOrchestrationStatus>> RunManage(
-            [HttpTrigger(AuthorizationLevel.Anonymous, new[] { "get", "post" }, Route = "bricks/manage/OjUpdate")] HttpRequest request,
+        [FunctionName("OjUpdate_List")]
+        public async Task<ActionResult<DurableOrchestrationStatus[]>> RunList(
+            [HttpTrigger("get", Route = "OjUpdate")] HttpRequest request,
+            [DurableClient] IDurableOrchestrationClient client)
+        {
+            return (await client.ListInstancesAsync()).Where(e => e.Name == "OjUpdate").ToArray();
+        }
+
+        [FunctionName("OjUpdate_Halt")]
+        public async Task<ActionResult<DurableOrchestrationStatus[]>> RunHalt(
+            [HttpTrigger("post", Route = "OjUpdate/Halt")] HttpRequest request,
             [DurableClient] IDurableOrchestrationClient client,
             ILogger log)
         {
-            if (request.Method == "POST")
+            var result = await client.ListInstancesAsync();
+            foreach (var instance in result.Where(r => r.Name == "OjUpdate"))
             {
-                if (HasKey("stop", out var value) && value == "true") await StopAll();
-                else if (HasKey("init", out value) && value == "true") await InitAll();
-                else if (HasKey("trigger", out value) && Enum.TryParse<RecordType>(value, out var type)) await TriggerOne(type);
-            }
-
-            return (await client.ListInstancesAsync()).Where(e => e.Name == "OjUpdate");
-
-            bool HasKey(string key, out string value)
-            {
-                value = null;
-                return request.Query.TryGetValue(key, out var values)
-                    && values.Count == 1
-                    && (value = values[0]) != null;
-            }
-
-            async Task StopAll()
-            {
-                var result = await client.ListInstancesAsync();
-                foreach (var instance in result.Where(r => r.Name == "OjUpdate"))
+                try
                 {
-                    try
+                    if (instance.RuntimeStatus != OrchestrationRuntimeStatus.Terminated)
                     {
-                        if (instance.RuntimeStatus != OrchestrationRuntimeStatus.Terminated)
-                        {
-                            await client.TerminateAsync(instance.InstanceId, "Manual stopped");
-                        }
+                        await client.TerminateAsync(instance.InstanceId, "Manual stopped");
+                    }
 
-                        await client.PurgeInstanceHistoryAsync(instance.InstanceId);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.LogError(ex, "Unexpected exception happened during stopping. Please retry if possible.");
-                    }
+                    await client.PurgeInstanceHistoryAsync(instance.InstanceId);
+                }
+                catch (Exception ex)
+                {
+                    log.LogError(ex, "Unexpected exception happened during stopping. Please retry if possible.");
                 }
             }
 
-            async Task InitAll()
-            {
-                await _storage.MigrateAsync();
+            return await RunList(request, client);
+        }
 
-                var result = await client.ListInstancesAsync();
-                foreach ((RecordType category, _) in ServiceConstants.GetDrivers())
-                {
-                    await client.StartNewAsync("OjUpdate", "OjUpdate_" + category, category);
-                    await _storage.CreateStatusAsync(category);
-                }
+        [FunctionName("OjUpdate_Initialize")]
+        public async Task<ActionResult<DurableOrchestrationStatus[]>> RunInitialize(
+            [HttpTrigger("post", Route = "OjUpdate/Initialize")] HttpRequest request,
+            [DurableClient] IDurableOrchestrationClient client,
+            ILogger log)
+        {
+            await _storage.MigrateAsync();
+            log.LogInformation("Migrated schema.");
+
+            foreach ((RecordType category, _) in ServiceConstants.GetDrivers())
+            {
+                await client.StartNewAsync("OjUpdate", "OjUpdate_" + category, category);
+                await _storage.CreateStatusAsync(category);
+
+                log.LogInformation("Started category '{category}'.", category);
             }
 
-            async Task TriggerOne(RecordType type)
+            return await RunList(request, client);
+        }
+
+        [FunctionName("OjUpdate_Trigger")]
+        public async Task<ActionResult<DurableOrchestrationStatus[]>> RunTrigger(
+            [HttpTrigger("post", Route = "OjUpdate/Trigger/{target}")] HttpRequest request,
+            [DurableClient] IDurableOrchestrationClient client,
+            string target,
+            ILogger log)
+        {
+            if (!Enum.TryParse(target, out RecordType type))
             {
-                await client.RaiseEventAsync("OjUpdate_" + type, "ManualReset");
+                return new BadRequestResult();
             }
+
+            await client.RaiseEventAsync("OjUpdate_" + type, "ManualReset");
+            log.LogInformation("ManualReset event triggered on {type}.", type);
+
+            return await RunList(request, client);
         }
     }
 }
