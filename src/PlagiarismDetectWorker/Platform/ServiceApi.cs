@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using System;
@@ -11,6 +12,7 @@ using Xylab.PlagiarismDetect.Backend.Services;
 
 namespace Xylab.PlagiarismDetect.Worker
 {
+    [FunctionAuthorize("PlagiarismDetectSystem.All")]
     public class ServiceApi
     {
         private readonly IPlagiarismDetectService _service;

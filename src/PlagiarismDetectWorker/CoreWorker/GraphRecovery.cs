@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -20,8 +22,9 @@ namespace Xylab.PlagiarismDetect.Worker
         }
 
         [FunctionName("GraphRecoveryScheduler")]
+        [FunctionAuthorize("PlagiarismDetectSystem.All")]
         public static async Task<IActionResult> Schedule(
-            [HttpTrigger("post", Route = "graph-recovery/{setid}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "graph-recovery/{setid}")] HttpRequest req,
             string setid,
             [Queue(Startup.GraphRecoveryQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> recoveryQueue)
         {
