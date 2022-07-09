@@ -19,6 +19,8 @@ namespace Xylab.PlagiarismDetect.Worker
             [Queue(Startup.ReportGeneratingQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> reportGenerator,
             ILogger log)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
+
             string rescueRecord =
                 await RescueWorker.RunAsync(
                     new AsyncCollectorSignalBroker(submissionTokenizer),

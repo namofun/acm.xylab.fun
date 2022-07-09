@@ -27,6 +27,7 @@ namespace Xylab.PlagiarismDetect.Worker
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "bootstrap")] HttpRequest req,
             ILogger log)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             await BootstrapWorker.RunAsync(_store, _compiler, log);
             return new OkObjectResult(new { status = 200, comment = "Bootstrapping finished." });
         }

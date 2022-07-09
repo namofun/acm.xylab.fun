@@ -1,4 +1,6 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics;
@@ -32,6 +34,8 @@ namespace Xylab.PlagiarismDetect.Worker
             builder.Services.ReplaceSingleton<ISignalProvider, InjectSignalProvider>();
             builder.Services.AddSingletonDowncast<InjectSignalProvider, ISignalProvider>();
             builder.Services.AddSingleton<ITelemetryClient, FunctionsTelemetryClient>();
+
+            builder.Services.AddSingleton<IActionResultExecutor<ObjectResult>, CompatibleObjectResultExecutor>();
         }
     }
 }

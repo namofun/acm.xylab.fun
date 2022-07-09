@@ -1,8 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Buffers;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Xylab.PlagiarismDetect.Backend.Models;
 using SystemJsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 using SystemJsonIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition;
@@ -13,11 +22,13 @@ namespace Xylab.PlagiarismDetect.Worker
 {
     internal abstract class CompatibleJsonContractResolverBase : DefaultContractResolver
     {
+        public static readonly string DefaultNamespace = typeof(Xylab.PlagiarismDetect.Backend.Models.Report).Namespace;
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);
 
-            if (member.DeclaringType?.Namespace == typeof(Xylab.PlagiarismDetect.Backend.Models.Report).Namespace)
+            if (member.DeclaringType?.Namespace == DefaultNamespace)
             {
                 SystemJsonIgnoreAttribute ignoreAttribute = member.GetCustomAttribute<SystemJsonIgnoreAttribute>();
                 if (ignoreAttribute != null)
@@ -205,6 +216,64 @@ namespace Xylab.PlagiarismDetect.Worker
             }
 
             return contract;
+        }
+    }
+
+    public class CompatibleObjectResultExecutor : ObjectResultExecutor
+    {
+        private readonly ArrayPool<char> _arrayPool;
+        private readonly IOptions<MvcOptions> _mvcOptions;
+        private readonly IOptions<MvcNewtonsoftJsonOptions> _jsonOptions;
+
+        public CompatibleObjectResultExecutor(
+            OutputFormatterSelector formatterSelector,
+            IHttpResponseStreamWriterFactory writerFactory,
+            ILoggerFactory loggerFactory,
+            IOptions<MvcOptions> mvcOptions,
+            IOptions<MvcNewtonsoftJsonOptions> jsonOptions,
+            ArrayPool<char> arrayPool)
+            : base(formatterSelector, writerFactory, loggerFactory, mvcOptions)
+        {
+            _mvcOptions = mvcOptions;
+            _arrayPool = arrayPool;
+            _jsonOptions = jsonOptions;
+        }
+
+        public override Task ExecuteAsync(ActionContext context, ObjectResult result)
+        {
+            Type type = result.DeclaredType ?? result.Value?.GetType();
+            if (type.Namespace == CompatibleJsonContractResolverBase.DefaultNamespace
+                || (type.IsConstructedGenericType
+                    && type.GetGenericArguments()[0].Namespace == CompatibleJsonContractResolverBase.DefaultNamespace))
+            {
+                bool useV2 = false;
+                if (context.HttpContext.Request.Headers.UserAgent.Contains("PlagiarismRestful/1.2.0"))
+                    useV2 = true;
+
+                if (context.HttpContext.Request.Headers.TryGetValue("x-plag-version", out StringValues value)
+                    && value.Count == 1
+                    && value[0] == "v2")
+                    useV2 = true;
+
+                if (context.HttpContext.Request.Query.TryGetValue("apiVersion", out value)
+                    && value.Count == 1
+                    && value[0] == "v2")
+                    useV2 = true;
+
+                JsonSerializerSettings settings = new();
+                settings.ContractResolver = useV2
+                    ? CompatibleV2JsonContractResolver.Instance
+                    : CompatibleV3JsonContractResolver.Instance;
+
+                result.Formatters.Add(
+                    new NewtonsoftJsonOutputFormatter(
+                        settings,
+                        _arrayPool,
+                        _mvcOptions.Value,
+                        _jsonOptions.Value));
+            }
+
+            return base.ExecuteAsync(context, result);
         }
     }
 }

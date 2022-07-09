@@ -28,6 +28,7 @@ namespace Xylab.PlagiarismDetect.Worker
             string setid,
             [Queue(Startup.GraphRecoveryQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> recoveryQueue)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             bool force = req.Query.TryGetValue("force", out var forced) && forced.Contains("true");
             GraphRecoveryTask task = new() { SetId = setid, Force = force };
             await recoveryQueue.AddAsync(task.ToJson());

@@ -1,44 +1,52 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions;
 using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Xylab.PlagiarismDetect.Worker
 {
     internal static class ResponseExtensions
     {
-        public static IActionResult Respond(this HttpRequest httpRequest, object result, int? statusCode = null)
+        public static bool IsAuthorized(this HttpRequest req)
         {
-            if (result == null) return new NotFoundResult();
-
-            bool useV2 = false;
-            if (httpRequest.Headers.UserAgent.Contains("PlagiarismRestful/1.2.0"))
-                useV2 = true;
-
-            if (httpRequest.Headers.TryGetValue("x-plag-version", out StringValues value)
-                && value.Count == 1
-                && value[0] == "v2")
-                useV2 = true;
-
-            if (httpRequest.Query.TryGetValue("apiVersion", out value)
-                && value.Count == 1
-                && value[0] == "v2")
-                useV2 = true;
-
-            JsonSerializerSettings settings = new();
-            settings.ContractResolver = useV2
-                ? CompatibleV2JsonContractResolver.Instance
-                : CompatibleV3JsonContractResolver.Instance;
-
-            return new JsonResult(result, settings) { StatusCode = statusCode };
+            if (req.HttpContext.Items.TryGetValue(FunctionAuthorizeAttribute.Key, out var faa)
+                && faa is FunctionAuthorizeAttribute authorizeAttribute)
+            {
+                return authorizeAttribute.IsAuthorized();
+            }
+            else
+            {
+                return true;
+            }
         }
 
-        public static IActionResult CreatedAt(this HttpRequest httpRequest, object result, string location)
+        public static StatusCodeResult Ok(this HttpRequest req)
         {
-            httpRequest.HttpContext.Response.Headers.Location = location;
-            return Respond(httpRequest, result, StatusCodes.Status201Created);
+            return new StatusCodeResult(StatusCodes.Status200OK);
+        }
+
+        public static StatusCodeResult Forbid(this HttpRequest req)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
+
+        public static StatusCodeResult NotFound(this HttpRequest req)
+        {
+            return new StatusCodeResult(StatusCodes.Status404NotFound);
+        }
+
+        public static StatusCodeResult BadRequest(this HttpRequest req)
+        {
+            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+        }
+
+        public static StatusCodeResult ServiceUnavailable(this HttpRequest req)
+        {
+            return new StatusCodeResult(StatusCodes.Status503ServiceUnavailable);
         }
 
         public static int? GetQueryInt(this HttpRequest httpRequest, string keyName)
@@ -84,5 +92,62 @@ namespace Xylab.PlagiarismDetect.Worker
                 ? vs[0]
                 : defaultValue;
         }
+
+        public static async Task<ActionResult<TResult>> Execute<TResult>(
+            this HttpRequest req,
+            Func<Task<TResult>> action)
+        {
+            if (!req.IsAuthorized())
+            {
+                return req.Forbid();
+            }
+
+            try
+            {
+                return await action();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return req.BadRequest();
+            }
+            catch (KeyNotFoundException)
+            {
+                return req.NotFound();
+            }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                return req.ServiceUnavailable();
+            }
+        }
+
+        public static Task<ActionResult<TResult>> Execute<TResult, TParam1>(
+            this HttpRequest req,
+            Func<TParam1, Task<TResult>> action,
+            TParam1 param1)
+            => Execute(req, () => action(param1));
+
+        public static Task<ActionResult<TResult>> Execute<TResult, TParam1, TParam2>(
+            this HttpRequest req,
+            Func<TParam1, TParam2, Task<TResult>> action,
+            TParam1 param1, TParam2 param2)
+            => Execute(req, () => action(param1, param2));
+
+        public static Task<ActionResult<TResult>> Execute<TResult, TParam1, TParam2, TParam3>(
+            this HttpRequest req,
+            Func<TParam1, TParam2, TParam3, Task<TResult>> action,
+            TParam1 param1, TParam2 param2, TParam3 param3)
+            => Execute(req, () => action(param1, param2, param3));
+
+        public static Task<ActionResult<TResult>> Execute<TResult, TParam1, TParam2, TParam3, TParam4, TParam5>(
+            this HttpRequest req,
+            Func<TParam1, TParam2, TParam3, TParam4, TParam5, Task<TResult>> action,
+            TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5)
+            => Execute(req, () => action(param1, param2, param3, param4, param5));
+
+        public static Task<ActionResult<TResult>> Execute<TResult, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9>(
+            this HttpRequest req,
+            Func<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, Task<TResult>> action,
+            TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6, TParam7 param7, TParam8 param8, TParam9 param9)
+            => Execute(req, () => action(param1, param2, param3, param4, param5, param6, param7, param8, param9));
     }
 }

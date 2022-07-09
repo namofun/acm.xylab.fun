@@ -34,7 +34,8 @@ namespace Xylab.PlagiarismDetect.Worker
             [Queue(Startup.ReportGeneratingQueue, Connection = "AzureWebJobsStorage")] IAsyncCollector<string> reportGenerator,
             ILogger log,
             CancellationToken cancellationToken)
-            => CompilationWorker.RunAsync(
+        {
+            return CompilationWorker.RunAsync(
                 queueMessage,
                 _store,
                 _converter,
@@ -44,5 +45,6 @@ namespace Xylab.PlagiarismDetect.Worker
                 new AsyncCollectorSignalBroker(reportGenerator),
                 _telemetryClient,
                 cancellationToken);
+        }
     }
 }

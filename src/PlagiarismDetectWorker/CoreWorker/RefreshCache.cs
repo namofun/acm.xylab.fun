@@ -24,6 +24,7 @@ namespace Xylab.PlagiarismDetect.Worker
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "refresh-cache")] HttpRequest req,
             ILogger log)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             log.LogInformation("Refreshing cache for the system.");
             await _jobContext.RefreshCacheAsync();
             return new OkObjectResult(new { result = "ok" });
