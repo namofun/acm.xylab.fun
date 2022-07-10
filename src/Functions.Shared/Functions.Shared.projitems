@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)FunctionAuthorizeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FunctionFilterShim.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FunctionsHttpHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TelemetryClient.cs" />
   </ItemGroup>
 </Project>

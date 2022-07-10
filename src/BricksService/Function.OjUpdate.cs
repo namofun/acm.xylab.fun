@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Xylab.BricksService.OjUpdate
 {
+    [FunctionAuthorize("BricksService.OjUpdate")]
     public class Function
     {
         private readonly RecordV2Storage _storage;
@@ -69,18 +72,20 @@ namespace Xylab.BricksService.OjUpdate
 
         [FunctionName("OjUpdate_List")]
         public async Task<ActionResult<DurableOrchestrationStatus[]>> RunList(
-            [HttpTrigger("get", Route = "OjUpdate")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "OjUpdate")] HttpRequest req,
             [DurableClient] IDurableOrchestrationClient client)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             return (await client.ListInstancesAsync()).Where(e => e.Name == "OjUpdate").ToArray();
         }
 
         [FunctionName("OjUpdate_Halt")]
         public async Task<ActionResult<DurableOrchestrationStatus[]>> RunHalt(
-            [HttpTrigger("post", Route = "OjUpdate/Halt")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "OjUpdate/Halt")] HttpRequest req,
             [DurableClient] IDurableOrchestrationClient client,
             ILogger log)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             var result = await client.ListInstancesAsync();
             foreach (var instance in result.Where(r => r.Name == "OjUpdate"))
             {
@@ -99,15 +104,16 @@ namespace Xylab.BricksService.OjUpdate
                 }
             }
 
-            return await RunList(request, client);
+            return await RunList(req, client);
         }
 
         [FunctionName("OjUpdate_Initialize")]
         public async Task<ActionResult<DurableOrchestrationStatus[]>> RunInitialize(
-            [HttpTrigger("post", Route = "OjUpdate/Initialize")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "OjUpdate/Initialize")] HttpRequest req,
             [DurableClient] IDurableOrchestrationClient client,
             ILogger log)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             await _storage.MigrateAsync();
             log.LogInformation("Migrated schema.");
 
@@ -119,16 +125,17 @@ namespace Xylab.BricksService.OjUpdate
                 log.LogInformation("Started category '{category}'.", category);
             }
 
-            return await RunList(request, client);
+            return await RunList(req, client);
         }
 
         [FunctionName("OjUpdate_Trigger")]
         public async Task<ActionResult<DurableOrchestrationStatus[]>> RunTrigger(
-            [HttpTrigger("post", Route = "OjUpdate/Trigger/{target}")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "OjUpdate/Trigger/{target}")] HttpRequest req,
             [DurableClient] IDurableOrchestrationClient client,
             string target,
             ILogger log)
         {
+            if (!req.IsAuthorized()) return req.Forbid();
             if (!Enum.TryParse(target, out RecordType type))
             {
                 return new BadRequestResult();
@@ -137,7 +144,7 @@ namespace Xylab.BricksService.OjUpdate
             await client.RaiseEventAsync("OjUpdate_" + type, "ManualReset");
             log.LogInformation("ManualReset event triggered on {type}.", type);
 
-            return await RunList(request, client);
+            return await RunList(req, client);
         }
     }
 }
