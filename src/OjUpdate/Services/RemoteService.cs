@@ -29,7 +29,7 @@ namespace Xylab.BricksService.OjUpdate
         public async Task RequestUpdate()
         {
             using var resp = await _httpClient.PostAsync(
-                "/api/bricks/manage/OjUpdate?trigger=" + Driver.Category,
+                "/api/OjUpdate/Trigger/" + Driver.Category,
                 new ByteArrayContent(Array.Empty<byte>()));
             resp.EnsureSuccessStatusCode();
         }

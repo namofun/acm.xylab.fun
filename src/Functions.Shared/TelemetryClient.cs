@@ -2,13 +2,18 @@
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Azure.Functions.Extensions.DependencyInjection
+[assembly: FunctionsStartup(typeof(Microsoft.Azure.Functions.TelemetryStartup))]
+
+namespace Microsoft.Azure.Functions
 {
     internal class FunctionsTelemetryClient : ITelemetryClient
     {
@@ -203,6 +208,16 @@ namespace Microsoft.Azure.Functions.Extensions.DependencyInjection
             {
                 OperationHolder.Dispose();
             }
+        }
+    }
+
+    internal class TelemetryStartup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+            builder.Services.AddSingleton<ITelemetryClient, FunctionsTelemetryClient>();
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
     }
 }

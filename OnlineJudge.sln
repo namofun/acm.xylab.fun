@@ -23,7 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xylab.BricksService.Puppete
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xylab.BricksAggregator.Linux", "src\BricksService.Linux\Xylab.BricksAggregator.Linux.csproj", "{23C3F231-665B-482A-9C88-D786B5FA59F5}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Azure.Functions.Shared", "src\Functions.Shared\Azure.Functions.Shared.shproj", "{DF4EA2BD-5423-4B3A-AD36-90E860AF8EFA}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Functions.Shared\Functions.Shared.projitems*{23c3f231-665b-482a-9c88-d786b5fa59f5}*SharedItemsImports = 5
+		src\Functions.Shared\Functions.Shared.projitems*{3f6bef8a-4fd1-4d07-a68a-328b99fa5462}*SharedItemsImports = 5
+		src\Functions.Shared\Functions.Shared.projitems*{401a95c9-f305-406e-afa6-4da3163e336f}*SharedItemsImports = 5
+		src\Functions.Shared\Functions.Shared.projitems*{df4ea2bd-5423-4b3a-ad36-90e860af8efa}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64

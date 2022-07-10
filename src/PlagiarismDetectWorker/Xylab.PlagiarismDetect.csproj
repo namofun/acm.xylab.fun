@@ -20,4 +20,6 @@
     <None Update="local.settings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
+  <Import Project="..\Functions.Shared\Functions.Shared.projitems" Label="Shared" />
+
 </Project>

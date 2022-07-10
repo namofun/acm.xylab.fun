@@ -19,9 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\PlagiarismDetectWorker\TelemetryClient.cs" />
     <None Update="host.json" CopyToOutputDirectory="PreserveNewest" />
     <None Update="local.settings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
   </ItemGroup>
+
+  <Import Project="..\Functions.Shared\Functions.Shared.projitems" Label="Shared" />
 
 </Project>
